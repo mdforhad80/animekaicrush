@@ -1,0 +1,22 @@
+name = "nexstream-api"
+main = "worker.js"
+compatibility_date = "2024-01-01"
+compatibility_flags = ["nodejs_compat"]
+
+# D1 Database Binding
+[[d1_databases]]
+binding = "NEXSTREAM_DB"
+database_name = "nexstream-db"
+database_id = "YOUR_D1_DATABASE_ID_HERE"
+
+# KV Namespace (for rate limiting & cache)
+[[kv_namespaces]]
+binding = "NEXSTREAM_KV"
+id = "YOUR_KV_NAMESPACE_ID_HERE"
+
+# Environment Variables
+[vars]
+# FRONTEND_URL = "https://your-username.github.io/nexstream-anime"
+
+# Secrets (set via wrangler secret put)
+# JWT_SECRET = "your-super-secret-jwt-key-min-32-chars-long"
