@@ -1,277 +1,584 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>User Settings Area - EnmaStream</title>
-  <!-- Global Shared Style block injected here -->
-  <style>
-    .profile-card {
-      background: var(--bg-secondary);
-      border-radius: var(--radius-lg);
-      border: 1px solid var(--glass-border);
-      padding: 3rem 2rem;
-      max-width: 800px;
-      margin: 2rem auto;
-      text-align: center;
-    }
-    .profile-avatar {
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      border: 3px solid var(--accent);
-      margin-bottom: 1.5rem;
-    }
-    .form-group {
-      text-align: left;
-      margin-bottom: 1.5rem;
-    }
-    .form-input {
-      width: 100%;
-      background: var(--bg-tertiary);
-      border: 1px solid var(--glass-border);
-      padding: 0.75rem 1rem;
-      border-radius: var(--radius-md);
-      color: #fff;
-      margin-top: 0.5rem;
-      outline: none;
-    }
-    .profile-tabs {
-      display: flex;
-      justify-content: center;
-      gap: 1rem;
-      margin-top: 3rem;
-      border-bottom: 1px solid var(--glass-border);
-      padding-bottom: 1rem;
-    }
-    .profile-tab {
-      color: var(--text-secondary);
-      font-weight: 600;
-      padding: 0.5rem 1rem;
-      cursor: pointer;
-    }
-    .profile-tab.active {
-      color: var(--accent-light);
-      border-bottom: 2px solid var(--accent);
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="description" content="Your AnimeStream profile, favorites, bookmarks, and watch history.">
+<title>Profile - AnimeStream</title>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg-primary:#07070b;--bg-secondary:#0f0f1a;--bg-card:#16162a;--bg-glass:rgba(22,22,42,0.85);
+  --accent:#8b5cf6;--accent-glow:#a78bfa;--accent-dim:#6d28d9;
+  --text-primary:#f8fafc;--text-secondary:#94a3b8;--text-muted:#64748b;
+  --border:rgba(139,92,246,0.15);--border-glow:rgba(139,92,246,0.4);
+  --success:#22c55e;--error:#ef4444;
+  --radius-sm:8px;--radius-md:12px;--radius-lg:16px;--radius-xl:24px;
+  --shadow-sm:0 2px 8px rgba(0,0,0,0.3);--shadow-md:0 8px 24px rgba(0,0,0,0.4);--shadow-lg:0 16px 48px rgba(0,0,0,0.5);
+  --transition-fast:0.15s ease;--transition-base:0.3s ease;--transition-slow:0.5s ease;
+  --header-height:64px;
+}
+html,body{overflow-x:hidden;max-width:100%;min-height:100dvh}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;background:var(--bg-primary);color:var(--text-primary);line-height:1.5;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+button{border:none;background:none;cursor:pointer;font-family:inherit;color:inherit}
+img{max-width:100%;display:block}
+ul{list-style:none}
+input,textarea{font-family:inherit;color:inherit;outline:none}
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:var(--bg-primary)}
+::-webkit-scrollbar-thumb{background:var(--accent-dim);border-radius:3px}
+
+/* Header */
+.header{position:fixed;top:0;left:0;right:0;height:var(--header-height);background:rgba(7,7,11,0.85);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border-bottom:1px solid var(--border);z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:0 4vw;transition:background var(--transition-base),box-shadow var(--transition-base)}
+.header.scrolled{background:rgba(7,7,11,0.95);box-shadow:var(--shadow-md)}
+.header-left,.header-right{display:flex;align-items:center;gap:16px}
+.logo{font-size:clamp(1.2rem,2vw,1.6rem);font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent-glow));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:-0.5px;display:flex;align-items:center;gap:8px}
+.logo-icon{width:32px;height:32px;fill:var(--accent)}
+.menu-toggle{width:40px;height:40px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:5px;border-radius:var(--radius-sm);transition:background var(--transition-fast)}
+.menu-toggle:hover{background:rgba(139,92,246,0.1)}
+.menu-toggle span{display:block;width:20px;height:2px;background:var(--text-primary);border-radius:1px;transition:transform var(--transition-fast),opacity var(--transition-fast)}
+.menu-toggle.active span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.menu-toggle.active span:nth-child(2){opacity:0}
+.menu-toggle.active span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.header-btn{width:40px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:50%;transition:background var(--transition-fast),transform var(--transition-fast);position:relative}
+.header-btn:hover{background:rgba(139,92,246,0.15);transform:scale(1.05)}
+.header-btn svg{width:20px;height:20px;stroke:var(--text-secondary);fill:none;stroke-width:2}
+.header-btn:hover svg{stroke:var(--accent-glow)}
+.profile-btn img,.profile-btn .avatar-placeholder{width:36px;height:36px;border-radius:50%;object-fit:cover;border:2px solid var(--border);transition:border-color var(--transition-fast)}
+.profile-btn:hover img,.profile-btn:hover .avatar-placeholder{border-color:var(--accent)}
+.avatar-placeholder{background:linear-gradient(135deg,var(--accent-dim),var(--accent));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:#fff}
+.desktop-nav{display:none;align-items:center;gap:4px}
+.nav-item{padding:8px 14px;font-size:0.875rem;font-weight:500;color:var(--text-secondary);border-radius:var(--radius-sm);transition:all var(--transition-fast);position:relative;white-space:nowrap}
+.nav-item:hover{color:var(--text-primary);background:rgba(139,92,246,0.1)}
+.nav-item.active{color:var(--accent-glow);background:rgba(139,92,246,0.15)}
+
+/* Sidebar */
+.sidebar-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);z-index:999;opacity:0;visibility:hidden;transition:opacity var(--transition-base),visibility var(--transition-base)}
+.sidebar-overlay.active{opacity:1;visibility:visible}
+.sidebar{position:fixed;top:0;left:0;bottom:0;width:280px;max-width:85vw;background:var(--bg-secondary);border-right:1px solid var(--border);z-index:1000;transform:translateX(-100%);transition:transform var(--transition-slow) cubic-bezier(0.4,0,0.2,1);overflow-y:auto;display:flex;flex-direction:column}
+.sidebar.active{transform:translateX(0)}
+.sidebar-header{padding:20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.sidebar-nav{flex:1;padding:16px 0}
+.sidebar-item{display:flex;align-items:center;gap:14px;padding:12px 20px;font-size:0.9375rem;color:var(--text-secondary);transition:all var(--transition-fast);cursor:pointer}
+.sidebar-item:hover,.sidebar-item.active{background:rgba(139,92,246,0.1);color:var(--text-primary)}
+.sidebar-item svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;flex-shrink:0}
+.sidebar-divider{height:1px;background:var(--border);margin:12px 20px}
+.sidebar-footer{padding:20px;border-top:1px solid var(--border);font-size:0.75rem;color:var(--text-muted)}
+
+/* Profile Page */
+.profile-page{margin-top:var(--header-height);padding:clamp(24px,3vw,48px) clamp(16px,4vw,80px);max-width:1200px;margin-left:auto;margin-right:auto}
+
+/* Profile Header */
+.profile-header{display:flex;align-items:center;gap:24px;margin-bottom:40px;flex-wrap:wrap}
+.profile-avatar-wrap{position:relative}
+.profile-avatar{width:clamp(80px,15vw,120px);height:clamp(80px,15vw,120px);border-radius:50%;object-fit:cover;border:3px solid var(--accent);box-shadow:0 0 30px rgba(139,92,246,0.3)}
+.profile-avatar-placeholder{width:clamp(80px,15vw,120px);height:clamp(80px,15vw,120px);border-radius:50%;background:linear-gradient(135deg,var(--accent-dim),var(--accent));display:flex;align-items:center;justify-content:center;font-size:clamp(2rem,4vw,3rem);font-weight:800;color:#fff;border:3px solid var(--accent);box-shadow:0 0 30px rgba(139,92,246,0.3)}
+.profile-info{flex:1;min-width:0}
+.profile-name{font-size:clamp(1.5rem,3vw,2rem);font-weight:700;margin-bottom:4px}
+.profile-username{font-size:1rem;color:var(--text-muted);margin-bottom:12px}
+.profile-stats{display:flex;gap:24px;flex-wrap:wrap}
+.profile-stat{text-align:center}
+.profile-stat-value{font-size:1.5rem;font-weight:700;color:var(--accent-glow)}
+.profile-stat-label{font-size:0.75rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px}
+.profile-actions{display:flex;gap:12px;margin-top:16px}
+.profile-btn{padding:10px 20px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);font-size:0.875rem;font-weight:600;color:var(--text-secondary);transition:all var(--transition-fast);display:flex;align-items:center;gap:8px}
+.profile-btn:hover{background:rgba(139,92,246,0.15);border-color:var(--accent-glow);color:var(--text-primary)}
+.profile-btn-danger:hover{background:rgba(239,68,68,0.15);border-color:var(--error);color:var(--error)}
+.profile-btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2}
+
+/* Tabs */
+.profile-tabs{display:flex;gap:8px;margin-bottom:32px;border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none}
+.profile-tabs::-webkit-scrollbar{display:none}
+.profile-tab{padding:12px 20px;font-size:0.9375rem;font-weight:600;color:var(--text-secondary);border-bottom:2px solid transparent;cursor:pointer;transition:all var(--transition-fast);white-space:nowrap;flex-shrink:0}
+.profile-tab:hover{color:var(--text-primary)}
+.profile-tab.active{color:var(--accent-glow);border-bottom-color:var(--accent)}
+
+/* Tab Content */
+.tab-content{display:none}
+.tab-content.active{display:block;animation:fadeIn 0.3s ease}
+
+/* Anime Grid */
+.anime-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:20px}
+.anime-card{cursor:pointer;transition:transform var(--transition-base);position:relative}
+.anime-card:hover{transform:translateY(-8px)}
+.anime-card-poster{position:relative;aspect-ratio:2/3;border-radius:var(--radius-md);overflow:hidden;background:var(--bg-card);margin-bottom:10px}
+.anime-card-poster img{width:100%;height:100%;object-fit:cover;transition:transform var(--transition-slow)}
+.anime-card:hover .anime-card-poster img{transform:scale(1.08)}
+.anime-card-badges{position:absolute;top:8px;left:8px;right:8px;display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-start}
+.anime-card-badge{padding:3px 8px;border-radius:4px;font-size:0.6875rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px}
+.badge-score{background:rgba(251,191,36,0.9);color:#000}
+.badge-eps{background:rgba(15,23,42,0.85);color:#fff;border:1px solid rgba(255,255,255,0.2)}
+.anime-card-title{font-size:0.8125rem;font-weight:600;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;color:var(--text-primary)}
+.anime-card-meta{font-size:0.75rem;color:var(--text-muted);margin-top:4px}
+.anime-card-remove{position:absolute;top:8px;right:8px;width:28px;height:28px;background:rgba(239,68,68,0.9);border-radius:50%;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity var(--transition-fast);cursor:pointer;z-index:2}
+.anime-card-remove svg{width:14px;height:14px;stroke:#fff;fill:none;stroke-width:2}
+.anime-card:hover .anime-card-remove{opacity:1}
+
+/* Continue Watching */
+.continue-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+.continue-card{display:flex;gap:16px;padding:16px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);transition:all var(--transition-fast);cursor:pointer}
+.continue-card:hover{background:rgba(139,92,246,0.05);border-color:var(--accent-glow)}
+.continue-poster{width:80px;height:120px;border-radius:var(--radius-sm);overflow:hidden;flex-shrink:0;background:var(--bg-secondary)}
+.continue-poster img{width:100%;height:100%;object-fit:cover}
+.continue-info{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center}
+.continue-title{font-size:0.9375rem;font-weight:700;margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.continue-ep{font-size:0.8125rem;color:var(--text-secondary);margin-bottom:8px}
+.continue-progress{height:4px;background:var(--bg-secondary);border-radius:2px;overflow:hidden;margin-bottom:4px}
+.continue-progress-bar{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-glow));border-radius:2px;transition:width var(--transition-slow)}
+.continue-progress-text{font-size:0.75rem;color:var(--text-muted)}
+
+/* Settings */
+.settings-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;margin-bottom:24px}
+.settings-title{font-size:1.125rem;font-weight:700;margin-bottom:20px;display:flex;align-items:center;gap:10px}
+.settings-title::before{content:'';width:4px;height:20px;background:linear-gradient(to bottom,var(--accent),var(--accent-dim));border-radius:2px}
+.settings-row{display:flex;justify-content:space-between;align-items:center;padding:16px 0;border-bottom:1px solid var(--border)}
+.settings-row:last-child{border-bottom:none}
+.settings-label{font-size:0.9375rem;font-weight:500}
+.settings-desc{font-size:0.8125rem;color:var(--text-muted);margin-top:2px}
+.settings-input{width:100%;padding:12px 16px;background:rgba(139,92,246,0.05);border:1px solid var(--border);border-radius:var(--radius-md);font-size:0.9375rem;color:var(--text-primary);margin-top:8px;transition:border-color var(--transition-fast),box-shadow var(--transition-fast)}
+.settings-input:focus{border-color:var(--accent-glow);box-shadow:0 0 0 3px rgba(139,92,246,0.15)}
+.settings-input::placeholder{color:var(--text-muted)}
+.settings-btn{padding:10px 20px;background:var(--accent);color:#fff;font-size:0.875rem;font-weight:600;border-radius:var(--radius-md);transition:all var(--transition-fast)}
+.settings-btn:hover{background:var(--accent-dim);transform:translateY(-1px)}
+.settings-btn:disabled{opacity:0.5;cursor:not-allowed;transform:none}
+
+/* Empty State */
+.empty-state{text-align:center;padding:60px 20px}
+.empty-state h3{font-size:1.25rem;color:var(--text-secondary);margin-bottom:8px}
+.empty-state p{font-size:0.875rem;color:var(--text-muted)}
+.empty-state a{color:var(--accent-glow);text-decoration:underline}
+
+/* Loading */
+.skeleton{background:linear-gradient(90deg,var(--bg-card) 25%,rgba(139,92,246,0.1) 50%,var(--bg-card) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:var(--radius-sm)}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+
+/* Footer */
+.footer{padding:clamp(24px,3vw,48px) clamp(16px,4vw,80px);border-top:1px solid var(--border);text-align:center}
+.footer-text{font-size:0.8125rem;color:var(--text-muted);line-height:1.8;max-width:600px;margin:0 auto}
+.footer-disclaimer{margin-top:12px;font-size:0.75rem;opacity:0.7}
+
+/* Toast */
+.toast-container{position:fixed;bottom:24px;right:24px;z-index:10000;display:flex;flex-direction:column;gap:8px}
+.toast{padding:12px 20px;background:var(--bg-glass);backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:var(--radius-md);font-size:0.875rem;display:flex;align-items:center;gap:10px;transform:translateX(120%);transition:transform var(--transition-base);box-shadow:var(--shadow-md);max-width:320px}
+.toast.show{transform:translateX(0)}
+.toast-success{border-color:rgba(34,197,94,0.3);color:var(--success)}
+.toast-error{border-color:rgba(239,68,68,0.3);color:var(--error)}
+
+/* Responsive */
+@media(min-width:768px){.desktop-nav{display:flex}.menu-toggle{display:none}.anime-grid{grid-template-columns:repeat(auto-fill,minmax(180px,1fr))}}
+@media(min-width:1024px){.profile-page{padding-left:80px;padding-right:80px}.anime-grid{grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}}
+@media(max-width:767px){.profile-header{flex-direction:column;text-align:center}.profile-stats{justify-content:center}.profile-actions{justify-content:center}.anime-grid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px}.continue-grid{grid-template-columns:1fr}}
+@media(max-width:480px){.anime-grid{grid-template-columns:repeat(2,1fr);gap:12px}}
+</style>
+<base target="_blank">
 </head>
 <body>
 
-  <header>
-    <a href="index.html" class="logo-area">
-      <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="16" cy="16" r="14" fill="#8B5CF6" fill-opacity="0.2" stroke="#8B5CF6" stroke-width="2"/>
-        <path d="M11 9L23 16L11 23V9Z" fill="#8B5CF6"/>
-      </svg>
-      Enma<span>Stream</span>
+<!-- Header -->
+<header class="header" id="header">
+  <div class="header-left">
+    <button class="menu-toggle" id="menuToggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    <a href="index.html" class="logo">
+      <svg class="logo-icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+      AnimeStream
     </a>
-    <nav class="nav-menu">
-      <a href="index.html" class="nav-item">Home</a>
-      <a href="schedule.html" class="nav-item">Schedule</a>
-      <a href="az-list.html" class="nav-item">A-Z List</a>
-    </nav>
-  </header>
+  </div>
+  <nav class="header-center desktop-nav">
+    <a href="index.html" class="nav-item">Home</a>
+    <a href="search.html?filter=trending" class="nav-item">Trending</a>
+    <a href="schedule.html" class="nav-item">Schedule</a>
+    <a href="az-list.html" class="nav-item">A-Z List</a>
+  </nav>
+  <div class="header-right">
+    <button class="header-btn" id="searchBtn" aria-label="Search">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    </button>
+    <button class="header-btn profile-btn" id="profileBtn" aria-label="Profile">
+      <div class="avatar-placeholder" id="headerAvatar">?</div>
+    </button>
+  </div>
+</header>
 
-  <main style="padding:90px 4% 4rem;">
-    <!-- Dual auth & profile routing state logic -->
-    <div id="unauth-view">
-      <div class="profile-card" style="max-width:500px;">
-        <h2 style="margin-bottom:2rem;">Start Streaming</h2>
-        
-        <!-- Tab controller selection -->
-        <div style="display:flex; justify-content:center; gap:1.5rem; margin-bottom:2rem;">
-          <button style="color:var(--accent-light); font-weight:700;" id="auth-tab-login" onclick="switchAuthMode('login')">Login</button>
-          <button style="color:var(--text-secondary); font-weight:700;" id="auth-tab-register" onclick="switchAuthMode('register')">Register</button>
+<!-- Sidebar -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <a href="index.html" class="logo">
+      <svg class="logo-icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+      AnimeStream
+    </a>
+    <button class="auth-close" id="sidebarClose"><svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+  </div>
+  <nav class="sidebar-nav">
+    <a href="index.html" class="sidebar-item"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Home</span></a>
+    <a href="search.html?filter=trending" class="sidebar-item"><svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg><span>Trending</span></a>
+    <a href="schedule.html" class="sidebar-item"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span>Schedule</span></a>
+    <a href="az-list.html" class="sidebar-item"><svg viewBox="0 0 24 24"><path d="A4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg><span>A-Z List</span></a>
+    <div class="sidebar-divider"></div>
+    <a href="profile.html" class="sidebar-item active" id="sidebarProfile"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Profile</span></a>
+  </nav>
+  <div class="sidebar-footer">
+    <p>This site does not store any files on its server. All contents are provided by non-affiliated third parties.</p>
+  </div>
+</aside>
+
+<!-- Profile Page -->
+<div class="profile-page">
+  <!-- Profile Header -->
+  <div class="profile-header" id="profileHeader">
+    <div class="profile-avatar-wrap">
+      <div class="profile-avatar-placeholder" id="profileAvatar">?</div>
+    </div>
+    <div class="profile-info">
+      <h1 class="profile-name" id="profileName">Loading...</h1>
+      <div class="profile-username" id="profileUsername">@username</div>
+      <div class="profile-stats">
+        <div class="profile-stat">
+          <div class="profile-stat-value" id="statFavorites">0</div>
+          <div class="profile-stat-label">Favorites</div>
         </div>
-
-        <form id="auth-form" onsubmit="handleAuthSubmit(event)">
-          <div class="form-group">
-            <label id="username-lbl" style="display:none;">Username</label>
-            <input type="text" id="auth-username" placeholder="Username" class="form-input" style="display:none;">
-          </div>
-          <div class="form-group">
-            <label>Email Address</label>
-            <input type="email" id="auth-email" placeholder="Email Address" class="form-input" required>
-          </div>
-          <div class="form-group">
-            <label>Password</label>
-            <input type="password" id="auth-password" placeholder="Password" class="form-input" required>
-          </div>
-          <button class="btn-premium" style="width:100%; justify-content:center; margin-top:1.5rem;" type="submit">Continue</button>
-        </form>
+        <div class="profile-stat">
+          <div class="profile-stat-value" id="statBookmarks">0</div>
+          <div class="profile-stat-label">Bookmarks</div>
+        </div>
+        <div class="profile-stat">
+          <div class="profile-stat-value" id="statHistory">0</div>
+          <div class="profile-stat-label">Watched</div>
+        </div>
+      </div>
+      <div class="profile-actions">
+        <button class="profile-btn" id="editProfileBtn">
+          <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          Edit Profile
+        </button>
+        <button class="profile-btn profile-btn-danger" id="logoutBtn">
+          <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          Logout
+        </button>
       </div>
     </div>
+  </div>
 
-    <div id="auth-view" style="display:none;">
-      <div class="profile-card">
-        <img id="usr-avatar" src="" class="profile-avatar" alt="User Profile Image">
-        <h2 id="usr-username" style="color:#fff;">Username</h2>
-        <p id="usr-email" style="margin-bottom:1.5rem;">email@address.com</p>
-        <button class="btn-secondary" onclick="clearSession()">Logout Session</button>
+  <!-- Tabs -->
+  <div class="profile-tabs" id="profileTabs">
+    <button class="profile-tab active" data-tab="continue">Continue Watching</button>
+    <button class="profile-tab" data-tab="favorites">Favorites</button>
+    <button class="profile-tab" data-tab="bookmarks">Bookmarks</button>
+    <button class="profile-tab" data-tab="history">Watch History</button>
+    <button class="profile-tab" data-tab="settings">Settings</button>
+  </div>
+
+  <!-- Continue Watching -->
+  <div class="tab-content active" id="tab-continue">
+    <div class="continue-grid" id="continueGrid"></div>
+  </div>
+
+  <!-- Favorites -->
+  <div class="tab-content" id="tab-favorites">
+    <div class="anime-grid" id="favoritesGrid"></div>
+  </div>
+
+  <!-- Bookmarks -->
+  <div class="tab-content" id="tab-bookmarks">
+    <div class="anime-grid" id="bookmarksGrid"></div>
+  </div>
+
+  <!-- History -->
+  <div class="tab-content" id="tab-history">
+    <div class="anime-grid" id="historyGrid"></div>
+  </div>
+
+  <!-- Settings -->
+  <div class="tab-content" id="tab-settings">
+    <div class="settings-card">
+      <h2 class="settings-title">Profile Information</h2>
+      <div style="margin-bottom:16px">
+        <label class="settings-label">Display Name</label>
+        <p class="settings-desc">This is how your name will appear across the site</p>
+        <input type="text" class="settings-input" id="settingsName" placeholder="Your name">
       </div>
-
-      <div class="profile-tabs">
-        <div class="profile-tab active" id="tab-fav" onclick="switchSection('favorites')">Favorites</div>
-        <div class="profile-tab" id="tab-hist" onclick="switchSection('history')">Watch History</div>
+      <div style="margin-bottom:16px">
+        <label class="settings-label">Username</label>
+        <p class="settings-desc">Your unique username</p>
+        <input type="text" class="settings-input" id="settingsUsername" placeholder="Username" disabled>
       </div>
+      <div style="margin-bottom:16px">
+        <label class="settings-label">Email</label>
+        <p class="settings-desc">Your email address</p>
+        <input type="email" class="settings-input" id="settingsEmail" placeholder="Email" disabled>
+      </div>
+      <button class="settings-btn" id="saveProfileBtn">Save Changes</button>
+    </div>
 
-      <div class="anime-grid" id="profile-data-grid">
-        <!-- Dyn content items -->
+    <div class="settings-card">
+      <h2 class="settings-title">Account</h2>
+      <div class="settings-row">
+        <div>
+          <div class="settings-label">Backend URL</div>
+          <p class="settings-desc">Configure your Cloudflare Worker URL</p>
+        </div>
+      </div>
+      <input type="text" class="settings-input" id="backendUrlInput" placeholder="https://your-worker.your-subdomain.workers.dev">
+      <button class="settings-btn" id="saveBackendBtn" style="margin-top:12px">Save Backend URL</button>
+    </div>
+
+    <div class="settings-card">
+      <h2 class="settings-title">Danger Zone</h2>
+      <div class="settings-row">
+        <div>
+          <div class="settings-label">Clear Local Cache</div>
+          <p class="settings-desc">Remove all cached anime data from your browser</p>
+        </div>
+        <button class="profile-btn profile-btn-danger" id="clearCacheBtn">Clear Cache</button>
       </div>
     </div>
-  </main>
+  </div>
+</div>
 
-  <footer>
-    <div>&copy; 2024 EnmaStream. Premium Cinematic Engine.</div>
-    <div class="disclaimer">This site does not store any files on its server. All contents are provided by non-affiliated third parties.</div>
-  </footer>
+<!-- Footer -->
+<footer class="footer">
+  <p class="footer-text">&copy; 2024 AnimeStream. All rights reserved.</p>
+  <p class="footer-text footer-disclaimer">This site does not store any files on its server. All contents are provided by non-affiliated third parties.</p>
+</footer>
 
-  <script>
-    let activeAuthMode = "login";
+<!-- Toast -->
+<div class="toast-container" id="toastContainer"></div>
 
-    function switchAuthMode(mode) {
-      activeAuthMode = mode;
-      const userField = document.getElementById("auth-username");
-      const userLabel = document.getElementById("username-lbl");
-      const tabLogin = document.getElementById("auth-tab-login");
-      const tabReg = document.getElementById("auth-tab-register");
+<script>
+const CONFIG = {
+  API_BASE: 'https://api.jikan.moe/v4',
+  BACKEND_URL: localStorage.getItem('backendUrl') || '',
+  CACHE_DURATION: 5 * 60 * 1000,
+  MAX_RETRIES: 3,
+  RETRY_DELAY: 1000
+};
 
-      if (mode === "login") {
-        userField.style.display = "none";
-        userLabel.style.display = "none";
-        userField.removeAttribute("required");
-        tabLogin.style.color = "var(--accent-light)";
-        tabReg.style.color = "var(--text-secondary)";
-      } else {
-        userField.style.display = "block";
-        userLabel.style.display = "block";
-        userField.setAttribute("required", true);
-        tabLogin.style.color = "var(--text-secondary)";
-        tabReg.style.color = "var(--accent-light)";
-      }
-    }
+function $(sel){return document.querySelector(sel)}
+function $$(sel){return document.querySelectorAll(sel)}
 
-    async function handleAuthSubmit(e) {
-      e.preventDefault();
-      const email = document.getElementById("auth-email").value;
-      const password = document.getElementById("auth-password").value;
-      
-      let payload = { password };
-      let endpoint = "/api/auth/login";
+function showToast(msg,type='success'){
+  const container=$('#toastContainer');
+  const toast=document.createElement('div');
+  toast.className=`toast toast-${type}`;
+  toast.textContent=msg;
+  container.appendChild(toast);
+  requestAnimationFrame(()=>toast.classList.add('show'));
+  setTimeout(()=>{toast.classList.remove('show');setTimeout(()=>toast.remove(),300)},3000);
+}
 
-      if (activeAuthMode === "login") {
-        payload.emailOrUsername = email;
-      } else {
-        payload.username = document.getElementById("auth-username").value;
-        payload.email = email;
-        endpoint = "/api/auth/signup";
-      }
+function getToken(){return localStorage.getItem('authToken');}
 
-      const res = await fetch(`${BACKEND_URL}${endpoint}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      });
+async function apiCall(path,opts={}){
+  if(!CONFIG.BACKEND_URL)return null;
+  try{
+    const token=getToken();
+    const headers={'Content-Type':'application/json'};
+    if(token)headers['Authorization']=`Bearer ${token}`;
+    const res=await fetch(`${CONFIG.BACKEND_URL}${path}`,{...opts,headers:{...headers,...opts.headers}});
+    return await res.json();
+  }catch(e){return null;}
+}
 
-      if (res.ok) {
-        const data = await res.json();
-        saveSession(data.token, data.user);
-        initProfileDashboard();
-      } else {
-        const data = await res.json();
-        alert(data.error || "Authentication execution mismatch.");
-      }
-    }
+let currentUser = null;
 
-    async function initProfileDashboard() {
-      const token = getSessionToken();
-      if (!token) {
-        document.getElementById("unauth-view").style.display = "block";
-        document.getElementById("auth-view").style.display = "none";
-        return;
-      }
+async function checkAuth(){
+  const token=getToken();
+  if(!token){redirectToLogin();return;}
+  const data=await apiCall('/api/auth/me');
+  if(data?.success){currentUser=data.user;updateAuthUI(data.user);loadProfileData();}
+  else{localStorage.removeItem('authToken');redirectToLogin();}
+}
 
-      document.getElementById("unauth-view").style.display = "none";
-      document.getElementById("auth-view").style.display = "block";
+function redirectToLogin(){
+  showToast('Please login to view your profile','error');
+  setTimeout(()=>location.href='index.html',1500);
+}
 
-      const user = getUser();
-      if (user) {
-        document.getElementById("usr-username").textContent = user.username;
-        document.getElementById("usr-email").textContent = user.email;
-        document.getElementById("usr-avatar").src = user.avatar || 'https://api.dicebear.com/7.x/bottts/svg?seed=Enma';
-      }
+function updateAuthUI(user){
+  const avatar=$('#headerAvatar');
+  const profileBtn=$('#profileBtn');
+  if(user){
+    avatar.textContent=user.name?.[0]?.toUpperCase()||user.username?.[0]?.toUpperCase()||'U';
+    if(user.avatar){avatar.outerHTML=`<img src="${user.avatar}" alt="${user.username}" class="avatar-placeholder" style="object-fit:cover">`;}
+    profileBtn.onclick=()=>location.href='profile.html';
+  }else{avatar.textContent='?';profileBtn.onclick=()=>location.href='index.html';}
+}
 
-      switchSection('favorites');
-    }
+function updateProfileUI(user){
+  $('#profileName').textContent = user.name || user.username;
+  $('#profileUsername').textContent = `@${user.username}`;
 
-    async function switchSection(section) {
-      const grid = document.getElementById("profile-data-grid");
-      grid.innerHTML = "<div class='skeleton' style='width:100%; height:200px; grid-column:1/-1;'></div>";
+  const avatarEl = $('#profileAvatar');
+  if(user.avatar){
+    avatarEl.outerHTML = `<img src="${user.avatar}" alt="${user.name}" class="profile-avatar" id="profileAvatar">`;
+  }else{
+    avatarEl.textContent = user.name?.[0]?.toUpperCase() || user.username?.[0]?.toUpperCase() || 'U';
+  }
 
-      const tFav = document.getElementById("tab-fav");
-      const tHist = document.getElementById("tab-hist");
+  $('#settingsName').value = user.name || '';
+  $('#settingsUsername').value = user.username || '';
+  $('#settingsEmail').value = user.email || '';
+  $('#backendUrlInput').value = CONFIG.BACKEND_URL;
+}
 
-      if (section === "favorites") {
-        tFav.classList.add("active");
-        tHist.classList.remove("active");
-        
-        const res = await fetchWithAuth("/api/user/favorites");
-        grid.innerHTML = "";
-        if (res.ok) {
-          const list = await res.json();
-          if (list.length === 0) {
-            grid.innerHTML = "<p style='grid-column:1/-1; text-align:center;'>Your favorite list is currently empty.</p>";
-            return;
-          }
-          list.forEach(item => {
-            const card = document.createElement("div");
-            card.className = "anime-card";
-            card.onclick = () => window.location.href = `anime.html?id=${item.mal_id}`;
-            card.innerHTML = `
-              <img src="${item.image_url}" alt="${item.title}" loading="lazy">
-              <div class="anime-card-overlay">
-                <div class="anime-card-title">${item.title}</div>
-                <div class="anime-card-meta">
-                  <span class="score-badge">★ ${item.score || 'N/A'}</span>
-                </div>
-              </div>
-            `;
-            grid.appendChild(card);
-          });
-        }
-      } else {
-        tFav.classList.remove("active");
-        tHist.classList.add("active");
-        
-        const res = await fetchWithAuth("/api/user/history");
-        grid.innerHTML = "";
-        if (res.ok) {
-          const list = await res.json();
-          if (list.length === 0) {
-            grid.innerHTML = "<p style='grid-column:1/-1; text-align:center;'>No watching history found.</p>";
-            return;
-          }
-          list.forEach(item => {
-            const card = document.createElement("div");
-            card.className = "anime-card";
-            card.onclick = () => window.location.href = `watch.html?id=${item.mal_id}&ep=${item.episode}`;
-            card.innerHTML = `
-              <img src="${item.image_url}" alt="${item.title}" loading="lazy">
-              <div class="anime-card-overlay">
-                <div class="anime-card-title">${item.title}</div>
-                <div class="anime-card-meta">
-                  <span style="color:var(--accent-light);">Ep ${item.episode}</span>
-                </div>
-              </div>
-            `;
-            grid.appendChild(card);
-          });
-        }
-      }
-    }
+// ========== TABS ==========
+$$('.profile-tab').forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    $$('.profile-tab').forEach(t=>t.classList.remove('active'));
+    tab.classList.add('active');
+    $$('.tab-content').forEach(c=>c.classList.remove('active'));
+    $(`#tab-${tab.dataset.tab}`)?.classList.add('active');
+  });
+});
 
-    window.onload = initProfileDashboard;
-  </script>
+// ========== LOAD DATA ==========
+async function loadProfileData(){
+  if(!currentUser)return;
+  updateProfileUI(currentUser);
+
+  const [favRes, bmRes, histRes, statsRes] = await Promise.allSettled([
+    apiCall('/api/favorites'),
+    apiCall('/api/bookmarks'),
+    apiCall('/api/history'),
+    apiCall('/api/stats')
+  ]);
+
+  const favorites = favRes.value?.favorites || [];
+  const bookmarks = bmRes.value?.bookmarks || [];
+  const history = histRes.value?.history || [];
+  const stats = statsRes.value?.stats || {favorites:0,bookmarks:0,history:0};
+
+  $('#statFavorites').textContent = stats.favorites;
+  $('#statBookmarks').textContent = stats.bookmarks;
+  $('#statHistory').textContent = stats.history;
+
+  renderFavorites(favorites);
+  renderBookmarks(bookmarks);
+  renderHistory(history);
+  renderContinueWatching(history);
+}
+
+function renderAnimeGrid(items, gridId, type){
+  const grid = $(`#${gridId}`);
+  if(!items.length){
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><h3>No ${type} yet</h3><p>Start watching anime to see them here</p></div>`;
+    return;
+  }
+
+  grid.innerHTML = items.map(item=>`
+    <div class="anime-card">
+      <div class="anime-card-poster" onclick="location.href='anime.html?id=${item.anime_id}'">
+        <img src="${item.anime_image||'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22300%22%3E%3Crect fill=%22%2316162a%22 width=%22200%22 height=%22300%22/%3E%3Ctext fill=%22%2364748b%22 x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 font-size=%2214%22%3ENo Image%3C/text%3E%3C/svg%3E'}" alt="${item.anime_title}" loading="lazy">
+        <div class="anime-card-badges">
+          <span class="anime-card-badge badge-eps">${type==='history'?`EP ${item.episode_number||1}`:''}</span>
+        </div>
+      </div>
+      <div class="anime-card-title">${item.anime_title}</div>
+      <div class="anime-card-meta">${item.anime_type||'TV'}</div>
+      <div class="anime-card-remove" onclick="removeItem('${type}',${item.anime_id},event)" title="Remove">
+        <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderFavorites(items){renderAnimeGrid(items,'favoritesGrid','favorites');}
+function renderBookmarks(items){renderAnimeGrid(items,'bookmarksGrid','bookmarks');}
+function renderHistory(items){renderAnimeGrid(items,'historyGrid','history');}
+
+function renderContinueWatching(history){
+  const grid = $('#continueGrid');
+  const recent = history.slice(0, 6);
+
+  if(!recent.length){
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><h3>No continue watching</h3><p>Your in-progress anime will appear here</p></div>`;
+    return;
+  }
+
+  grid.innerHTML = recent.map(item=>{
+    const progress = item.total_seconds ? Math.round((item.progress_seconds / item.total_seconds) * 100) : 0;
+    return `
+      <div class="continue-card" onclick="location.href='watch.html?id=${item.anime_id}&ep=${item.episode_number||1}'">
+        <div class="continue-poster">
+          <img src="${item.anime_image||''}" alt="${item.anime_title}" loading="lazy" onerror="this.style.display='none'">
+        </div>
+        <div class="continue-info">
+          <div class="continue-title">${item.anime_title}</div>
+          <div class="continue-ep">Episode ${item.episode_number || 1}</div>
+          <div class="continue-progress">
+            <div class="continue-progress-bar" style="width:${progress}%"></div>
+          </div>
+          <div class="continue-progress-text">${progress}% completed</div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+async function removeItem(type, animeId, event){
+  event.stopPropagation();
+  const endpoint = type === 'favorites' ? `/api/favorites/${animeId}` : type === 'bookmarks' ? `/api/bookmarks/${animeId}` : `/api/history/${animeId}`;
+  const data = await apiCall(endpoint, {method: 'DELETE'});
+  if(data?.success){
+    showToast('Removed successfully');
+    loadProfileData();
+  }else{
+    showToast('Failed to remove','error');
+  }
+}
+
+// ========== SETTINGS ==========
+$('#saveProfileBtn')?.addEventListener('click', async () => {
+  const name = $('#settingsName').value;
+  const data = await apiCall('/api/profile', {method: 'PUT', body: JSON.stringify({name})});
+  if(data?.success){
+    showToast('Profile updated');
+    currentUser.name = name;
+    updateProfileUI(currentUser);
+  }else{
+    showToast(data?.error || 'Update failed','error');
+  }
+});
+
+$('#saveBackendBtn')?.addEventListener('click', () => {
+  const url = $('#backendUrlInput').value.trim();
+  if(url){
+    localStorage.setItem('backendUrl', url);
+    CONFIG.BACKEND_URL = url;
+    showToast('Backend URL saved');
+  }
+});
+
+$('#clearCacheBtn')?.addEventListener('click', () => {
+  Object.keys(localStorage).forEach(key => {
+    if(key.startsWith('cache_')) localStorage.removeItem(key);
+  });
+  showToast('Cache cleared');
+});
+
+$('#logoutBtn')?.addEventListener('click', () => {
+  localStorage.removeItem('authToken');
+  showToast('Logged out');
+  setTimeout(()=>location.href='index.html',1000);
+});
+
+// ========== MOBILE SIDEBAR ==========
+function openSidebar(){$('#sidebar').classList.add('active');$('#sidebarOverlay').classList.add('active');document.body.style.overflow='hidden';}
+function closeSidebar(){$('#sidebar').classList.remove('active');$('#sidebarOverlay').classList.remove('active');document.body.style.overflow='';}
+
+$('#menuToggle')?.addEventListener('click',()=>{if($('#sidebar').classList.contains('active'))closeSidebar();else openSidebar();});
+$('#sidebarClose')?.addEventListener('click',closeSidebar);
+$('#sidebarOverlay')?.addEventListener('click',closeSidebar);
+
+window.addEventListener('scroll',()=>{$('#header').classList.toggle('scrolled',window.scrollY>50);},{passive:true});
+$('#searchBtn')?.addEventListener('click',()=>location.href='search.html');
+
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeSidebar();});
+
+document.addEventListener('DOMContentLoaded',()=>{
+  checkAuth();
+});
+</script>
 </body>
 </html>
