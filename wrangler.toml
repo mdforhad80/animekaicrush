@@ -3,7 +3,7 @@ main = "worker.js"
 compatibility_date = "2024-03-01"
 
 [vars]
-JWT_SECRET = "super-secure-high-entropy-jwt-secret-key-change-this"
+JWT_SECRET = "N6wY9cS8gV8m7P3kQ4xD0vR1sL2zB9fJt6nE5hM8aK1qW3yU7pC4dF2gH9jL0mN"
 
 [[d1_databases]]
 binding = "DB"
