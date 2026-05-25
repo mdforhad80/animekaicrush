@@ -1,8 +1,6 @@
 // worker.js — Cloudflare Workers Backend
 // Complete API with D1 Database, JWT Auth, Rate Limiting
 
-import { Router } from './router.js'; // Inline router below for single-file deployment
-
 // ==================== CONFIG ====================
 const JWT_SECRET = (env) => env.JWT_SECRET;
 const COOKIE_NAME = 'nexstream_token';
