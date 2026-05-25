@@ -1,2861 +1,1230 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <meta name="theme-color" content="#0a0a0f" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-
-    <title>AnimeVault — Premium Anime Streaming</title>
-    <meta name="description" content="AnimeVault is a premium anime streaming platform with cinematic quality, ultra-modern design, and a massive library of anime content." />
-    <meta name="keywords" content="anime, streaming, premium, jikan, animevault, watch anime" />
-
-    <!-- OpenGraph -->
-    <meta property="og:title" content="AnimeVault — Premium Anime Streaming" />
-    <meta property="og:description" content="AnimeVault is a premium anime streaming platform with cinematic quality and a massive library." />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://animevault.pages.dev" />
-    <meta property="og:image" content="https://animevault.pages.dev/og-image.jpg" />
-
-    <!-- Twitter -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="AnimeVault — Premium Anime Streaming" />
-    <meta name="twitter:description" content="Premium anime streaming platform with cinematic quality." />
-
-    <style>
-        /* ===== RESET + BASE ===== */
-        *,
-        *::before,
-        *::after {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --bg-primary: #0a0a0f;
-            --bg-secondary: #111118;
-            --bg-card: rgba(20, 20, 30, 0.75);
-            --bg-glass: rgba(255, 255, 255, 0.04);
-            --border-glass: rgba(255, 255, 255, 0.07);
-            --text-primary: #f0f0f5;
-            --text-secondary: #a0a0b8;
-            --text-muted: #6a6a82;
-            --accent-purple: #8b5cf6;
-            --accent-glow: rgba(139, 92, 246, 0.35);
-            --accent-glow-soft: rgba(139, 92, 246, 0.12);
-            --accent-pink: #ec4899;
-            --accent-blue: #3b82f6;
-            --radius-lg: 16px;
-            --radius-md: 12px;
-            --radius-sm: 8px;
-            --font-sans: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.6);
-            --shadow-glow: 0 0 60px rgba(139, 92, 246, 0.15);
-            --transition-smooth: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-            --transition-bounce: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        html {
-            scroll-behavior: smooth;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        html,
-        body {
-            overflow-x: hidden;
-            max-width: 100%;
-            width: 100%;
-        }
-
-        body {
-            font-family: var(--font-sans);
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.6;
-            min-height: 100vh;
-            min-height: 100dvh;
-            padding-top: 70px;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-
-        /* ===== SCROLLBAR ===== */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: var(--bg-secondary);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: var(--accent-purple);
-            border-radius: 10px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #a78bfa;
-        }
-
-        /* ===== UTILITY ===== */
-        .container {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        .glass {
-            background: var(--bg-glass);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--border-glass);
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        .sr-only {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            border: 0;
-        }
-
-        /* ===== BUTTONS ===== */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            padding: 10px 24px;
-            border-radius: var(--radius-sm);
-            font-weight: 600;
-            font-size: 0.9rem;
-            border: none;
-            cursor: pointer;
-            transition: var(--transition-smooth);
-            font-family: var(--font-sans);
-            text-decoration: none;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn-primary {
-            background: var(--accent-purple);
-            color: #fff;
-            box-shadow: 0 4px 20px var(--accent-glow);
-        }
-        .btn-primary:hover {
-            background: #7c3aed;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 30px var(--accent-glow);
-        }
-        .btn-primary:active {
-            transform: scale(0.97);
-        }
-
-        .btn-secondary {
-            background: var(--bg-glass);
-            color: var(--text-primary);
-            border: 1px solid var(--border-glass);
-        }
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.08);
-        }
-
-        .btn-ghost {
-            background: transparent;
-            color: var(--text-secondary);
-        }
-        .btn-ghost:hover {
-            color: var(--text-primary);
-            background: var(--bg-glass);
-        }
-
-        .btn-danger {
-            background: #ef4444;
-            color: #fff;
-        }
-        .btn-danger:hover {
-            background: #dc2626;
-        }
-
-        /* ===== HEADER ===== */
-        .header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
-            background: rgba(10, 10, 15, 0.92);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border-bottom: 1px solid var(--border-glass);
-            height: 70px;
-            padding: 0 24px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            transition: var(--transition-smooth);
-        }
-
-        .header-brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex-shrink: 0;
-        }
-
-        .header-brand .logo {
-            font-size: 1.4rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, #8b5cf6, #ec4899);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            letter-spacing: -0.5px;
-            text-decoration: none;
-        }
-
-        .header-brand .logo span {
-            -webkit-text-fill-color: #fff;
-            background: none;
-        }
-
-        .header-nav {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            flex-wrap: nowrap;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
-            padding: 0 4px;
-            flex: 1;
-            justify-content: center;
-        }
-        .header-nav::-webkit-scrollbar {
-            display: none;
-        }
-
-        .header-nav a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 0.85rem;
-            font-weight: 500;
-            padding: 6px 14px;
-            border-radius: var(--radius-sm);
-            transition: var(--transition-smooth);
-            white-space: nowrap;
-            position: relative;
-        }
-        .header-nav a:hover,
-        .header-nav a.active {
-            color: var(--text-primary);
-            background: var(--bg-glass);
-        }
-        .header-nav a.active::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 20px;
-            height: 2px;
-            border-radius: 10px;
-            background: var(--accent-purple);
-        }
-
-        .header-actions {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex-shrink: 0;
-        }
-
-        .header-actions button {
-            background: none;
-            border: none;
-            color: var(--text-secondary);
-            font-size: 1.2rem;
-            padding: 6px 8px;
-            border-radius: var(--radius-sm);
-            cursor: pointer;
-            transition: var(--transition-smooth);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .header-actions button:hover {
-            color: var(--text-primary);
-            background: var(--bg-glass);
-        }
-
-        .header-actions .profile-btn {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: var(--accent-purple);
-            color: #fff;
-            font-weight: 700;
-            font-size: 0.85rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0;
-            overflow: hidden;
-        }
-        .header-actions .profile-btn img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 50%;
-        }
-        .header-actions .profile-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 30px var(--accent-glow);
-        }
-
-        /* Hamburger */
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            gap: 4px;
-            background: none;
-            border: none;
-            padding: 6px;
-            cursor: pointer;
-        }
-        .hamburger span {
-            width: 22px;
-            height: 2px;
-            background: var(--text-primary);
-            border-radius: 10px;
-            transition: var(--transition-smooth);
-        }
-        .hamburger.active span:nth-child(1) {
-            transform: rotate(45deg) translate(5px, 4px);
-        }
-        .hamburger.active span:nth-child(2) {
-            opacity: 0;
-        }
-        .hamburger.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(5px, -4px);
-        }
-
-        /* ===== SIDEBAR ===== */
-        .sidebar-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            z-index: 1100;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.35s ease;
-        }
-        .sidebar-overlay.open {
-            opacity: 1;
-            pointer-events: all;
-        }
-
-        .sidebar {
-            position: fixed;
-            top: 0;
-            left: -300px;
-            width: 280px;
-            height: 100%;
-            background: var(--bg-secondary);
-            z-index: 1200;
-            padding: 24px 20px;
-            overflow-y: auto;
-            transition: left 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-            border-right: 1px solid var(--border-glass);
-        }
-        .sidebar.open {
-            left: 0;
-        }
-
-        .sidebar-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 28px;
-        }
-        .sidebar-header .logo {
-            font-size: 1.2rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, #8b5cf6, #ec4899);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .sidebar-close {
-            background: none;
-            border: none;
-            color: var(--text-secondary);
-            font-size: 1.6rem;
-            cursor: pointer;
-            padding: 4px;
-        }
-
-        .sidebar-nav {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
-        .sidebar-nav a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            padding: 12px 16px;
-            border-radius: var(--radius-sm);
-            font-size: 0.95rem;
-            font-weight: 500;
-            transition: var(--transition-smooth);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .sidebar-nav a:hover,
-        .sidebar-nav a.active {
-            color: var(--text-primary);
-            background: var(--bg-glass);
-        }
-        .sidebar-nav a.active {
-            border-left: 3px solid var(--accent-purple);
-        }
-
-        .sidebar-divider {
-            height: 1px;
-            background: var(--border-glass);
-            margin: 16px 0;
-        }
-
-        /* ===== AUTH MODAL ===== */
-        .auth-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.75);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            z-index: 2000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.4s ease;
-            padding: 20px;
-        }
-        .auth-overlay.open {
-            opacity: 1;
-            pointer-events: all;
-        }
-
-        .auth-modal {
-            background: rgba(18, 18, 28, 0.97);
-            backdrop-filter: blur(32px);
-            -webkit-backdrop-filter: blur(32px);
-            border: 1px solid var(--border-glass);
-            border-radius: var(--radius-lg);
-            padding: 40px 36px;
-            max-width: 440px;
-            width: 100%;
-            max-height: 90vh;
-            overflow-y: auto;
-            transform: scale(0.92) translateY(20px);
-            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
-            opacity: 0;
-            box-shadow: var(--shadow-card), var(--shadow-glow);
-        }
-        .auth-overlay.open .auth-modal {
-            transform: scale(1) translateY(0);
-            opacity: 1;
-        }
-
-        .auth-modal .close-auth {
-            float: right;
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            font-size: 1.4rem;
-            cursor: pointer;
-            padding: 4px 8px;
-            transition: var(--transition-smooth);
-        }
-        .auth-modal .close-auth:hover {
-            color: var(--text-primary);
-        }
-
-        .auth-modal h2 {
-            font-size: 1.6rem;
-            font-weight: 700;
-            margin-bottom: 6px;
-            background: linear-gradient(135deg, #8b5cf6, #ec4899);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .auth-modal .subtitle {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            margin-bottom: 24px;
-        }
-
-        .auth-modal .tabs {
-            display: flex;
-            gap: 4px;
-            background: var(--bg-glass);
-            border-radius: var(--radius-sm);
-            padding: 4px;
-            margin-bottom: 24px;
-        }
-        .auth-modal .tabs button {
-            flex: 1;
-            padding: 10px;
-            border: none;
-            border-radius: var(--radius-sm);
-            background: transparent;
-            color: var(--text-secondary);
-            font-weight: 600;
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: var(--transition-smooth);
-            font-family: var(--font-sans);
-        }
-        .auth-modal .tabs button.active {
-            background: var(--accent-purple);
-            color: #fff;
-            box-shadow: 0 4px 16px var(--accent-glow);
-        }
-        .auth-modal .tabs button:not(.active):hover {
-            color: var(--text-primary);
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .auth-modal .form-group {
-            margin-bottom: 16px;
-        }
-        .auth-modal .form-group label {
-            display: block;
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: var(--text-secondary);
-            margin-bottom: 4px;
-        }
-        .auth-modal .form-group input {
-            width: 100%;
-            padding: 12px 16px;
-            border-radius: var(--radius-sm);
-            border: 1px solid var(--border-glass);
-            background: rgba(255, 255, 255, 0.04);
-            color: var(--text-primary);
-            font-size: 0.95rem;
-            transition: var(--transition-smooth);
-            font-family: var(--font-sans);
-            outline: none;
-        }
-        .auth-modal .form-group input:focus {
-            border-color: var(--accent-purple);
-            box-shadow: 0 0 0 3px var(--accent-glow-soft);
-        }
-        .auth-modal .form-group input::placeholder {
-            color: var(--text-muted);
-        }
-
-        .auth-modal .form-options {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin: 12px 0 20px;
-            font-size: 0.85rem;
-        }
-        .auth-modal .form-options label {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--text-secondary);
-            cursor: pointer;
-        }
-        .auth-modal .form-options label input[type="checkbox"] {
-            accent-color: var(--accent-purple);
-            width: 16px;
-            height: 16px;
-        }
-        .auth-modal .form-options a {
-            color: var(--accent-purple);
-            text-decoration: none;
-            font-weight: 500;
-        }
-        .auth-modal .form-options a:hover {
-            text-decoration: underline;
-        }
-
-        .auth-modal .btn-submit {
-            width: 100%;
-            padding: 14px;
-            border: none;
-            border-radius: var(--radius-sm);
-            background: var(--accent-purple);
-            color: #fff;
-            font-weight: 700;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: var(--transition-smooth);
-            font-family: var(--font-sans);
-            box-shadow: 0 4px 20px var(--accent-glow);
-        }
-        .auth-modal .btn-submit:hover {
-            background: #7c3aed;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 30px var(--accent-glow);
-        }
-        .auth-modal .btn-submit:active {
-            transform: scale(0.97);
-        }
-
-        .auth-modal .switch-link {
-            text-align: center;
-            margin-top: 18px;
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-        }
-        .auth-modal .switch-link button {
-            background: none;
-            border: none;
-            color: var(--accent-purple);
-            font-weight: 600;
-            cursor: pointer;
-            font-family: var(--font-sans);
-            font-size: 0.9rem;
-        }
-        .auth-modal .switch-link button:hover {
-            text-decoration: underline;
-        }
-
-        .auth-modal .terms-row {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin: 12px 0;
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-        }
-        .auth-modal .terms-row input[type="checkbox"] {
-            accent-color: var(--accent-purple);
-            width: 16px;
-            height: 16px;
-            flex-shrink: 0;
-        }
-        .auth-modal .terms-row a {
-            color: var(--accent-purple);
-            text-decoration: none;
-        }
-
-        /* ===== HERO SLIDER ===== */
-        .hero-section {
-            margin-bottom: 40px;
-            position: relative;
-            width: 100%;
-            max-width: 100%;
-            aspect-ratio: 16 / 9;
-            min-height: 240px;
-            max-height: 85vh;
-            background: var(--bg-secondary);
-            overflow: hidden;
-            border-radius: 0;
-            box-shadow: none;
-        }
-
-        .hero-slider {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-        }
-
-        .hero-slide {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            transition: opacity 0.8s ease;
-            pointer-events: none;
-        }
-        .hero-slide.active {
-            opacity: 1;
-            pointer-events: all;
-        }
-
-        .hero-slide .bg {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            background: var(--bg-secondary);
-        }
-
-        .hero-slide .overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 70%;
-            background: linear-gradient(to top, rgba(10, 10, 15, 0.95) 0%, rgba(10, 10, 15, 0.4) 50%, transparent 100%);
-        }
-
-        .hero-slide .content {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            padding: 40px 48px;
-            z-index: 2;
-        }
-
-        .hero-slide .content h1 {
-            font-size: clamp(1.6rem, 4vw, 3.2rem);
-            font-weight: 800;
-            margin-bottom: 6px;
-            line-height: 1.1;
-            text-shadow: 0 4px 30px rgba(0, 0, 0, 0.6);
-        }
-
-        .hero-slide .content .meta {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            margin-bottom: 8px;
-        }
-        .hero-slide .content .meta .score {
-            color: #fbbf24;
-            font-weight: 700;
-        }
-        .hero-slide .content .meta .badge {
-            background: var(--accent-purple);
-            color: #fff;
-            padding: 2px 10px;
-            border-radius: 20px;
-            font-size: 0.7rem;
-            font-weight: 700;
-            text-transform: uppercase;
-        }
-
-        .hero-slide .content .synopsis {
-            font-size: clamp(0.85rem, 1.1vw, 1.05rem);
-            color: var(--text-secondary);
-            max-width: 600px;
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            margin-bottom: 16px;
-            text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
-        }
-
-        .hero-slide .content .actions {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-        .hero-slide .content .actions .btn {
-            padding: 12px 28px;
-            font-size: 0.95rem;
-        }
-
-        /* Hero controls */
-        .hero-controls {
-            position: absolute;
-            bottom: 20px;
-            right: 24px;
-            z-index: 10;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .hero-controls .arrows {
-            display: flex;
-            gap: 4px;
-        }
-        .hero-controls .arrows button {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            border: none;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(8px);
-            color: #fff;
-            font-size: 1.2rem;
-            cursor: pointer;
-            transition: var(--transition-smooth);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .hero-controls .arrows button:hover {
-            background: var(--accent-purple);
-            box-shadow: 0 0 30px var(--accent-glow);
-        }
-
-        /* ===== WIDGETS ===== */
-        .widget-section {
-            margin-bottom: 40px;
-        }
-        .widget-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 16px;
-        }
-        .widget-header h2 {
-            font-size: 1.3rem;
-            font-weight: 700;
-        }
-        .widget-header .view-all {
-            color: var(--text-muted);
-            text-decoration: none;
-            font-size: 0.85rem;
-            font-weight: 500;
-            transition: var(--transition-smooth);
-        }
-        .widget-header .view-all:hover {
-            color: var(--accent-purple);
-        }
-
-        /* ===== CARDS ===== */
-        .card-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(min(170px, 100%), 1fr));
-            gap: 16px;
-        }
-
-        .anime-card {
-            background: var(--bg-card);
-            border-radius: var(--radius-md);
-            overflow: hidden;
-            transition: var(--transition-smooth);
-            cursor: pointer;
-            position: relative;
-            border: 1px solid var(--border-glass);
-            display: flex;
-            flex-direction: column;
-        }
-        .anime-card:hover {
-            transform: translateY(-6px) scale(1.02);
-            box-shadow: var(--shadow-card), var(--shadow-glow);
-            border-color: var(--accent-glow);
-        }
-
-        .anime-card .poster {
-            width: 100%;
-            aspect-ratio: 2/3;
-            object-fit: cover;
-            display: block;
-        }
-
-        .anime-card .card-body {
-            padding: 10px 12px 12px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .anime-card .card-body .title {
-            font-size: 0.85rem;
-            font-weight: 600;
-            line-height: 1.3;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        .anime-card .card-body .meta-row {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-            flex-wrap: wrap;
-            margin-top: auto;
-        }
-        .anime-card .card-body .meta-row .score {
-            color: #fbbf24;
-            font-weight: 700;
-        }
-        .anime-card .card-body .meta-row .badge {
-            background: var(--accent-purple);
-            color: #fff;
-            padding: 0 8px;
-            border-radius: 12px;
-            font-weight: 700;
-            font-size: 0.6rem;
-            text-transform: uppercase;
-        }
-
-        .anime-card .top-badge {
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(4px);
-            padding: 2px 10px;
-            border-radius: 12px;
-            font-size: 0.65rem;
-            font-weight: 700;
-            color: #fff;
-            border: 1px solid var(--border-glass);
-            text-transform: uppercase;
-        }
-
-        /* ===== SLIDER (horizontal scroll) ===== */
-        .slider-container {
-            position: relative;
-            overflow: hidden;
-        }
-
-        .slider-track {
-            display: flex;
-            gap: 16px;
-            overflow-x: auto;
-            scroll-snap-type: x mandatory;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
-            padding: 4px 2px 12px;
-        }
-        .slider-track::-webkit-scrollbar {
-            display: none;
-        }
-
-        .slider-track .anime-card {
-            flex: 0 0 min(180px, 40vw);
-            scroll-snap-align: start;
-        }
-
-        .slider-arrows {
-            display: flex;
-            gap: 6px;
-            flex-shrink: 0;
-        }
-        .slider-arrows button {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            border: none;
-            background: var(--bg-glass);
-            color: var(--text-secondary);
-            cursor: pointer;
-            transition: var(--transition-smooth);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1rem;
-        }
-        .slider-arrows button:hover {
-            background: var(--accent-purple);
-            color: #fff;
-            box-shadow: 0 0 20px var(--accent-glow);
-        }
-
-        /* ===== SEARCH OVERLAY ===== */
-        .search-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(10, 10, 15, 0.97);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            z-index: 3000;
-            padding: 24px;
-            display: flex;
-            flex-direction: column;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.35s ease;
-            overflow-y: auto;
-        }
-        .search-overlay.open {
-            opacity: 1;
-            pointer-events: all;
-        }
-
-        .search-overlay .search-header {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            max-width: 800px;
-            margin: 0 auto 24px;
-            width: 100%;
-        }
-        .search-overlay .search-header input {
-            flex: 1;
-            padding: 16px 20px;
-            border-radius: var(--radius-md);
-            border: 2px solid var(--border-glass);
-            background: rgba(255, 255, 255, 0.04);
-            color: var(--text-primary);
-            font-size: 1.2rem;
-            font-family: var(--font-sans);
-            outline: none;
-            transition: var(--transition-smooth);
-        }
-        .search-overlay .search-header input:focus {
-            border-color: var(--accent-purple);
-            box-shadow: 0 0 0 4px var(--accent-glow-soft);
-        }
-        .search-overlay .search-header input::placeholder {
-            color: var(--text-muted);
-        }
-        .search-overlay .search-header .close-search {
-            background: none;
-            border: none;
-            color: var(--text-secondary);
-            font-size: 1.6rem;
-            cursor: pointer;
-            padding: 8px;
-            transition: var(--transition-smooth);
-        }
-        .search-overlay .search-header .close-search:hover {
-            color: var(--text-primary);
-            transform: rotate(90deg);
-        }
-
-        .search-overlay .search-filters {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-            max-width: 800px;
-            margin: 0 auto 20px;
-            width: 100%;
-        }
-        .search-overlay .search-filters select {
-            padding: 8px 16px;
-            border-radius: var(--radius-sm);
-            border: 1px solid var(--border-glass);
-            background: rgba(255, 255, 255, 0.04);
-            color: var(--text-primary);
-            font-size: 0.85rem;
-            font-family: var(--font-sans);
-            outline: none;
-            min-width: 120px;
-            cursor: pointer;
-        }
-        .search-overlay .search-filters select:focus {
-            border-color: var(--accent-purple);
-        }
-        .search-overlay .search-filters select option {
-            background: var(--bg-secondary);
-        }
-
-        .search-overlay .search-results {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(min(160px, 100%), 1fr));
-            gap: 16px;
-            max-width: 800px;
-            margin: 0 auto;
-            width: 100%;
-        }
-
-        .search-overlay .search-results .anime-card {
-            aspect-ratio: auto;
-        }
-
-        .search-overlay .no-results {
-            text-align: center;
-            color: var(--text-muted);
-            padding: 40px 0;
-            font-size: 1.1rem;
-        }
-
-        /* ===== PROFILE PAGE ===== */
-        .profile-header {
-            display: flex;
-            align-items: center;
-            gap: 28px;
-            padding: 32px 0 24px;
-            flex-wrap: wrap;
-        }
-        .profile-header .avatar {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            background: var(--accent-purple);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.8rem;
-            font-weight: 700;
-            color: #fff;
-            flex-shrink: 0;
-            overflow: hidden;
-            box-shadow: 0 0 40px var(--accent-glow);
-        }
-        .profile-header .avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        .profile-header .info h1 {
-            font-size: 1.8rem;
-            font-weight: 700;
-        }
-        .profile-header .info .username {
-            color: var(--text-secondary);
-            font-size: 1rem;
-        }
-        .profile-header .info .stats {
-            display: flex;
-            gap: 24px;
-            margin-top: 6px;
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-        }
-        .profile-header .info .stats strong {
-            color: var(--text-primary);
-        }
-
-        .profile-tabs {
-            display: flex;
-            gap: 4px;
-            background: var(--bg-glass);
-            border-radius: var(--radius-sm);
-            padding: 4px;
-            margin-bottom: 24px;
-            flex-wrap: wrap;
-        }
-        .profile-tabs button {
-            padding: 10px 20px;
-            border: none;
-            border-radius: var(--radius-sm);
-            background: transparent;
-            color: var(--text-secondary);
-            font-weight: 600;
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: var(--transition-smooth);
-            font-family: var(--font-sans);
-        }
-        .profile-tabs button.active {
-            background: var(--accent-purple);
-            color: #fff;
-            box-shadow: 0 4px 16px var(--accent-glow);
-        }
-        .profile-tabs button:not(.active):hover {
-            color: var(--text-primary);
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .profile-tab-content {
-            min-height: 200px;
-        }
-        .profile-tab-content .tab-pane {
-            display: none;
-        }
-        .profile-tab-content .tab-pane.active {
-            display: block;
-        }
-
-        .profile-settings .form-group {
-            max-width: 400px;
-        }
-
-        /* ===== FOOTER ===== */
-        .footer {
-            padding: 24px 0 20px;
-            border-top: 1px solid var(--border-glass);
-            margin-top: 40px;
-            text-align: center;
-            font-size: 0.8rem;
-            color: var(--text-muted);
-        }
-        .footer .socials {
-            display: flex;
-            justify-content: center;
-            gap: 16px;
-            margin-bottom: 8px;
-        }
-        .footer .socials a {
-            color: var(--text-muted);
-            text-decoration: none;
-            font-size: 1.1rem;
-            transition: var(--transition-smooth);
-        }
-        .footer .socials a:hover {
-            color: var(--accent-purple);
-        }
-        .footer .disclaimer {
-            font-size: 0.7rem;
-            color: var(--text-muted);
-            max-width: 600px;
-            margin: 8px auto 0;
-            opacity: 0.7;
-        }
-
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 1024px) {
-            .header-nav a {
-                font-size: 0.75rem;
-                padding: 4px 10px;
-            }
-            .hero-slide .content {
-                padding: 28px 32px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            body {
-                padding-top: 60px;
-            }
-            .header {
-                height: 60px;
-                padding: 0 16px;
-            }
-            .header-nav {
-                display: none;
-            }
-            .hamburger {
-                display: flex;
-            }
-            .header-brand .logo {
-                font-size: 1.1rem;
-            }
-            .header-actions button {
-                font-size: 1rem;
-                padding: 4px 6px;
-            }
-            .header-actions .profile-btn {
-                width: 32px;
-                height: 32px;
-                font-size: 0.75rem;
-            }
-
-            .hero-section {
-                aspect-ratio: 16/9;
-                min-height: 180px;
-            }
-            .hero-slide .content {
-                padding: 20px 20px 16px;
-            }
-            .hero-slide .content h1 {
-                font-size: 1.2rem;
-            }
-            .hero-slide .content .synopsis {
-                -webkit-line-clamp: 2;
-                font-size: 0.8rem;
-            }
-            .hero-slide .content .actions .btn {
-                padding: 8px 16px;
-                font-size: 0.8rem;
-            }
-            .hero-controls {
-                bottom: 12px;
-                right: 16px;
-                gap: 8px;
-            }
-            .hero-controls .arrows button {
-                width: 28px;
-                height: 28px;
-                font-size: 0.9rem;
-            }
-
-            .auth-modal {
-                padding: 28px 20px;
-                margin: 10px;
-            }
-            .auth-modal h2 {
-                font-size: 1.3rem;
-            }
-
-            .profile-header {
-                flex-direction: column;
-                align-items: center;
-                text-align: center;
-                gap: 16px;
-            }
-            .profile-header .info .stats {
-                justify-content: center;
-            }
-
-            .slider-track .anime-card {
-                flex: 0 0 min(140px, 45vw);
-            }
-
-            .search-overlay {
-                padding: 16px;
-            }
-            .search-overlay .search-header input {
-                font-size: 1rem;
-                padding: 12px 16px;
-            }
-            .search-overlay .search-results {
-                grid-template-columns: repeat(auto-fill, minmax(min(130px, 100%), 1fr));
-                gap: 12px;
-            }
-
-            .card-grid {
-                grid-template-columns: repeat(auto-fill, minmax(min(140px, 100%), 1fr));
-                gap: 12px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .container {
-                padding: 0 12px;
-            }
-            .hero-section {
-                min-height: 140px;
-            }
-            .hero-slide .content {
-                padding: 14px 14px 12px;
-            }
-            .hero-slide .content h1 {
-                font-size: 1rem;
-            }
-            .hero-slide .content .synopsis {
-                display: none;
-            }
-            .hero-slide .content .actions .btn {
-                padding: 6px 14px;
-                font-size: 0.7rem;
-            }
-            .hero-controls {
-                bottom: 8px;
-                right: 10px;
-            }
-            .hero-controls .arrows button {
-                width: 24px;
-                height: 24px;
-                font-size: 0.7rem;
-            }
-
-            .slider-track .anime-card {
-                flex: 0 0 min(110px, 48vw);
-            }
-
-            .auth-modal {
-                padding: 20px 16px;
-            }
-            .auth-modal .tabs button {
-                font-size: 0.75rem;
-                padding: 8px;
-            }
-
-            .profile-tabs button {
-                padding: 8px 12px;
-                font-size: 0.75rem;
-            }
-
-            .search-overlay .search-results {
-                grid-template-columns: repeat(auto-fill, minmax(min(100px, 100%), 1fr));
-                gap: 8px;
-            }
-            .search-overlay .search-filters select {
-                min-width: 80px;
-                font-size: 0.75rem;
-                padding: 6px 10px;
-            }
-
-            .card-grid {
-                grid-template-columns: repeat(auto-fill, minmax(min(110px, 100%), 1fr));
-                gap: 8px;
-            }
-        }
-
-        @media (orientation: landscape) and (max-height: 500px) {
-            .hero-section {
-                aspect-ratio: 16/6;
-                min-height: 120px;
-            }
-            .hero-slide .content .synopsis {
-                display: none;
-            }
-            .hero-slide .content h1 {
-                font-size: 1.2rem;
-            }
-            .hero-slide .content .actions .btn {
-                padding: 6px 14px;
-                font-size: 0.75rem;
-            }
-            .hero-slide .content {
-                padding: 16px 24px;
-            }
-        }
-
-        /* ===== SAFE AREA ===== */
-        @supports (padding: max(0px)) {
-            .header {
-                padding-left: max(24px, env(safe-area-inset-left));
-                padding-right: max(24px, env(safe-area-inset-right));
-            }
-            .auth-overlay {
-                padding: max(20px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right)) max(20px, env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left));
-            }
-            .search-overlay {
-                padding: max(24px, env(safe-area-inset-top)) max(24px, env(safe-area-inset-right)) max(24px, env(safe-area-inset-bottom)) max(24px, env(safe-area-inset-left));
-            }
-            .sidebar {
-                padding-top: max(24px, env(safe-area-inset-top));
-                padding-bottom: max(24px, env(safe-area-inset-bottom));
-            }
-        }
-
-        /* ===== LOADING SKELETON ===== */
-        .skeleton {
-            background: linear-gradient(90deg, rgba(255, 255, 255, 0.04) 25%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.04) 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.5s ease-in-out infinite;
-            border-radius: var(--radius-sm);
-        }
-        @keyframes shimmer {
-            0% {
-                background-position: -200% 0;
-            }
-            100% {
-                background-position: 200% 0;
-            }
-        }
-
-        .skeleton-card {
-            aspect-ratio: 2/3;
-            border-radius: var(--radius-md);
-            background: var(--bg-card);
-            border: 1px solid var(--border-glass);
-        }
-
-        /* ===== MEGA MENU DROPDOWN ===== */
-        .nav-dropdown {
-            position: relative;
-        }
-        .nav-dropdown .dropdown-menu {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            background: rgba(18, 18, 28, 0.97);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid var(--border-glass);
-            border-radius: var(--radius-md);
-            padding: 12px 16px;
-            min-width: 180px;
-            opacity: 0;
-            pointer-events: none;
-            transform: translateY(8px);
-            transition: opacity 0.25s ease, transform 0.3s ease;
-            z-index: 100;
-            box-shadow: var(--shadow-card);
-            max-height: 360px;
-            overflow-y: auto;
-        }
-        .nav-dropdown:hover .dropdown-menu,
-        .nav-dropdown:focus-within .dropdown-menu {
-            opacity: 1;
-            pointer-events: all;
-            transform: translateY(0);
-        }
-        .nav-dropdown .dropdown-menu a {
-            display: block;
-            padding: 6px 12px;
-            border-radius: var(--radius-sm);
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 0.85rem;
-            transition: var(--transition-smooth);
-            white-space: nowrap;
-        }
-        .nav-dropdown .dropdown-menu a:hover {
-            color: var(--text-primary);
-            background: var(--bg-glass);
-        }
-
-        @media (max-width: 768px) {
-            .nav-dropdown .dropdown-menu {
-                position: static;
-                opacity: 1;
-                pointer-events: all;
-                transform: none;
-                background: transparent;
-                backdrop-filter: none;
-                border: none;
-                padding: 4px 0 4px 16px;
-                box-shadow: none;
-                max-height: none;
-                display: none;
-            }
-            .nav-dropdown.open .dropdown-menu {
-                display: block;
-            }
-            .nav-dropdown .dropdown-toggle::after {
-                content: ' ▾';
-                font-size: 0.7rem;
-            }
-        }
-
-        /* ===== TOAST ===== */
-        .toast-container {
-            position: fixed;
-            bottom: 24px;
-            right: 24px;
-            z-index: 5000;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            max-width: 360px;
-            width: 100%;
-        }
-        .toast {
-            padding: 14px 20px;
-            border-radius: var(--radius-sm);
-            background: rgba(18, 18, 28, 0.97);
-            backdrop-filter: blur(16px);
-            border: 1px solid var(--border-glass);
-            color: var(--text-primary);
-            font-size: 0.9rem;
-            box-shadow: var(--shadow-card);
-            animation: toastIn 0.35s ease;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .toast.success {
-            border-left: 4px solid #22c55e;
-        }
-        .toast.error {
-            border-left: 4px solid #ef4444;
-        }
-        .toast.info {
-            border-left: 4px solid var(--accent-purple);
-        }
-        @keyframes toastIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px) scale(0.95);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-        .toast .toast-close {
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            cursor: pointer;
-            font-size: 1.2rem;
-            margin-left: auto;
-            padding: 0 4px;
-        }
-    </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="theme-color" content="#030305"/>
+<title>AnimeVault — Stream Premium Anime</title>
+<meta name="description" content="Watch anime online free in HD. Trending, top rated, and new releases."/>
+<meta property="og:title" content="AnimeVault — Stream Premium Anime"/>
+<meta property="og:description" content="Watch anime online free in HD quality."/>
+<meta property="og:type" content="website"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{overflow-x:hidden;max-width:100%;background:#030305;color:#f0f0ff;font-family:'Outfit','Segoe UI',sans-serif;scroll-behavior:smooth}
+:root{
+  --bg-void:#030305;--bg-deep:#07070f;--bg-surface:#0d0d1a;--bg-card:#111122;
+  --bg-glass:rgba(255,255,255,0.04);--bg-glass-hover:rgba(255,255,255,0.07);
+  --accent-primary:#7c3aed;--accent-glow:#9d5af0;--accent-bright:#c084fc;
+  --accent-pink:#e879f9;--accent-cyan:#22d3ee;--accent-gold:#fbbf24;
+  --accent-red:#f43f5e;--accent-green:#10b981;
+  --text-primary:#f0f0ff;--text-secondary:#a0a0c0;--text-muted:#5a5a7a;
+  --border-subtle:rgba(124,58,237,0.15);--border-glow:rgba(124,58,237,0.45);
+  --radius-sm:6px;--radius-md:12px;--radius-lg:18px;--radius-xl:24px;
+  --shadow-card:0 4px 32px rgba(0,0,0,0.7);--shadow-glow:0 0 40px rgba(124,58,237,0.35);
+  --transition-fast:0.15s ease;--transition-smooth:0.3s cubic-bezier(0.4,0,0.2,1);
+  --header-height:70px;
+}
+::selection{background:rgba(124,58,237,0.4);color:#fff}
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:#0d0d1a}
+::-webkit-scrollbar-thumb{background:#7c3aed;border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:#9d5af0}
+
+/* ─── HEADER ─── */
+#header{position:fixed;top:0;left:0;right:0;height:var(--header-height);z-index:1000;
+  background:linear-gradient(180deg,rgba(3,3,5,0.98) 0%,rgba(3,3,5,0.85) 100%);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border-subtle);
+  display:flex;align-items:center;padding:0 clamp(12px,3vw,32px);gap:16px;
+  transition:var(--transition-smooth)}
+#header.scrolled{background:rgba(3,3,5,0.99);box-shadow:0 2px 40px rgba(0,0,0,0.8)}
+
+.header-left{display:flex;align-items:center;gap:12px;flex-shrink:0}
+.hamburger-btn{background:none;border:none;cursor:pointer;padding:8px;
+  display:flex;flex-direction:column;gap:5px;border-radius:var(--radius-sm)}
+.hamburger-btn span{display:block;width:22px;height:2px;background:var(--text-secondary);
+  border-radius:2px;transition:var(--transition-smooth)}
+.hamburger-btn:hover span{background:var(--accent-bright)}
+
+.logo{font-family:'Cinzel',serif;font-size:clamp(18px,2.5vw,24px);font-weight:700;
+  text-decoration:none;letter-spacing:0.05em;
+  background:linear-gradient(135deg,#c084fc,#7c3aed,#22d3ee);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 0 12px rgba(124,58,237,0.5));
+  flex-shrink:0}
+
+/* NAV */
+.header-nav{display:flex;align-items:center;gap:2px;flex:1;justify-content:center;
+  overflow:hidden}
+.nav-item{position:relative}
+.nav-link{display:flex;align-items:center;gap:5px;padding:8px 12px;
+  color:var(--text-secondary);text-decoration:none;font-size:13px;font-weight:500;
+  border-radius:var(--radius-sm);transition:var(--transition-fast);white-space:nowrap;
+  background:none;border:none;cursor:pointer}
+.nav-link:hover,.nav-link.active{color:var(--text-primary);background:var(--bg-glass)}
+.nav-link .caret{width:12px;height:12px;opacity:0.6;transition:transform var(--transition-fast)}
+.nav-item:hover .caret{transform:rotate(180deg)}
+
+/* MEGA DROPDOWN */
+.mega-drop{position:absolute;top:calc(100% + 8px);left:50%;transform:translateX(-50%);
+  background:rgba(7,7,15,0.97);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  border:1px solid var(--border-subtle);border-radius:var(--radius-lg);
+  padding:16px;min-width:260px;opacity:0;visibility:hidden;pointer-events:none;
+  transform:translateX(-50%) translateY(-8px);transition:all var(--transition-smooth);
+  box-shadow:var(--shadow-card),var(--shadow-glow);z-index:200}
+.nav-item:hover .mega-drop{opacity:1;visibility:visible;pointer-events:all;
+  transform:translateX(-50%) translateY(0)}
+.mega-drop-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.mega-drop-item{padding:8px 12px;border-radius:var(--radius-sm);color:var(--text-secondary);
+  text-decoration:none;font-size:13px;transition:var(--transition-fast);cursor:pointer;
+  display:block}
+.mega-drop-item:hover{color:var(--accent-bright);background:var(--bg-glass)}
+.mega-drop-title{font-size:11px;font-weight:600;letter-spacing:0.1em;
+  color:var(--text-muted);text-transform:uppercase;margin-bottom:8px;padding:0 4px}
+
+/* HEADER RIGHT */
+.header-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.icon-btn{background:none;border:none;cursor:pointer;padding:8px;
+  border-radius:var(--radius-sm);color:var(--text-secondary);
+  transition:var(--transition-fast);display:flex;align-items:center;justify-content:center}
+.icon-btn:hover{color:var(--accent-bright);background:var(--bg-glass)}
+.icon-btn svg{width:20px;height:20px}
+
+/* LANG */
+.lang-select{background:var(--bg-glass);border:1px solid var(--border-subtle);
+  color:var(--text-secondary);font-size:12px;padding:5px 8px;border-radius:var(--radius-sm);
+  cursor:pointer;outline:none;font-family:inherit}
+.lang-select:hover{border-color:var(--accent-primary);color:var(--text-primary)}
+
+/* PROFILE BTN */
+.profile-btn{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--accent-primary),var(--accent-pink));
+  border:2px solid transparent;cursor:pointer;overflow:hidden;flex-shrink:0;
+  transition:var(--transition-smooth);display:flex;align-items:center;justify-content:center;
+  font-size:14px;font-weight:600;color:#fff}
+.profile-btn:hover{transform:scale(1.1);box-shadow:0 0 16px rgba(124,58,237,0.5)}
+
+/* ─── MOBILE SIDEBAR ─── */
+#sidebar-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:1099;
+  opacity:0;visibility:hidden;transition:var(--transition-smooth)}
+#sidebar-overlay.open{opacity:1;visibility:visible}
+#sidebar{position:fixed;top:0;left:0;bottom:0;width:var(--sidebar-width,260px);
+  background:rgba(7,7,15,0.99);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);
+  border-right:1px solid var(--border-subtle);z-index:1100;
+  transform:translateX(-100%);transition:transform 0.35s cubic-bezier(0.4,0,0.2,1);
+  display:flex;flex-direction:column;overflow-y:auto;padding:20px 0}
+#sidebar.open{transform:translateX(0)}
+.sidebar-logo{padding:0 20px 20px;border-bottom:1px solid var(--border-subtle);
+  font-family:'Cinzel',serif;font-size:20px;font-weight:700;
+  background:linear-gradient(135deg,#c084fc,#7c3aed);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.sidebar-nav{padding:12px 0}
+.sidebar-link{display:flex;align-items:center;gap:10px;padding:11px 20px;
+  color:var(--text-secondary);text-decoration:none;font-size:14px;
+  transition:var(--transition-fast)}
+.sidebar-link:hover{color:var(--text-primary);background:var(--bg-glass)}
+.sidebar-link svg{width:18px;height:18px;flex-shrink:0}
+
+/* ─── SEARCH OVERLAY ─── */
+#search-overlay{position:fixed;inset:0;z-index:2000;
+  background:rgba(3,3,5,0.95);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);
+  opacity:0;visibility:hidden;transition:var(--transition-smooth);
+  display:flex;flex-direction:column;align-items:center;padding:clamp(20px,5vw,80px) 20px 20px;
+  overflow-y:auto}
+#search-overlay.open{opacity:1;visibility:visible}
+.search-close{position:absolute;top:20px;right:20px;background:var(--bg-glass);
+  border:1px solid var(--border-subtle);color:var(--text-secondary);
+  border-radius:50%;width:40px;height:40px;cursor:pointer;font-size:20px;
+  display:flex;align-items:center;justify-content:center;transition:var(--transition-fast)}
+.search-close:hover{color:#fff;border-color:var(--accent-primary)}
+.search-bar-wrap{width:100%;max-width:680px;position:relative;margin-bottom:24px}
+#search-input{width:100%;padding:16px 56px 16px 20px;background:var(--bg-surface);
+  border:2px solid var(--border-subtle);border-radius:var(--radius-xl);
+  color:var(--text-primary);font-size:18px;font-family:inherit;outline:none;
+  transition:var(--transition-smooth)}
+#search-input:focus{border-color:var(--accent-primary);box-shadow:0 0 0 4px rgba(124,58,237,0.15)}
+.search-icon-btn{position:absolute;right:12px;top:50%;transform:translateY(-50%);
+  background:none;border:none;cursor:pointer;color:var(--text-muted);
+  display:flex;align-items:center;justify-content:center}
+.search-filters{display:flex;flex-wrap:wrap;gap:8px;width:100%;max-width:680px;margin-bottom:24px}
+.search-filter{padding:6px 14px;background:var(--bg-glass);border:1px solid var(--border-subtle);
+  border-radius:20px;color:var(--text-secondary);font-size:12px;cursor:pointer;
+  transition:var(--transition-fast)}
+.search-filter:hover,.search-filter.active{background:rgba(124,58,237,0.2);
+  border-color:var(--accent-primary);color:var(--accent-bright)}
+#search-results{width:100%;max-width:680px;display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px}
+.search-result-card{background:var(--bg-card);border-radius:var(--radius-md);
+  overflow:hidden;cursor:pointer;border:1px solid var(--border-subtle);
+  transition:var(--transition-smooth)}
+.search-result-card:hover{transform:translateY(-4px);border-color:var(--accent-primary);
+  box-shadow:var(--shadow-glow)}
+.search-result-card img{width:100%;aspect-ratio:3/4;object-fit:cover}
+.search-result-info{padding:8px}
+.search-result-info h4{font-size:12px;font-weight:500;color:var(--text-primary);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.search-result-info span{font-size:11px;color:var(--text-muted)}
+
+/* ─── AUTH MODAL ─── */
+#auth-overlay{position:fixed;inset:0;z-index:3000;
+  background:rgba(0,0,0,0.8);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  display:flex;align-items:center;justify-content:center;padding:20px;
+  opacity:0;visibility:hidden;transition:var(--transition-smooth)}
+#auth-overlay.open{opacity:1;visibility:visible}
+.auth-modal{background:linear-gradient(145deg,rgba(13,13,26,0.98),rgba(7,7,15,0.99));
+  border:1px solid var(--border-subtle);border-radius:var(--radius-xl);
+  width:100%;max-width:440px;max-height:90vh;overflow-y:auto;
+  padding:clamp(24px,4vw,40px);box-shadow:var(--shadow-card),var(--shadow-glow);
+  transform:scale(0.95) translateY(20px);transition:var(--transition-smooth)}
+#auth-overlay.open .auth-modal{transform:scale(1) translateY(0)}
+.auth-tabs{display:flex;margin-bottom:28px;background:var(--bg-surface);
+  border-radius:var(--radius-md);padding:4px}
+.auth-tab{flex:1;padding:9px;border:none;background:none;cursor:pointer;
+  border-radius:var(--radius-sm);color:var(--text-muted);font-size:14px;
+  font-family:inherit;font-weight:500;transition:var(--transition-fast)}
+.auth-tab.active{background:var(--accent-primary);color:#fff;
+  box-shadow:0 2px 12px rgba(124,58,237,0.4)}
+.auth-logo{font-family:'Cinzel',serif;font-size:22px;font-weight:700;text-align:center;
+  background:linear-gradient(135deg,#c084fc,#7c3aed);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  margin-bottom:8px}
+.auth-subtitle{text-align:center;color:var(--text-muted);font-size:13px;margin-bottom:24px}
+.form-group{margin-bottom:16px}
+.form-label{display:block;font-size:12px;font-weight:500;color:var(--text-secondary);
+  margin-bottom:6px;letter-spacing:0.03em}
+.form-input{width:100%;padding:12px 16px;background:var(--bg-surface);
+  border:1px solid var(--border-subtle);border-radius:var(--radius-md);
+  color:var(--text-primary);font-size:14px;font-family:inherit;outline:none;
+  transition:var(--transition-fast)}
+.form-input:focus{border-color:var(--accent-primary);box-shadow:0 0 0 3px rgba(124,58,237,0.12)}
+.form-row{display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:16px;flex-wrap:wrap;gap:8px}
+.form-row label{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-secondary);cursor:pointer}
+.form-row input[type=checkbox]{accent-color:var(--accent-primary)}
+.form-link{color:var(--accent-bright);font-size:12px;text-decoration:none}
+.form-link:hover{text-decoration:underline}
+.auth-btn{width:100%;padding:13px;background:linear-gradient(135deg,var(--accent-primary),var(--accent-pink));
+  border:none;border-radius:var(--radius-md);color:#fff;font-size:15px;font-weight:600;
+  font-family:inherit;cursor:pointer;transition:var(--transition-smooth);margin-bottom:16px}
+.auth-btn:hover{transform:translateY(-1px);box-shadow:0 6px 24px rgba(124,58,237,0.5)}
+.auth-divider{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:var(--border-subtle)}
+.auth-divider span{font-size:12px;color:var(--text-muted)}
+.social-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.social-btn{padding:10px;background:var(--bg-glass);border:1px solid var(--border-subtle);
+  border-radius:var(--radius-md);color:var(--text-secondary);font-size:13px;
+  cursor:pointer;transition:var(--transition-fast);display:flex;align-items:center;
+  justify-content:center;gap:6px;font-family:inherit}
+.social-btn:hover{background:var(--bg-glass-hover);border-color:rgba(255,255,255,0.2)}
+.auth-switch{text-align:center;font-size:13px;color:var(--text-muted)}
+.auth-switch button{background:none;border:none;color:var(--accent-bright);cursor:pointer;
+  font-size:13px;font-family:inherit}
+.auth-close{position:absolute;top:16px;right:16px;background:var(--bg-glass);
+  border:1px solid var(--border-subtle);color:var(--text-muted);border-radius:50%;
+  width:36px;height:36px;cursor:pointer;font-size:18px;display:flex;
+  align-items:center;justify-content:center;transition:var(--transition-fast)}
+.auth-close:hover{color:#fff;border-color:var(--accent-primary)}
+#auth-overlay{position:relative}
+.auth-modal{position:relative}
+
+/* ─── HERO SLIDER ─── */
+#hero{position:relative;height:calc(100vh - var(--header-height));min-height:500px;
+  max-height:800px;overflow:hidden;margin-top:var(--header-height)}
+.hero-track{display:flex;height:100%;transition:transform 0.7s cubic-bezier(0.4,0,0.2,1)}
+.hero-slide{min-width:100%;height:100%;position:relative;flex-shrink:0}
+.hero-bg{position:absolute;inset:0;background-size:cover;background-position:center;
+  transform:scale(1.05);transition:transform 8s ease}
+.hero-slide.active .hero-bg{transform:scale(1)}
+.hero-gradient{position:absolute;inset:0;
+  background:linear-gradient(90deg,rgba(3,3,5,0.92) 0%,rgba(3,3,5,0.6) 50%,rgba(3,3,5,0.2) 100%),
+             linear-gradient(0deg,rgba(3,3,5,0.9) 0%,transparent 50%)}
+.hero-content{position:absolute;bottom:clamp(40px,8vh,100px);left:clamp(20px,5vw,80px);
+  max-width:clamp(280px,50%,600px)}
+.hero-badges{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.badge{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;
+  letter-spacing:0.05em;text-transform:uppercase}
+.badge-genre{background:rgba(124,58,237,0.3);border:1px solid rgba(124,58,237,0.5);
+  color:var(--accent-bright)}
+.badge-score{background:rgba(251,191,36,0.2);border:1px solid rgba(251,191,36,0.4);
+  color:var(--accent-gold)}
+.badge-new{background:rgba(244,63,94,0.25);border:1px solid rgba(244,63,94,0.5);
+  color:#fb7185}
+.hero-title{font-family:'Cinzel',serif;font-size:clamp(22px,4vw,52px);font-weight:700;
+  line-height:1.1;color:#fff;margin-bottom:10px;
+  text-shadow:0 2px 20px rgba(0,0,0,0.5);
+  opacity:0;transform:translateY(20px);transition:all 0.6s ease 0.1s}
+.hero-slide.active .hero-title{opacity:1;transform:translateY(0)}
+.hero-meta{display:flex;gap:12px;font-size:13px;color:var(--text-secondary);margin-bottom:12px;
+  opacity:0;transform:translateY(20px);transition:all 0.6s ease 0.2s;flex-wrap:wrap}
+.hero-slide.active .hero-meta{opacity:1;transform:translateY(0)}
+.hero-synopsis{font-size:clamp(13px,1.4vw,15px);color:var(--text-secondary);
+  line-height:1.7;margin-bottom:20px;display:-webkit-box;-webkit-line-clamp:3;
+  -webkit-box-orient:vertical;overflow:hidden;
+  opacity:0;transform:translateY(20px);transition:all 0.6s ease 0.3s}
+.hero-slide.active .hero-synopsis{opacity:1;transform:translateY(0)}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap;
+  opacity:0;transform:translateY(20px);transition:all 0.6s ease 0.4s}
+.hero-slide.active .hero-btns{opacity:1;transform:translateY(0)}
+.btn-watch{display:flex;align-items:center;gap:8px;padding:12px 24px;
+  background:linear-gradient(135deg,var(--accent-primary),var(--accent-pink));
+  border:none;border-radius:var(--radius-md);color:#fff;font-size:14px;font-weight:600;
+  font-family:inherit;cursor:pointer;text-decoration:none;
+  transition:var(--transition-smooth);box-shadow:0 4px 20px rgba(124,58,237,0.4)}
+.btn-watch:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(124,58,237,0.6)}
+.btn-details{display:flex;align-items:center;gap:8px;padding:12px 24px;
+  background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);
+  border-radius:var(--radius-md);color:#fff;font-size:14px;font-weight:600;
+  font-family:inherit;cursor:pointer;text-decoration:none;backdrop-filter:blur(10px);
+  transition:var(--transition-smooth)}
+.btn-details:hover{background:rgba(255,255,255,0.18);transform:translateY(-2px)}
+
+.hero-controls{position:absolute;bottom:clamp(20px,4vh,40px);right:clamp(20px,4vw,60px);
+  display:flex;align-items:center;gap:12px}
+.hero-arrow{width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.15);color:#fff;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:var(--transition-smooth);backdrop-filter:blur(10px)}
+.hero-arrow:hover{background:rgba(124,58,237,0.4);border-color:var(--accent-primary)}
+.hero-dots{display:flex;gap:6px;align-items:center}
+.hero-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.3);
+  cursor:pointer;transition:var(--transition-smooth)}
+.hero-dot.active{width:24px;border-radius:3px;background:var(--accent-bright)}
+
+/* ─── MAIN CONTENT ─── */
+#main{padding:40px clamp(16px,4vw,60px);max-width:1600px;margin:0 auto}
+
+/* ─── SECTION HEADERS ─── */
+.section-header{display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:20px}
+.section-title{font-family:'Cinzel',serif;font-size:clamp(16px,2vw,22px);font-weight:600;
+  display:flex;align-items:center;gap:10px}
+.section-title::before{content:'';width:4px;height:1em;background:linear-gradient(180deg,var(--accent-primary),var(--accent-pink));
+  border-radius:2px;flex-shrink:0}
+.section-more{color:var(--accent-bright);font-size:13px;text-decoration:none;
+  display:flex;align-items:center;gap:4px;transition:var(--transition-fast)}
+.section-more:hover{gap:8px}
+
+/* ─── ANIME WIDGET / SLIDER ─── */
+.anime-widget{margin-bottom:48px}
+.slider-wrap{position:relative}
+.slider-container{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;
+  scroll-behavior:smooth;padding-bottom:8px;cursor:grab;user-select:none;
+  -webkit-overflow-scrolling:touch}
+.slider-container:active{cursor:grabbing}
+.slider-container::-webkit-scrollbar{height:3px}
+.slider-container::-webkit-scrollbar-track{background:transparent}
+.slider-container::-webkit-scrollbar-thumb{background:var(--accent-primary);border-radius:3px}
+
+.slider-arrow{position:absolute;top:50%;transform:translateY(-50%);
+  width:40px;height:40px;border-radius:50%;background:rgba(7,7,15,0.9);
+  border:1px solid var(--border-subtle);color:#fff;cursor:pointer;z-index:10;
+  display:flex;align-items:center;justify-content:center;
+  transition:var(--transition-smooth);backdrop-filter:blur(10px)}
+.slider-arrow:hover{background:var(--accent-primary);border-color:var(--accent-primary);
+  box-shadow:var(--shadow-glow)}
+.slider-arrow.left{left:-16px}.slider-arrow.right{right:-16px}
+.slider-arrow.hidden{opacity:0;pointer-events:none}
+
+/* ─── ANIME CARD ─── */
+.anime-card{flex-shrink:0;width:clamp(130px,14vw,180px);
+  border-radius:var(--radius-md);overflow:hidden;cursor:pointer;
+  scroll-snap-align:start;background:var(--bg-card);
+  border:1px solid var(--border-subtle);
+  transition:var(--transition-smooth);position:relative}
+.anime-card:hover{transform:translateY(-6px) scale(1.02);
+  border-color:var(--accent-primary);box-shadow:var(--shadow-glow)}
+.card-poster{width:100%;aspect-ratio:3/4;overflow:hidden;position:relative;background:#0d0d1a}
+.card-poster img{width:100%;height:100%;object-fit:cover;
+  transition:transform 0.4s ease;display:block}
+.anime-card:hover .card-poster img{transform:scale(1.08)}
+.card-badges{position:absolute;top:6px;left:6px;display:flex;flex-direction:column;gap:3px}
+.card-badge{padding:2px 6px;border-radius:3px;font-size:9px;font-weight:700;
+  text-transform:uppercase;letter-spacing:0.05em;backdrop-filter:blur(8px)}
+.card-badge.hd{background:rgba(34,211,238,0.3);color:var(--accent-cyan);
+  border:1px solid rgba(34,211,238,0.4)}
+.card-badge.score{background:rgba(251,191,36,0.3);color:var(--accent-gold);
+  border:1px solid rgba(251,191,36,0.4)}
+.card-badge.ep{background:rgba(124,58,237,0.35);color:var(--accent-bright);
+  border:1px solid rgba(124,58,237,0.4)}
+.card-badge.type{background:rgba(16,185,129,0.25);color:#34d399;
+  border:1px solid rgba(16,185,129,0.4)}
+.card-hover-overlay{position:absolute;inset:0;background:rgba(3,3,5,0.7);
+  opacity:0;display:flex;align-items:center;justify-content:center;
+  transition:var(--transition-smooth)}
+.anime-card:hover .card-hover-overlay{opacity:1}
+.play-icon{width:44px;height:44px;border-radius:50%;
+  background:linear-gradient(135deg,var(--accent-primary),var(--accent-pink));
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 0 20px rgba(124,58,237,0.5)}
+.card-info{padding:10px}
+.card-title{font-size:12px;font-weight:500;color:var(--text-primary);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:4px}
+.card-meta{font-size:11px;color:var(--text-muted);display:flex;gap:6px}
+
+/* ─── SKELETON LOADER ─── */
+.skeleton{background:linear-gradient(90deg,#111122 25%,#1a1a33 50%,#111122 75%);
+  background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:var(--radius-md)}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* ─── FOOTER ─── */
+#footer{background:var(--bg-deep);border-top:1px solid var(--border-subtle);
+  padding:32px clamp(16px,4vw,60px);text-align:center}
+.footer-logo{font-family:'Cinzel',serif;font-size:20px;font-weight:700;
+  background:linear-gradient(135deg,#c084fc,#7c3aed);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  margin-bottom:12px}
+.footer-links{display:flex;flex-wrap:wrap;justify-content:center;gap:16px;
+  margin-bottom:16px}
+.footer-links a{color:var(--text-muted);font-size:13px;text-decoration:none}
+.footer-links a:hover{color:var(--accent-bright)}
+.footer-social{display:flex;justify-content:center;gap:12px;margin-bottom:16px}
+.social-icon{width:36px;height:36px;border-radius:50%;background:var(--bg-glass);
+  border:1px solid var(--border-subtle);display:flex;align-items:center;justify-content:center;
+  color:var(--text-muted);text-decoration:none;transition:var(--transition-fast)}
+.social-icon:hover{color:var(--accent-bright);border-color:var(--accent-primary)}
+.footer-disclaimer{font-size:12px;color:var(--text-muted);max-width:600px;margin:0 auto;
+  line-height:1.6}
+.footer-copy{font-size:12px;color:var(--text-muted);margin-top:8px}
+
+/* ─── TOAST ─── */
+#toast-wrap{position:fixed;bottom:20px;right:20px;z-index:9999;
+  display:flex;flex-direction:column;gap:8px;pointer-events:none}
+.toast{padding:12px 20px;background:var(--bg-surface);border:1px solid var(--border-subtle);
+  border-radius:var(--radius-md);color:var(--text-primary);font-size:13px;
+  box-shadow:var(--shadow-card);transform:translateX(120%);
+  transition:transform 0.35s cubic-bezier(0.34,1.56,0.64,1);pointer-events:all}
+.toast.show{transform:translateX(0)}
+.toast.success{border-color:rgba(16,185,129,0.4);color:#34d399}
+.toast.error{border-color:rgba(244,63,94,0.4);color:#fb7185}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:900px){
+  .header-nav{display:none}
+  .hero-content{max-width:min(90%,500px)}
+  .slider-arrow{display:none}
+}
+@media(max-width:600px){
+  #hero{height:70vh;min-height:400px;max-height:none}
+  .hero-synopsis{display:none}
+  .hero-content{left:16px;right:16px;max-width:none;bottom:60px}
+  .hero-btns{gap:8px}
+  .btn-watch,.btn-details{padding:10px 16px;font-size:13px}
+  .hero-controls{right:16px;bottom:16px}
+  #main{padding:24px 12px}
+}
+@media(min-width:901px){.hamburger-btn{display:none}}
+</style>
 </head>
 <body>
 
-    <!-- ===== HEADER ===== -->
-    <header class="header" role="banner">
-        <div class="header-brand">
-            <button class="hamburger" id="hamburgerBtn" aria-label="Toggle navigation">
-                <span></span><span></span><span></span>
-            </button>
-            <a href="/" class="logo">Anime<span>Vault</span></a>
+<!-- ═══════════ HEADER ═══════════ -->
+<header id="header">
+  <div class="header-left">
+    <button class="hamburger-btn" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+    <a href="index.html" class="logo">AnimeVault</a>
+  </div>
+
+  <nav class="header-nav" id="header-nav">
+    <div class="nav-item">
+      <a href="index.html" class="nav-link active">Home</a>
+    </div>
+    <div class="nav-item">
+      <a href="#trending" class="nav-link">Trending</a>
+    </div>
+    <div class="nav-item">
+      <a href="schedule.html" class="nav-link">Schedule</a>
+    </div>
+    <div class="nav-item">
+      <a href="az-list.html" class="nav-link">A-Z List</a>
+    </div>
+    <div class="nav-item">
+      <button class="nav-link">
+        Genres
+        <svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="mega-drop" id="genres-drop">
+        <div class="mega-drop-title">Browse Genres</div>
+        <div class="mega-drop-grid" id="genres-grid">
+          <!-- populated by JS -->
         </div>
-
-        <nav class="header-nav" role="navigation" aria-label="Main navigation">
-            <a href="/" class="active">Home</a>
-            <a href="/schedule.html">Schedule</a>
-            <a href="/az-list.html">A-Z</a>
-
-            <!-- Genres Dropdown -->
-            <div class="nav-dropdown" id="genresDropdown">
-                <a href="#" class="dropdown-toggle">Genres</a>
-                <div class="dropdown-menu" id="genresMenu"></div>
-            </div>
-
-            <!-- Types Dropdown -->
-            <div class="nav-dropdown">
-                <a href="#" class="dropdown-toggle">Types</a>
-                <div class="dropdown-menu">
-                    <a href="/search.html?type=tv">TV</a>
-                    <a href="/search.html?type=movie">Movie</a>
-                    <a href="/search.html?type=ova">OVA</a>
-                    <a href="/search.html?type=ona">ONA</a>
-                    <a href="/search.html?type=special">Special</a>
-                    <a href="/search.html?type=music">Music</a>
-                </div>
-            </div>
-
-            <!-- Status Dropdown -->
-            <div class="nav-dropdown">
-                <a href="#" class="dropdown-toggle">Status</a>
-                <div class="dropdown-menu">
-                    <a href="/search.html?status=airing">Airing</a>
-                    <a href="/search.html?status=completed">Completed</a>
-                    <a href="/search.html?status=upcoming">Upcoming</a>
-                    <a href="/search.html?status=releasing">Releasing</a>
-                </div>
-            </div>
-
-            <a href="/search.html">Search</a>
-            <a href="/profile.html">Profile</a>
-        </nav>
-
-        <div class="header-actions">
-            <button id="searchToggle" aria-label="Search" title="Search">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            </button>
-
-            <button id="langToggle" aria-label="Language" title="Language" style="font-weight:600;font-size:0.75rem;padding:4px 8px;">EN</button>
-
-            <button class="profile-btn" id="profileBtn" aria-label="Profile">
-                <span id="profileInitial">U</span>
-            </button>
+      </div>
+    </div>
+    <div class="nav-item">
+      <button class="nav-link">
+        Types
+        <svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="mega-drop">
+        <div class="mega-drop-title">Anime Types</div>
+        <div class="mega-drop-grid">
+          <a href="az-list.html?type=TV" class="mega-drop-item">TV Series</a>
+          <a href="az-list.html?type=Movie" class="mega-drop-item">Movies</a>
+          <a href="az-list.html?type=OVA" class="mega-drop-item">OVA</a>
+          <a href="az-list.html?type=ONA" class="mega-drop-item">ONA</a>
+          <a href="az-list.html?type=Special" class="mega-drop-item">Special</a>
+          <a href="az-list.html?type=Music" class="mega-drop-item">Music</a>
         </div>
-    </header>
-
-    <!-- ===== SIDEBAR ===== -->
-    <div class="sidebar-overlay" id="sidebarOverlay"></div>
-    <aside class="sidebar" id="sidebar" role="navigation" aria-label="Sidebar navigation">
-        <div class="sidebar-header">
-            <span class="logo">AnimeVault</span>
-            <button class="sidebar-close" id="sidebarClose" aria-label="Close sidebar">✕</button>
+      </div>
+    </div>
+    <div class="nav-item">
+      <button class="nav-link">
+        Status
+        <svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="mega-drop">
+        <div class="mega-drop-title">Airing Status</div>
+        <div class="mega-drop-grid">
+          <a href="az-list.html?status=airing" class="mega-drop-item">Airing</a>
+          <a href="az-list.html?status=complete" class="mega-drop-item">Completed</a>
+          <a href="az-list.html?status=upcoming" class="mega-drop-item">Upcoming</a>
+          <a href="az-list.html?status=ongoing" class="mega-drop-item">Ongoing</a>
         </div>
-        <nav class="sidebar-nav">
-            <a href="/" class="active">🏠 Home</a>
-            <a href="/schedule.html">📅 Schedule</a>
-            <a href="/az-list.html">🔤 A-Z List</a>
-            <a href="/search.html">🔍 Search</a>
-            <a href="/profile.html">👤 Profile</a>
-            <div class="sidebar-divider"></div>
-            <a href="#" id="sidebarGenres">🎭 Genres</a>
-            <a href="#" id="sidebarTypes">📺 Types</a>
-            <a href="#" id="sidebarStatus">📌 Status</a>
-        </nav>
-    </aside>
+      </div>
+    </div>
+  </nav>
 
-    <!-- ===== AUTH MODAL ===== -->
-    <div class="auth-overlay" id="authOverlay">
-        <div class="auth-modal" role="dialog" aria-labelledby="authTitle">
-            <button class="close-auth" id="closeAuth" aria-label="Close">✕</button>
-            <h2 id="authTitle">Welcome back</h2>
-            <p class="subtitle">Sign in to continue your anime journey.</p>
+  <div class="header-right">
+    <button class="icon-btn" id="search-btn" aria-label="Search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    </button>
+    <select class="lang-select" id="lang-select" aria-label="Language">
+      <option value="en">EN</option>
+      <option value="jp">JP</option>
+      <option value="bn">BN</option>
+    </select>
+    <button class="profile-btn" id="profile-btn" aria-label="Profile">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    </button>
+  </div>
+</header>
 
-            <div class="tabs" role="tablist">
-                <button role="tab" aria-selected="true" data-tab="login" class="active">Login</button>
-                <button role="tab" aria-selected="false" data-tab="signup">Sign Up</button>
-            </div>
+<!-- ═══════════ SIDEBAR ═══════════ -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <div class="sidebar-logo">AnimeVault</div>
+  <nav class="sidebar-nav">
+    <a href="index.html" class="sidebar-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Home
+    </a>
+    <a href="#trending" class="sidebar-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+      Trending
+    </a>
+    <a href="schedule.html" class="sidebar-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Schedule
+    </a>
+    <a href="az-list.html" class="sidebar-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+      A-Z List
+    </a>
+    <a href="search.html" class="sidebar-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      Search
+    </a>
+    <a href="profile.html" class="sidebar-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      Profile
+    </a>
+  </nav>
+</aside>
 
-            <!-- Login Form -->
-            <form id="loginForm" data-form="login">
-                <div class="form-group">
-                    <label for="loginEmail">Email or Username</label>
-                    <input type="text" id="loginEmail" placeholder="Enter your email or username" required autocomplete="username" />
-                </div>
-                <div class="form-group">
-                    <label for="loginPassword">Password</label>
-                    <input type="password" id="loginPassword" placeholder="Enter your password" required autocomplete="current-password" />
-                </div>
-                <div class="form-options">
-                    <label><input type="checkbox" id="rememberMe" /> Remember me</label>
-                    <a href="#" id="forgotPassword">Forgot password?</a>
-                </div>
-                <button type="submit" class="btn-submit">Sign In</button>
-                <div class="switch-link">
-                    Don't have an account? <button type="button" id="switchToSignup">Sign up</button>
-                </div>
-            </form>
+<!-- ═══════════ SEARCH OVERLAY ═══════════ -->
+<div id="search-overlay" role="dialog" aria-label="Search">
+  <button class="search-close" id="search-close" aria-label="Close">✕</button>
+  <div class="search-bar-wrap">
+    <input type="text" id="search-input" placeholder="Search anime, genres, studios..." autocomplete="off" spellcheck="false"/>
+    <button class="search-icon-btn" aria-label="Search">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    </button>
+  </div>
+  <div class="search-filters">
+    <button class="search-filter active" data-filter="all">All</button>
+    <button class="search-filter" data-filter="tv">TV</button>
+    <button class="search-filter" data-filter="movie">Movie</button>
+    <button class="search-filter" data-filter="ova">OVA</button>
+    <button class="search-filter" data-filter="ona">ONA</button>
+    <button class="search-filter" data-filter="airing">Airing</button>
+    <button class="search-filter" data-filter="completed">Completed</button>
+  </div>
+  <div id="search-results"></div>
+</div>
 
-            <!-- Signup Form -->
-            <form id="signupForm" data-form="signup" class="hidden">
-                <div class="form-group">
-                    <label for="signupName">Full Name</label>
-                    <input type="text" id="signupName" placeholder="Enter your full name" required autocomplete="name" />
-                </div>
-                <div class="form-group">
-                    <label for="signupUsername">Username</label>
-                    <input type="text" id="signupUsername" placeholder="Choose a username" required autocomplete="username" />
-                </div>
-                <div class="form-group">
-                    <label for="signupEmail">Email</label>
-                    <input type="email" id="signupEmail" placeholder="Enter your email" required autocomplete="email" />
-                </div>
-                <div class="form-group">
-                    <label for="signupPassword">Password</label>
-                    <input type="password" id="signupPassword" placeholder="Create a password" required autocomplete="new-password" />
-                </div>
-                <div class="form-group">
-                    <label for="signupConfirm">Confirm Password</label>
-                    <input type="password" id="signupConfirm" placeholder="Confirm your password" required autocomplete="new-password" />
-                </div>
-                <div class="terms-row">
-                    <input type="checkbox" id="termsCheck" required />
-                    <label for="termsCheck">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></label>
-                </div>
-                <button type="submit" class="btn-submit">Create Account</button>
-                <div class="switch-link">
-                    Already have an account? <button type="button" id="switchToLogin">Sign in</button>
-                </div>
-            </form>
-        </div>
+<!-- ═══════════ AUTH MODAL ═══════════ -->
+<div id="auth-overlay" role="dialog" aria-label="Authentication">
+  <div class="auth-modal" id="auth-modal">
+    <button class="auth-close" id="auth-close" aria-label="Close">✕</button>
+    <div class="auth-logo">AnimeVault</div>
+    <p class="auth-subtitle" id="auth-subtitle">Sign in to access your watchlist and more</p>
+    <div class="auth-tabs">
+      <button class="auth-tab active" data-tab="login">Sign In</button>
+      <button class="auth-tab" data-tab="signup">Create Account</button>
     </div>
 
-    <!-- ===== SEARCH OVERLAY ===== -->
-    <div class="search-overlay" id="searchOverlay">
-        <div class="search-header">
-            <input type="text" id="searchInput" placeholder="Search for anime, genres, or characters..." autofocus />
-            <button class="close-search" id="closeSearch" aria-label="Close search">✕</button>
-        </div>
-        <div class="search-filters">
-            <select id="searchGenre">
-                <option value="">All Genres</option>
-            </select>
-            <select id="searchType">
-                <option value="">All Types</option>
-                <option value="tv">TV</option>
-                <option value="movie">Movie</option>
-                <option value="ova">OVA</option>
-                <option value="ona">ONA</option>
-                <option value="special">Special</option>
-                <option value="music">Music</option>
-            </select>
-            <select id="searchYear">
-                <option value="">All Years</option>
-            </select>
-            <select id="searchSort">
-                <option value="score">Sort by Score</option>
-                <option value="title">Sort by Title</option>
-                <option value="popularity">Sort by Popularity</option>
-            </select>
-        </div>
-        <div class="search-results" id="searchResults">
-            <div class="no-results">Start typing to search for anime.</div>
-        </div>
+    <!-- LOGIN FORM -->
+    <div id="login-form">
+      <div class="form-group">
+        <label class="form-label">Email or Username</label>
+        <input type="text" class="form-input" id="login-email" placeholder="your@email.com" autocomplete="username"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input type="password" class="form-input" id="login-pass" placeholder="••••••••" autocomplete="current-password"/>
+      </div>
+      <div class="form-row">
+        <label><input type="checkbox" id="remember-me"/> Remember me</label>
+        <a href="#" class="form-link">Forgot password?</a>
+      </div>
+      <button class="auth-btn" id="login-btn">Sign In</button>
+      <div class="auth-divider"><span>or continue with</span></div>
+      <div class="social-btns">
+        <button class="social-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+          Google
+        </button>
+        <button class="social-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+          GitHub
+        </button>
+      </div>
+      <p class="auth-switch">No account? <button onclick="switchAuthTab('signup')">Create one free</button></p>
     </div>
 
-    <!-- ===== TOAST CONTAINER ===== -->
-    <div class="toast-container" id="toastContainer"></div>
+    <!-- SIGNUP FORM -->
+    <div id="signup-form" style="display:none">
+      <div class="form-group">
+        <label class="form-label">Full Name</label>
+        <input type="text" class="form-input" id="signup-name" placeholder="Your Name" autocomplete="name"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Username</label>
+        <input type="text" class="form-input" id="signup-username" placeholder="cooluser123" autocomplete="username"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input type="email" class="form-input" id="signup-email" placeholder="your@email.com" autocomplete="email"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input type="password" class="form-input" id="signup-pass" placeholder="Min 8 characters" autocomplete="new-password"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Confirm Password</label>
+        <input type="password" class="form-input" id="signup-confirm" placeholder="Repeat password" autocomplete="new-password"/>
+      </div>
+      <div class="form-row">
+        <label><input type="checkbox" id="terms-check"/> I agree to the <a href="#" class="form-link">Terms of Service</a></label>
+      </div>
+      <button class="auth-btn" id="signup-btn">Create Account</button>
+      <p class="auth-switch">Have an account? <button onclick="switchAuthTab('login')">Sign in</button></p>
+    </div>
+  </div>
+</div>
 
-    <!-- ===== MAIN CONTENT ===== -->
-    <main role="main">
+<!-- ═══════════ HERO SLIDER ═══════════ -->
+<section id="hero">
+  <div class="hero-track" id="hero-track">
+    <!-- populated by JS -->
+  </div>
+  <div class="hero-controls">
+    <button class="hero-arrow" id="hero-prev" aria-label="Previous">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <div class="hero-dots" id="hero-dots"></div>
+    <button class="hero-arrow" id="hero-next" aria-label="Next">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+  </div>
+</section>
 
-        <!-- ===== HERO SLIDER ===== -->
-        <!-- Full width hero, not inside .container -->
-        <section class="hero-section" aria-label="Featured anime">
-            <div class="hero-slider" id="heroSlider">
-                <!-- Slides injected via JS -->
-                <div class="hero-controls">
-                    <div class="arrows">
-                        <button id="heroPrev" aria-label="Previous slide">‹</button>
-                        <button id="heroNext" aria-label="Next slide">›</button>
-                    </div>
-                </div>
-            </div>
-        </section>
+<!-- ═══════════ MAIN ═══════════ -->
+<main id="main">
 
-        <!-- ===== WIDGETS ===== -->
-        <section class="container">
-            <!-- Trending -->
-            <div class="widget-section" id="trendingSection">
-                <div class="widget-header">
-                    <h2>🔥 Trending Now</h2>
-                    <a href="/search.html?sort=trending" class="view-all">View All →</a>
-                </div>
-                <div class="slider-container">
-                    <div class="slider-track" id="trendingTrack"></div>
-                    <div class="slider-arrows" style="display:flex;justify-content:flex-end;margin-top:8px;">
-                        <button class="slider-prev" data-target="trendingTrack">‹</button>
-                        <button class="slider-next" data-target="trendingTrack">›</button>
-                    </div>
-                </div>
-            </div>
+  <section class="anime-widget" id="trending">
+    <div class="section-header">
+      <h2 class="section-title">Trending Now</h2>
+      <a href="az-list.html?sort=bypopularity" class="section-more">View All →</a>
+    </div>
+    <div class="slider-wrap">
+      <button class="slider-arrow left" aria-label="Scroll left">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <div class="slider-container" id="trending-slider"></div>
+      <button class="slider-arrow right" aria-label="Scroll right">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+    </div>
+  </section>
 
-            <!-- Top Rated -->
-            <div class="widget-section" id="topratedSection">
-                <div class="widget-header">
-                    <h2>⭐ Top Rated</h2>
-                    <a href="/search.html?sort=score" class="view-all">View All →</a>
-                </div>
-                <div class="slider-container">
-                    <div class="slider-track" id="topratedTrack"></div>
-                    <div class="slider-arrows" style="display:flex;justify-content:flex-end;margin-top:8px;">
-                        <button class="slider-prev" data-target="topratedTrack">‹</button>
-                        <button class="slider-next" data-target="topratedTrack">›</button>
-                    </div>
-                </div>
-            </div>
+  <section class="anime-widget" id="top-airing">
+    <div class="section-header">
+      <h2 class="section-title">Top Airing</h2>
+      <a href="az-list.html?status=airing" class="section-more">View All →</a>
+    </div>
+    <div class="slider-wrap">
+      <button class="slider-arrow left" aria-label="Scroll left">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <div class="slider-container" id="airing-slider"></div>
+      <button class="slider-arrow right" aria-label="Scroll right">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+    </div>
+  </section>
 
-            <!-- Movies (NEW) -->
-            <div class="widget-section" id="moviesSection">
-                <div class="widget-header">
-                    <h2>🎬 Movies</h2>
-                    <a href="/search.html?type=movie" class="view-all">View All →</a>
-                </div>
-                <div class="slider-container">
-                    <div class="slider-track" id="moviesTrack"></div>
-                    <div class="slider-arrows" style="display:flex;justify-content:flex-end;margin-top:8px;">
-                        <button class="slider-prev" data-target="moviesTrack">‹</button>
-                        <button class="slider-next" data-target="moviesTrack">›</button>
-                    </div>
-                </div>
-            </div>
+  <section class="anime-widget">
+    <div class="section-header">
+      <h2 class="section-title">Top Rated All Time</h2>
+      <a href="az-list.html?sort=byrank" class="section-more">View All →</a>
+    </div>
+    <div class="slider-wrap">
+      <button class="slider-arrow left" aria-label="Scroll left">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <div class="slider-container" id="toprated-slider"></div>
+      <button class="slider-arrow right" aria-label="Scroll right">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+    </div>
+  </section>
 
-            <!-- Top Airing -->
-            <div class="widget-section" id="airingSection">
-                <div class="widget-header">
-                    <h2>📡 Top Airing</h2>
-                    <a href="/search.html?status=airing" class="view-all">View All →</a>
-                </div>
-                <div class="slider-container">
-                    <div class="slider-track" id="airingTrack"></div>
-                    <div class="slider-arrows" style="display:flex;justify-content:flex-end;margin-top:8px;">
-                        <button class="slider-prev" data-target="airingTrack">‹</button>
-                        <button class="slider-next" data-target="airingTrack">›</button>
-                    </div>
-                </div>
-            </div>
+  <section class="anime-widget">
+    <div class="section-header">
+      <h2 class="section-title">Upcoming Anime</h2>
+      <a href="az-list.html?status=upcoming" class="section-more">View All →</a>
+    </div>
+    <div class="slider-wrap">
+      <button class="slider-arrow left" aria-label="Scroll left">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <div class="slider-container" id="upcoming-slider"></div>
+      <button class="slider-arrow right" aria-label="Scroll right">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+    </div>
+  </section>
 
-            <!-- Upcoming -->
-            <div class="widget-section" id="upcomingSection">
-                <div class="widget-header">
-                    <h2>🚀 Upcoming</h2>
-                    <a href="/search.html?status=upcoming" class="view-all">View All →</a>
-                </div>
-                <div class="slider-container">
-                    <div class="slider-track" id="upcomingTrack"></div>
-                    <div class="slider-arrows" style="display:flex;justify-content:flex-end;margin-top:8px;">
-                        <button class="slider-prev" data-target="upcomingTrack">‹</button>
-                        <button class="slider-next" data-target="upcomingTrack">›</button>
-                    </div>
-                </div>
-            </div>
+  <section class="anime-widget">
+    <div class="section-header">
+      <h2 class="section-title">Movies</h2>
+      <a href="az-list.html?type=Movie" class="section-more">View All →</a>
+    </div>
+    <div class="slider-wrap">
+      <button class="slider-arrow left" aria-label="Scroll left">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <div class="slider-container" id="movies-slider"></div>
+      <button class="slider-arrow right" aria-label="Scroll right">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+    </div>
+  </section>
 
-            <!-- Completed -->
-            <div class="widget-section" id="completedSection">
-                <div class="widget-header">
-                    <h2>✅ Completed</h2>
-                    <a href="/search.html?status=completed" class="view-all">View All →</a>
-                </div>
-                <div class="slider-container">
-                    <div class="slider-track" id="completedTrack"></div>
-                    <div class="slider-arrows" style="display:flex;justify-content:flex-end;margin-top:8px;">
-                        <button class="slider-prev" data-target="completedTrack">‹</button>
-                        <button class="slider-next" data-target="completedTrack">›</button>
-                    </div>
-                </div>
-            </div>
+  <section class="anime-widget">
+    <div class="section-header">
+      <h2 class="section-title">New Releases</h2>
+      <a href="az-list.html?sort=latest" class="section-more">View All →</a>
+    </div>
+    <div class="slider-wrap">
+      <button class="slider-arrow left" aria-label="Scroll left">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <div class="slider-container" id="newrel-slider"></div>
+      <button class="slider-arrow right" aria-label="Scroll right">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+    </div>
+  </section>
 
-            <!-- New Releases removed -->
-        </section>
+</main>
 
-    </main>
+<!-- ═══════════ FOOTER ═══════════ -->
+<footer id="footer">
+  <div class="footer-logo">AnimeVault</div>
+  <div class="footer-links">
+    <a href="#">About</a>
+    <a href="#">DMCA</a>
+    <a href="#">Privacy Policy</a>
+    <a href="#">Terms</a>
+    <a href="schedule.html">Schedule</a>
+    <a href="az-list.html">A-Z List</a>
+  </div>
+  <div class="footer-social">
+    <a href="#" class="social-icon" aria-label="Discord">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 00-.041-.106 13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03z"/></svg>
+    </a>
+    <a href="#" class="social-icon" aria-label="Twitter">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg>
+    </a>
+    <a href="#" class="social-icon" aria-label="Reddit">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.687-.562-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094.33.33 0 0 0 0 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 .029-.463.33.33 0 0 0-.464 0c-.547.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 0 0-.232-.095z"/></svg>
+    </a>
+  </div>
+  <p class="footer-disclaimer">This site does not store any files on its server. All contents are provided by non-affiliated third parties.</p>
+  <p class="footer-copy">© 2025 AnimeVault. All rights reserved.</p>
+</footer>
 
-    <!-- ===== FOOTER ===== -->
-    <footer class="footer" role="contentinfo">
-        <div class="container">
-            <div class="socials">
-                <a href="#" aria-label="Twitter">🐦</a>
-                <a href="#" aria-label="Discord">💬</a>
-                <a href="#" aria-label="GitHub">🐙</a>
-                <a href="#" aria-label="Reddit">🤖</a>
-            </div>
-            <p>&copy; 2026 AnimeVault. All rights reserved.</p>
-            <p class="disclaimer">This site does not store any files on its server. All contents are provided by non-affiliated third parties.</p>
+<!-- TOAST -->
+<div id="toast-wrap"></div>
+
+<script>
+// ═══════════════════════════════════════════
+// ANIMEVAULT — MAIN ENGINE
+// ═══════════════════════════════════════════
+
+const API = 'https://api.jikan.moe/v4';
+const CACHE_TTL = 5 * 60 * 1000; // 5 min
+const cache = new Map();
+
+// ─── UTILS ───
+function $(id){return document.getElementById(id)}
+function toast(msg,type='info'){
+  const wrap=$('toast-wrap');
+  const el=document.createElement('div');
+  el.className=`toast ${type}`;
+  el.textContent=msg;
+  wrap.appendChild(el);
+  requestAnimationFrame(()=>el.classList.add('show'));
+  setTimeout(()=>{el.classList.remove('show');setTimeout(()=>el.remove(),400)},3000);
+}
+
+async function apiFetch(url,retries=3,delay=1200){
+  const key=url;
+  const cached=cache.get(key);
+  if(cached&&Date.now()-cached.ts<CACHE_TTL)return cached.data;
+  for(let i=0;i<retries;i++){
+    try{
+      const r=await fetch(url,{signal:AbortSignal.timeout(10000)});
+      if(r.status===429){await new Promise(res=>setTimeout(res,delay*(i+1)));continue}
+      if(!r.ok)throw new Error(`HTTP ${r.status}`);
+      const d=await r.json();
+      cache.set(key,{data:d,ts:Date.now()});
+      return d;
+    }catch(e){
+      if(i===retries-1)throw e;
+      await new Promise(res=>setTimeout(res,delay*(i+1)));
+    }
+  }
+}
+
+// ─── LANG ───
+const LANGS={
+  en:{trending:'Trending Now',topRated:'Top Rated',airing:'Top Airing',
+      upcoming:'Upcoming',watch:'Watch Now',details:'Details',
+      search:'Search anime...'},
+  jp:{trending:'トレンド',topRated:'高評価',airing:'放映中',
+      upcoming:'近日公開',watch:'今すぐ見る',details:'詳細',
+      search:'アニメを検索...'},
+  bn:{trending:'ট্রেন্ডিং',topRated:'শীর্ষ রেটেড',airing:'সম্প্রচার',
+      upcoming:'আসন্ন',watch:'এখন দেখুন',details:'বিবরণ',
+      search:'অ্যানিমে খুঁজুন...'}
+};
+let currentLang='en';
+function initLang(){
+  currentLang=localStorage.getItem('av_lang')||'en';
+  const sel=$('lang-select');
+  if(sel)sel.value=currentLang;
+}
+$('lang-select')?.addEventListener('change',function(){
+  currentLang=this.value;
+  localStorage.setItem('av_lang',currentLang);
+  const l=LANGS[currentLang]||LANGS.en;
+  const si=$('search-input');
+  if(si)si.placeholder=l.search||'Search anime...';
+});
+
+// ─── HEADER SCROLL ───
+window.addEventListener('scroll',()=>{
+  $('header')?.classList.toggle('scrolled',window.scrollY>50);
+},{passive:true});
+
+// ─── SIDEBAR ───
+function openSidebar(){
+  $('sidebar')?.classList.add('open');
+  $('sidebar-overlay')?.classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeSidebar(){
+  $('sidebar')?.classList.remove('open');
+  $('sidebar-overlay')?.classList.remove('open');
+  document.body.style.overflow='';
+}
+$('hamburger')?.addEventListener('click',openSidebar);
+$('sidebar-overlay')?.addEventListener('click',closeSidebar);
+
+// ─── SEARCH ───
+function openSearch(){
+  $('search-overlay')?.classList.add('open');
+  document.body.style.overflow='hidden';
+  setTimeout(()=>$('search-input')?.focus(),100);
+}
+function closeSearch(){
+  $('search-overlay')?.classList.remove('open');
+  document.body.style.overflow='';
+}
+$('search-btn')?.addEventListener('click',openSearch);
+$('search-close')?.addEventListener('click',closeSearch);
+
+let searchTimer=null;
+$('search-input')?.addEventListener('input',function(){
+  clearTimeout(searchTimer);
+  const q=this.value.trim();
+  if(!q){$('search-results').innerHTML='';return}
+  searchTimer=setTimeout(()=>doSearch(q),420);
+});
+
+let activeFilter='all';
+document.querySelectorAll('.search-filter').forEach(btn=>{
+  btn.addEventListener('click',function(){
+    document.querySelectorAll('.search-filter').forEach(b=>b.classList.remove('active'));
+    this.classList.add('active');
+    activeFilter=this.dataset.filter;
+    const q=$('search-input')?.value.trim();
+    if(q)doSearch(q);
+  });
+});
+
+async function doSearch(q){
+  const res=$('search-results');
+  if(!res)return;
+  res.innerHTML='<div class="skeleton" style="height:120px;grid-column:1/-1"></div>';
+  try{
+    let url=`${API}/anime?q=${encodeURIComponent(q)}&limit=12&sfw=true`;
+    if(activeFilter!=='all'){
+      if(['tv','movie','ova','ona'].includes(activeFilter))url+=`&type=${activeFilter}`;
+      else if(activeFilter==='airing')url+=`&status=airing`;
+      else if(activeFilter==='completed')url+=`&status=complete`;
+    }
+    const d=await apiFetch(url);
+    if(!d?.data?.length){res.innerHTML='<p style="color:var(--text-muted);grid-column:1/-1;text-align:center;padding:40px">No results found</p>';return}
+    res.innerHTML=d.data.map(a=>`
+      <div class="search-result-card" onclick="location.href='anime.html?id=${a.mal_id}'">
+        <img src="${a.images?.jpg?.image_url||''}" alt="${a.title||''}" loading="lazy" onerror="this.src='data:image/svg+xml,<svg xmlns=\\"http://www.w3.org/2000/svg\\" width=\\"100\\" height=\\"140\\" viewBox=\\"0 0 100 140\\"><rect fill=\\"%230d0d1a\\" width=\\"100\\" height=\\"140\\"/></svg>'"/>
+        <div class="search-result-info">
+          <h4>${a.title||'Unknown'}</h4>
+          <span>${a.type||'?'} · ${a.score?'★'+a.score:''}</span>
         </div>
-    </footer>
-
-    <script>
-        // ============================================================
-        //  ANIMEVAULT — FULL APPLICATION LOGIC
-        //  Engineered for stability, performance, and premium UX.
-        // ============================================================
-
-        (function() {
-            'use strict';
-
-            // ===== CONFIG =====
-            const CONFIG = {
-                API_BASE: 'https://api.jikan.moe/v4',
-                CACHE_TTL: 3600000, // 1 hour
-                MAX_RETRIES: 3,
-                RETRY_DELAY: 1000,
-                HERO_INTERVAL: 5000,
-                SEARCH_DEBOUNCE: 400,
-                ITEMS_PER_WIDGET: 18,
-                HERO_SLIDE_COUNT: 10,
-            };
-
-            // ===== STATE =====
-            const state = {
-                user: null,
-                token: localStorage.getItem('av_token') || null,
-                language: localStorage.getItem('av_lang') || 'en',
-                heroIndex: 0,
-                heroTimer: null,
-                sliderInstances: {},
-                isSearchOpen: false,
-                isAuthOpen: false,
-                isSidebarOpen: false,
-                authTab: 'login',
-                searchController: null,
-            };
-
-            // ===== UTILITY FUNCTIONS =====
-            function $(sel, ctx) { return (ctx || document).querySelector(sel); }
-
-            function $$(sel, ctx) { return Array.from((ctx || document).querySelectorAll(sel)); }
-
-            function debounce(fn, ms) {
-                let timer;
-                return function(...args) {
-                    clearTimeout(timer);
-                    timer = setTimeout(() => fn.apply(this, args), ms);
-                };
-            }
-
-            function throttle(fn, ms) {
-                let last = 0;
-                return function(...args) {
-                    const now = Date.now();
-                    if (now - last >= ms) { last = now;
-                        fn.apply(this, args); }
-                };
-            }
-
-            function fetchWithRetry(url, options = {}, retries = CONFIG.MAX_RETRIES) {
-                return new Promise((resolve, reject) => {
-                    const attempt = (n) => {
-                        fetch(url, options)
-                            .then(res => {
-                                if (!res.ok) throw new Error(`HTTP ${res.status}`);
-                                return res.json();
-                            })
-                            .then(resolve)
-                            .catch(err => {
-                                if (n > 0) {
-                                    setTimeout(() => attempt(n - 1), CONFIG.RETRY_DELAY);
-                                } else {
-                                    reject(err);
-                                }
-                            });
-                    };
-                    attempt(retries);
-                });
-            }
-
-            function cacheFetch(key, fetchFn, ttl = CONFIG.CACHE_TTL) {
-                const cachedStr = localStorage.getItem('av_cache_' + key);
-                let staleData = null;
-
-                if (cachedStr) {
-                    try {
-                        const { data, timestamp } = JSON.parse(cachedStr);
-                        if (Date.now() - timestamp < ttl) {
-                            return Promise.resolve(data);
-                        }
-                        staleData = data;
-                    } catch (_) { /* ignore corrupted cache */ }
-                }
-
-                return fetchFn()
-                    .then(data => {
-                        try {
-                            localStorage.setItem('av_cache_' + key, JSON.stringify({ data, timestamp: Date.now() }));
-                        } catch (_) {}
-                        return data;
-                    })
-                    .catch(err => {
-                        if (staleData) {
-                            console.warn(`Cache stale for ${key}, returning cached data due to fetch error:`, err);
-                            return staleData;
-                        }
-                        throw err;
-                    });
-            }
-
-            function toast(message, type = 'info', duration = 3500) {
-                const container = document.getElementById('toastContainer');
-                const el = document.createElement('div');
-                el.className = `toast ${type}`;
-                el.innerHTML = `<span>${message}</span><button class="toast-close">✕</button>`;
-                container.appendChild(el);
-                el.querySelector('.toast-close').addEventListener('click', () => el.remove());
-                setTimeout(() => {
-                    if (el.parentNode) el.remove();
-                }, duration);
-            }
-
-            function getInitials(name) {
-                if (!name) return 'U';
-                return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
-            }
-
-            function escapeHTML(str) {
-                const div = document.createElement('div');
-                div.textContent = str;
-                return div.innerHTML;
-            }
-
-            function truncate(str, len = 120) {
-                return str.length > len ? str.slice(0, len) + '…' : str;
-            }
-
-            function formatDate(ts) {
-                return new Date(ts).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-            }
-
-            // ===== API =====
-            const API = {
-                async getTrending() {
-                    return cacheFetch('trending', () =>
-                        fetchWithRetry(`${CONFIG.API_BASE}/top/anime?limit=${CONFIG.ITEMS_PER_WIDGET}`)
-                    );
-                },
-                async getTopRated() {
-                    return cacheFetch('toprated', () =>
-                        fetchWithRetry(`${CONFIG.API_BASE}/top/anime?limit=${CONFIG.ITEMS_PER_WIDGET}&filter=bypopularity`)
-                    );
-                },
-                async getAiring() {
-                    return cacheFetch('airing', () =>
-                        fetchWithRetry(`${CONFIG.API_BASE}/top/anime?limit=${CONFIG.ITEMS_PER_WIDGET}&filter=airing`)
-                    );
-                },
-                async getUpcoming() {
-                    return cacheFetch('upcoming', () =>
-                        fetchWithRetry(`${CONFIG.API_BASE}/top/anime?limit=${CONFIG.ITEMS_PER_WIDGET}&filter=upcoming`)
-                    );
-                },
-                async getCompleted() {
-                    return cacheFetch('completed', () =>
-                        fetchWithRetry(`${CONFIG.API_BASE}/top/anime?limit=${CONFIG.ITEMS_PER_WIDGET}&filter=bypopularity&status=completed`)
-                    );
-                },
-                async getMovies() {
-                    // New: fetch top movies
-                    return cacheFetch('movies', () =>
-                        fetchWithRetry(`${CONFIG.API_BASE}/top/anime?limit=${CONFIG.ITEMS_PER_WIDGET}&type=movie`)
-                    );
-                },
-                async getGenres() {
-                    return cacheFetch('genres', () =>
-                        fetchWithRetry(`${CONFIG.API_BASE}/genres/anime`)
-                    );
-                },
-                async getAnime(id) {
-                    return fetchWithRetry(`${CONFIG.API_BASE}/anime/${id}/full`);
-                },
-                async search(query, filters = {}) {
-                    const params = new URLSearchParams({ q: query, limit: 20, ...filters });
-                    return fetchWithRetry(`${CONFIG.API_BASE}/anime?${params}`);
-                },
-                async getSchedule(day) {
-                    return cacheFetch(`schedule_${day}`, () =>
-                        fetchWithRetry(`${CONFIG.API_BASE}/schedules/${day}?limit=50`)
-                    );
-                },
-                async getCharacters(id) {
-                    return fetchWithRetry(`${CONFIG.API_BASE}/anime/${id}/characters`);
-                },
-                async getRecommendations(id) {
-                    return fetchWithRetry(`${CONFIG.API_BASE}/anime/${id}/recommendations`);
-                },
-                async getEpisodes(id, page = 1) {
-                    return fetchWithRetry(`${CONFIG.API_BASE}/anime/${id}/episodes?page=${page}`);
-                },
-            };
-
-            // ===== AUTH SYSTEM =====
-            const Auth = {
-                _user: null,
-
-                get user() {
-                    if (this._user) return this._user;
-                    const stored = localStorage.getItem('av_user');
-                    if (stored) {
-                        try { this._user = JSON.parse(stored); } catch (_) {}
-                    }
-                    return this._user;
-                },
-
-                isLoggedIn() {
-                    return !!this.user && !!state.token;
-                },
-
-                async login(email, password, remember = false) {
-                    // Simulate API call — in production, this hits your Cloudflare Worker
-                    await new Promise(r => setTimeout(r, 600));
-                    if (password.length < 4) throw new Error('Invalid credentials');
-                    const user = {
-                        id: 'usr_' + Date.now(),
-                        name: email.split('@')[0] || 'User',
-                        username: email.split('@')[0] || 'user',
-                        email: email,
-                        avatar: null,
-                        favorites: [],
-                        bookmarks: [],
-                        history: [],
-                        createdAt: new Date().toISOString(),
-                    };
-                    this._user = user;
-                    state.token = 'jwt_' + btoa(JSON.stringify({ uid: user.id, exp: Date.now() + 86400000 }));
-                    localStorage.setItem('av_user', JSON.stringify(user));
-                    localStorage.setItem('av_token', state.token);
-                    if (remember) {
-                        localStorage.setItem('av_remember', 'true');
-                    }
-                    return user;
-                },
-
-                async signup(name, username, email, password) {
-                    await new Promise(r => setTimeout(r, 600));
-                    if (password.length < 6) throw new Error('Password must be at least 6 characters');
-                    const user = {
-                        id: 'usr_' + Date.now(),
-                        name: name,
-                        username: username,
-                        email: email,
-                        avatar: null,
-                        favorites: [],
-                        bookmarks: [],
-                        history: [],
-                        createdAt: new Date().toISOString(),
-                    };
-                    this._user = user;
-                    state.token = 'jwt_' + btoa(JSON.stringify({ uid: user.id, exp: Date.now() + 86400000 }));
-                    localStorage.setItem('av_user', JSON.stringify(user));
-                    localStorage.setItem('av_token', state.token);
-                    return user;
-                },
-
-                logout() {
-                    this._user = null;
-                    state.token = null;
-                    localStorage.removeItem('av_user');
-                    localStorage.removeItem('av_token');
-                    localStorage.removeItem('av_remember');
-                    updateProfileUI();
-                    toast('Logged out successfully', 'info');
-                },
-
-                updateProfile(data) {
-                    if (!this.user) return;
-                    const updated = { ...this.user, ...data };
-                    this._user = updated;
-                    localStorage.setItem('av_user', JSON.stringify(updated));
-                    updateProfileUI();
-                    return updated;
-                },
-
-                addFavorite(animeId) {
-                    if (!this.user) return;
-                    if (!this.user.favorites.includes(animeId)) {
-                        this.user.favorites.push(animeId);
-                        this._user = { ...this.user };
-                        localStorage.setItem('av_user', JSON.stringify(this.user));
-                    }
-                },
-
-                removeFavorite(animeId) {
-                    if (!this.user) return;
-                    this.user.favorites = this.user.favorites.filter(id => id !== animeId);
-                    this._user = { ...this.user };
-                    localStorage.setItem('av_user', JSON.stringify(this.user));
-                },
-
-                addBookmark(animeId) {
-                    if (!this.user) return;
-                    if (!this.user.bookmarks.includes(animeId)) {
-                        this.user.bookmarks.push(animeId);
-                        this._user = { ...this.user };
-                        localStorage.setItem('av_user', JSON.stringify(this.user));
-                    }
-                },
-
-                removeBookmark(animeId) {
-                    if (!this.user) return;
-                    this.user.bookmarks = this.user.bookmarks.filter(id => id !== animeId);
-                    this._user = { ...this.user };
-                    localStorage.setItem('av_user', JSON.stringify(this.user));
-                },
-
-                addHistory(animeId, episode = 1) {
-                    if (!this.user) return;
-                    const existing = this.user.history.findIndex(h => h.animeId === animeId);
-                    if (existing !== -1) {
-                        this.user.history[existing].episode = episode;
-                        this.user.history[existing].lastWatched = Date.now();
-                    } else {
-                        this.user.history.push({ animeId, episode, lastWatched: Date.now() });
-                    }
-                    this._user = { ...this.user };
-                    localStorage.setItem('av_user', JSON.stringify(this.user));
-                },
-            };
-
-            // ===== UI UPDATES =====
-            function updateProfileUI() {
-                const user = Auth.user;
-                const initial = document.getElementById('profileInitial');
-                const profileBtn = document.getElementById('profileBtn');
-                if (user && Auth.isLoggedIn()) {
-                    const display = user.avatar ? `<img src="${user.avatar}" alt="${user.name}" />` : getInitials(user.name);
-                    profileBtn.innerHTML = display;
-                    profileBtn.style.background = user.avatar ? 'transparent' : 'var(--accent-purple)';
-                } else {
-                    profileBtn.innerHTML = '<span id="profileInitial">U</span>';
-                    profileBtn.style.background = 'var(--accent-purple)';
-                }
-            }
-
-            function renderAnimeCard(anime, clickable = true) {
-                const title = anime.title || anime.name || 'Unknown';
-                const score = anime.score ? anime.score.toFixed(1) : 'N/A';
-                const episodes = anime.episodes || '?';
-                const type = anime.type || 'TV';
-                const img = anime.images?.jpg?.image_url || anime.images?.jpg?.small_image_url || '';
-
-                const card = document.createElement('div');
-                card.className = 'anime-card';
-                if (clickable) {
-                    card.addEventListener('click', () => {
-                        window.location.href = `/anime.html?id=${anime.mal_id}`;
-                    });
-                }
-                card.innerHTML = `
-              <img class="poster" src="${img}" alt="${escapeHTML(title)}" loading="lazy" onerror="this.style.background='var(--bg-secondary)'" />
-              <div class="top-badge">${type}</div>
-              <div class="card-body">
-                <div class="title">${escapeHTML(title)}</div>
-                <div class="meta-row">
-                  <span class="score">★ ${score}</span>
-                  <span>${episodes} eps</span>
-                </div>
-              </div>
-            `;
-                return card;
-            }
-
-            function renderHeroSlide(anime) {
-                const img = anime.images?.jpg?.large_image_url || anime.images?.jpg?.image_url || '';
-                const title = anime.title || 'Unknown';
-                const score = anime.score ? anime.score.toFixed(1) : 'N/A';
-                const genres = anime.genres ? anime.genres.map(g => g.name).slice(0, 3).join(' • ') : '';
-                const synopsis = anime.synopsis || 'No synopsis available.';
-
-                const slide = document.createElement('div');
-                slide.className = 'hero-slide';
-                slide.innerHTML = `
-              <img class="bg" src="${img}" alt="${escapeHTML(title)}" loading="lazy" onerror="this.style.background='var(--bg-secondary)'" />
-              <div class="overlay"></div>
-              <div class="content">
-                <h1>${escapeHTML(title)}</h1>
-                <div class="meta">
-                  <span class="score">★ ${score}</span>
-                  <span>${genres}</span>
-                  <span class="badge">${anime.type || 'TV'}</span>
-                </div>
-                <div class="synopsis">${escapeHTML(truncate(synopsis, 180))}</div>
-                <div class="actions">
-                  <a href="/watch.html?id=${anime.mal_id}&ep=1" class="btn btn-primary">▶ Watch Now</a>
-                  <a href="/anime.html?id=${anime.mal_id}" class="btn btn-secondary">ℹ Details</a>
-                </div>
-              </div>
-            `;
-                return slide;
-            }
-
-            // ===== HERO SLIDER =====
-            const HeroSlider = {
-                _data: [],
-                _index: 0,
-                _timer: null,
-                _initialized: false,
-
-                async init() {
-                    if (this._initialized) return;
-                    try {
-                        const resp = await API.getTrending();
-                        this._data = (resp.data || []).slice(0, CONFIG.HERO_SLIDE_COUNT);
-                        if (!this._data.length) {
-                            document.querySelector('.hero-section').innerHTML =
-                                '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--text-muted);">No trending anime available.</div>';
-                            return;
-                        }
-                        this._build();
-                        this._start();
-                        this._initialized = true;
-                    } catch (err) {
-                        console.error('Hero slider init error:', err);
-                        document.querySelector('.hero-section').innerHTML =
-                            '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--text-muted);">Failed to load featured anime.</div>';
-                    }
-                },
-
-                _build() {
-                    const container = document.querySelector('.hero-slider');
-                    // Remove existing slides (keep controls)
-                    $$('.hero-slide', container).forEach(el => el.remove());
-
-                    this._data.forEach((anime, i) => {
-                        const slide = renderHeroSlide(anime);
-                        if (i === 0) slide.classList.add('active');
-                        container.insertBefore(slide, container.querySelector('.hero-controls'));
-                    });
-
-                    // Events
-                    document.getElementById('heroPrev').addEventListener('click', () => this._prev());
-                    document.getElementById('heroNext').addEventListener('click', () => this._next());
-
-                    // Touch / drag
-                    let startX = 0;
-                    const slider = container;
-                    slider.addEventListener('touchstart', (e) => { startX = e.touches[0].clientX; });
-                    slider.addEventListener('touchend', (e) => {
-                        const diff = startX - e.changedTouches[0].clientX;
-                        if (Math.abs(diff) > 40) {
-                            diff > 0 ? this._next() : this._prev();
-                        }
-                    });
-                    // Mouse drag
-                    let mouseDown = false,
-                        mouseStart = 0;
-                    slider.addEventListener('mousedown', (e) => { mouseDown = true;
-                        mouseStart = e.clientX; });
-                    slider.addEventListener('mouseup', (e) => {
-                        if (!mouseDown) return;
-                        mouseDown = false;
-                        const diff = mouseStart - e.clientX;
-                        if (Math.abs(diff) > 40) {
-                            diff > 0 ? this._next() : this._prev();
-                        }
-                    });
-                    slider.addEventListener('mouseleave', () => { mouseDown = false; });
-                },
-
-                _goTo(index) {
-                    if (index < 0) index = this._data.length - 1;
-                    if (index >= this._data.length) index = 0;
-                    this._index = index;
-                    const slides = $$('.hero-slide', document.querySelector('.hero-slider'));
-                    slides.forEach((s, i) => s.classList.toggle('active', i === index));
-                },
-
-                _next() { this._goTo(this._index + 1); },
-                _prev() { this._goTo(this._index - 1); },
-
-                _start() {
-                    if (this._timer) clearInterval(this._timer);
-                    this._timer = setInterval(() => this._next(), CONFIG.HERO_INTERVAL);
-                },
-
-                _stop() {
-                    if (this._timer) { clearInterval(this._timer);
-                        this._timer = null; }
-                },
-
-                destroy() {
-                    this._stop();
-                    this._initialized = false;
-                }
-            };
-
-            // ===== UNIVERSAL SLIDER ENGINE =====
-            function initSlider(trackId, data, loading = false) {
-                const track = document.getElementById(trackId);
-                if (!track) return;
-                // Clear skeletons if loading
-                if (loading) {
-                    track.innerHTML =
-                        Array.from({ length: 8 }).map(() =>
-                            `<div class="skeleton-card" style="flex:0 0 min(160px,40vw);"></div>`
-                        ).join('');
-                    return;
-                }
-                track.innerHTML = '';
-                if (!data || !data.length) {
-                    track.innerHTML = `
-                        <div style="color:var(--text-muted);padding:20px;text-align:center;width:100%;">
-                            <p>No anime available.</p>
-                            <button class="btn btn-secondary" style="margin-top:10px;" onclick="location.reload()">Refresh</button>
-                        </div>`;
-                    return;
-                }
-                data.forEach(anime => {
-                    const card = renderAnimeCard(anime);
-                    track.appendChild(card);
-                });
-
-                // Arrow controls
-                const prevBtn = document.querySelector(`[data-target="${trackId}"].slider-prev`);
-                const nextBtn = document.querySelector(`[data-target="${trackId}"].slider-next`);
-                if (prevBtn && nextBtn) {
-                    prevBtn.onclick = () => { track.scrollBy({ left: -300, behavior: 'smooth' }); };
-                    nextBtn.onclick = () => { track.scrollBy({ left: 300, behavior: 'smooth' }); };
-                }
-
-                // Mouse wheel
-                track.addEventListener('wheel', (e) => {
-                    if (e.deltaX !== 0) return;
-                    e.preventDefault();
-                    track.scrollBy({ left: e.deltaY * 1.2, behavior: 'smooth' });
-                }, { passive: false });
-
-                // Touch scroll already works with overflow-x
-            }
-
-            // ===== WIDGET LOADER =====
-            async function loadWidgets() {
-                const widgets = [
-                    { id: 'trendingTrack', fetcher: API.getTrending, key: 'trending' },
-                    { id: 'topratedTrack', fetcher: API.getTopRated, key: 'toprated' },
-                    { id: 'moviesTrack', fetcher: API.getMovies, key: 'movies' },
-                    { id: 'airingTrack', fetcher: API.getAiring, key: 'airing' },
-                    { id: 'upcomingTrack', fetcher: API.getUpcoming, key: 'upcoming' },
-                    { id: 'completedTrack', fetcher: API.getCompleted, key: 'completed' },
-                ];
-
-                // Show skeletons
-                widgets.forEach(w => initSlider(w.id, null, true));
-
-                const results = await Promise.allSettled(
-                    widgets.map(async w => {
-                        try {
-                            const resp = await w.fetcher();
-                            return { id: w.id, data: resp.data || [] };
-                        } catch (err) {
-                            console.error(`Widget ${w.key} failed:`, err);
-                            return { id: w.id, data: [] };
-                        }
-                    })
-                );
-
-                results.forEach((result, i) => {
-                    if (result.status === 'fulfilled') {
-                        initSlider(result.value.id, result.value.data, false);
-                    } else {
-                        initSlider(widgets[i].id, [], false);
-                    }
-                });
-            }
-
-            // ===== GENRES DROPDOWN =====
-            async function loadGenres() {
-                try {
-                    const resp = await API.getGenres();
-                    const genres = resp.data || [];
-                    const menu = document.getElementById('genresMenu');
-                    menu.innerHTML = genres.slice(0, 20).map(g =>
-                        `<a href="/search.html?genre=${g.mal_id}">${g.name}</a>`
-                    ).join('');
-                } catch (err) {
-                    console.error('Genres load error:', err);
-                }
-            }
-
-            // ===== SEARCH SYSTEM =====
-            const Search = {
-                _input: null,
-                _results: null,
-                _debounced: null,
-
-                init() {
-                    this._input = document.getElementById('searchInput');
-                    this._results = document.getElementById('searchResults');
-                    this._debounced = debounce(this._perform.bind(this), CONFIG.SEARCH_DEBOUNCE);
-                    this._input.addEventListener('input', this._debounced);
-                    this._input.addEventListener('keydown', (e) => {
-                        if (e.key === 'Enter') this._perform();
-                        if (e.key === 'Escape') this.close();
-                    });
-                    document.getElementById('closeSearch').addEventListener('click', () => this.close());
-                    document.getElementById('searchToggle').addEventListener('click', () => this.open());
-
-                    // Filters
-                    ['searchGenre', 'searchType', 'searchYear', 'searchSort'].forEach(id => {
-                        const el = document.getElementById(id);
-                        if (el) el.addEventListener('change', () => this._perform());
-                    });
-
-                    // Populate year filter
-                    const yearSelect = document.getElementById('searchYear');
-                    const currentYear = new Date().getFullYear();
-                    for (let y = currentYear; y >= 1980; y--) {
-                        const opt = document.createElement('option');
-                        opt.value = y;
-                        opt.textContent = y;
-                        yearSelect.appendChild(opt);
-                    }
-
-                    this._loadGenresFilter();
-                },
-
-                async _loadGenresFilter() {
-                    try {
-                        const resp = await API.getGenres();
-                        const genres = resp.data || [];
-                        const sel = document.getElementById('searchGenre');
-                        genres.slice(0, 20).forEach(g => {
-                            const opt = document.createElement('option');
-                            opt.value = g.mal_id;
-                            opt.textContent = g.name;
-                            sel.appendChild(opt);
-                        });
-                    } catch (_) {}
-                },
-
-                async _perform() {
-                    const query = this._input.value.trim();
-                    if (query.length < 2) {
-                        this._results.innerHTML =
-                        '<div class="no-results">Type at least 2 characters to search.</div>';
-                        return;
-                    }
-
-                    if (this._searchController) {
-                        this._searchController.abort();
-                    }
-                    this._searchController = new AbortController();
-
-                    const filters = {
-                        genre: document.getElementById('searchGenre').value || undefined,
-                        type: document.getElementById('searchType').value || undefined,
-                        year: document.getElementById('searchYear').value || undefined,
-                        order_by: document.getElementById('searchSort').value || 'score',
-                        sort: 'desc',
-                    };
-
-                    try {
-                        this._results.innerHTML =
-                            '<div class="no-results" style="color:var(--text-secondary);">Searching...</div>';
-                        const resp = await API.search(query, filters);
-                        const data = resp.data || [];
-                        if (data.length === 0) {
-                            this._results.innerHTML =
-                                '<div class="no-results">No results found. Try a different search.</div>';
-                            return;
-                        }
-                        this._results.innerHTML = '';
-                        data.forEach(anime => {
-                            const card = renderAnimeCard(anime);
-                            this._results.appendChild(card);
-                        });
-                    } catch (err) {
-                        if (err.name === 'AbortError') return;
-                        console.error('Search error:', err);
-                        this._results.innerHTML =
-                            '<div class="no-results">An error occurred. Please try again.</div>';
-                    } finally {
-                        this._searchController = null;
-                    }
-                },
-
-                open() {
-                    document.getElementById('searchOverlay').classList.add('open');
-                    this._input.focus();
-                    state.isSearchOpen = true;
-                    document.body.style.overflow = 'hidden';
-                },
-
-                close() {
-                    document.getElementById('searchOverlay').classList.remove('open');
-                    state.isSearchOpen = false;
-                    document.body.style.overflow = '';
-                    this._input.value = '';
-                    this._results.innerHTML = '<div class="no-results">Start typing to search for anime.</div>';
-                    if (this._searchController) {
-                        this._searchController.abort();
-                        this._searchController = null;
-                    }
-                },
-            };
-
-            // ===== AUTH MODAL =====
-            const AuthModal = {
-                _overlay: null,
-                _modal: null,
-
-                init() {
-                    this._overlay = document.getElementById('authOverlay');
-                    this._modal = document.querySelector('.auth-modal');
-
-                    document.getElementById('profileBtn').addEventListener('click', () => {
-                        if (Auth.isLoggedIn()) {
-                            window.location.href = '/profile.html';
-                        } else {
-                            this.open();
-                        }
-                    });
-
-                    document.getElementById('closeAuth').addEventListener('click', () => this.close());
-
-                    this._overlay.addEventListener('click', (e) => {
-                        if (e.target === this._overlay) this.close();
-                    });
-
-                    document.addEventListener('keydown', (e) => {
-                        if (e.key === 'Escape' && state.isAuthOpen) this.close();
-                    });
-
-                    // Tab switching
-                    const tabs = $$('.auth-modal .tabs button');
-                    tabs.forEach(btn => {
-                        btn.addEventListener('click', () => {
-                            tabs.forEach(b => b.classList.remove('active'));
-                            btn.classList.add('active');
-                            const tab = btn.dataset.tab;
-                            state.authTab = tab;
-                            document.getElementById('loginForm').classList.toggle('hidden', tab !== 'login');
-                            document.getElementById('signupForm').classList.toggle('hidden', tab !== 'signup');
-                            const title = document.getElementById('authTitle');
-                            title.textContent = tab === 'login' ? 'Welcome back' : 'Join AnimeVault';
-                            document.querySelector('.auth-modal .subtitle').textContent =
-                                tab === 'login' ? 'Sign in to continue your anime journey.' :
-                                'Create your free account and start watching.';
-                        });
-                    });
-
-                    // Switch links
-                    document.getElementById('switchToSignup').addEventListener('click', () => {
-                        $$('.auth-modal .tabs button')[1].click();
-                    });
-                    document.getElementById('switchToLogin').addEventListener('click', () => {
-                        $$('.auth-modal .tabs button')[0].click();
-                    });
-
-                    // Forms
-                    document.getElementById('loginForm').addEventListener('submit', async (e) => {
-                        e.preventDefault();
-                        const email = document.getElementById('loginEmail').value.trim();
-                        const password = document.getElementById('loginPassword').value;
-                        const remember = document.getElementById('rememberMe').checked;
-                        try {
-                            await Auth.login(email, password, remember);
-                            this.close();
-                            updateProfileUI();
-                            toast('Welcome back, ' + Auth.user.name + '!', 'success');
-                            window.location.reload();
-                        } catch (err) {
-                            toast(err.message || 'Login failed', 'error');
-                        }
-                    });
-
-                    document.getElementById('signupForm').addEventListener('submit', async (e) => {
-                        e.preventDefault();
-                        const name = document.getElementById('signupName').value.trim();
-                        const username = document.getElementById('signupUsername').value.trim();
-                        const email = document.getElementById('signupEmail').value.trim();
-                        const password = document.getElementById('signupPassword').value;
-                        const confirm = document.getElementById('signupConfirm').value;
-                        const terms = document.getElementById('termsCheck').checked;
-
-                        if (password !== confirm) {
-                            toast('Passwords do not match', 'error');
-                            return;
-                        }
-                        if (!terms) {
-                            toast('You must agree to the Terms of Service', 'error');
-                            return;
-                        }
-                        try {
-                            await Auth.signup(name, username, email, password);
-                            this.close();
-                            updateProfileUI();
-                            toast('Welcome to AnimeVault, ' + Auth.user.name + '!', 'success');
-                            window.location.reload();
-                        } catch (err) {
-                            toast(err.message || 'Signup failed', 'error');
-                        }
-                    });
-
-                    // Forgot password
-                    document.getElementById('forgotPassword').addEventListener('click', (e) => {
-                        e.preventDefault();
-                        toast('Password reset link sent to your email (demo).', 'info');
-                    });
-                },
-
-                open() {
-                    this._overlay.classList.add('open');
-                    state.isAuthOpen = true;
-                    document.body.style.overflow = 'hidden';
-                    if (!Auth.isLoggedIn()) {
-                        // Reset to login
-                        $$('.auth-modal .tabs button')[0].click();
-                    }
-                },
-
-                close() {
-                    this._overlay.classList.remove('open');
-                    state.isAuthOpen = false;
-                    document.body.style.overflow = '';
-                },
-            };
-
-            // ===== SIDEBAR =====
-            const Sidebar = {
-                init() {
-                    const overlay = document.getElementById('sidebarOverlay');
-                    const sidebar = document.getElementById('sidebar');
-                    const openBtn = document.getElementById('hamburgerBtn');
-                    const closeBtn = document.getElementById('sidebarClose');
-
-                    openBtn.addEventListener('click', () => this.open());
-                    closeBtn.addEventListener('click', () => this.close());
-                    overlay.addEventListener('click', () => this.close());
-
-                    document.addEventListener('keydown', (e) => {
-                        if (e.key === 'Escape' && state.isSidebarOpen) this.close();
-                    });
-
-                    // Sidebar nav items
-                    document.getElementById('sidebarGenres').addEventListener('click', (e) => {
-                        e.preventDefault();
-                        window.location.href = '/search.html';
-                    });
-                    document.getElementById('sidebarTypes').addEventListener('click', (e) => {
-                        e.preventDefault();
-                        window.location.href = '/search.html';
-                    });
-                    document.getElementById('sidebarStatus').addEventListener('click', (e) => {
-                        e.preventDefault();
-                        window.location.href = '/search.html';
-                    });
-                },
-
-                open() {
-                    document.getElementById('sidebar').classList.add('open');
-                    document.getElementById('sidebarOverlay').classList.add('open');
-                    state.isSidebarOpen = true;
-                    document.body.style.overflow = 'hidden';
-                },
-
-                close() {
-                    document.getElementById('sidebar').classList.remove('open');
-                    document.getElementById('sidebarOverlay').classList.remove('open');
-                    state.isSidebarOpen = false;
-                    document.body.style.overflow = '';
-                },
-            };
-
-            // ===== LANGUAGE SWITCHER =====
-            const Lang = {
-                _current: 'en',
-
-                init() {
-                    this._current = localStorage.getItem('av_lang') || 'en';
-                    const btn = document.getElementById('langToggle');
-                    btn.textContent = this._current.toUpperCase();
-                    btn.addEventListener('click', () => {
-                        const langs = ['en', 'jp', 'bn'];
-                        const idx = langs.indexOf(this._current);
-                        this._current = langs[(idx + 1) % langs.length];
-                        localStorage.setItem('av_lang', this._current);
-                        btn.textContent = this._current.toUpperCase();
-                        toast(`Language switched to ${this._current.toUpperCase()}`, 'info');
-                        // In a real app, this would reload translations
-                    });
-                }
-            };
-
-            // ===== RESPONSIVE FIXES =====
-            function fixOverflows() {
-                // Ensure no horizontal overflow
-                document.querySelectorAll('*').forEach(el => {
-                    const style = window.getComputedStyle(el);
-                    if (style.overflowX === 'hidden' && el.scrollWidth > el.clientWidth) {
-                        // Only fix if it's truly broken
-                    }
-                });
-                // Fix iframe issues
-                document.querySelectorAll('iframe').forEach(iframe => {
-                    iframe.style.maxWidth = '100%';
-                });
-            }
-
-            // ===== INIT =====
-            async function initApp() {
-                try {
-                    // Load user
-                    if (Auth.isLoggedIn()) {
-                        updateProfileUI();
-                    }
-
-                    // Init subsystems
-                    Lang.init();
-                    Sidebar.init();
-                    AuthModal.init();
-                    Search.init();
-
-                    // Load genres
-                    loadGenres();
-
-                    // Load hero
-                    await HeroSlider.init();
-
-                    // Load widgets
-                    await loadWidgets();
-
-                    // Fix overflows after load
-                    setTimeout(fixOverflows, 500);
-                    window.addEventListener('resize', throttle(fixOverflows, 300));
-
-                    // Handle orientation change
-                    window.addEventListener('orientationchange', () => {
-                        setTimeout(fixOverflows, 400);
-                    });
-
-                    // Handle resize for sliders
-                    const resizeObserver = new ResizeObserver(() => {
-                        // Recalculate any slider dimensions if needed
-                    });
-                    document.querySelectorAll('.slider-track').forEach(el => {
-                        resizeObserver.observe(el);
-                    });
-
-                    console.log('🚀 AnimeVault initialized successfully');
-                } catch (err) {
-                    console.error('Init error:', err);
-                    toast('Failed to load some content. Please refresh.', 'error');
-                }
-            }
-
-            // ===== DOM READY =====
-            if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', initApp);
-            } else {
-                initApp();
-            }
-
-            // ===== EXPOSE GLOBALS (for debugging) =====
-            window.__AV = {
-                state,
-                API,
-                Auth,
-                HeroSlider,
-                Search,
-                toast,
-                initSlider,
-                loadWidgets,
-            };
-
-        })();
-    </script>
-
+      </div>`).join('');
+  }catch(e){res.innerHTML='<p style="color:var(--accent-red);grid-column:1/-1;text-align:center;padding:40px">Search failed. Try again.</p>'}
+}
+
+// ─── AUTH ───
+let authUser=JSON.parse(localStorage.getItem('av_user')||'null');
+function updateProfileBtn(){
+  const btn=$('profile-btn');
+  if(!btn)return;
+  if(authUser){
+    btn.textContent=authUser.name?authUser.name[0].toUpperCase():'U';
+    btn.title=authUser.name||'Profile';
+  }else{
+    btn.innerHTML=`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`;
+  }
+}
+$('profile-btn')?.addEventListener('click',()=>{
+  if(authUser){location.href='profile.html';return}
+  $('auth-overlay')?.classList.add('open');
+  document.body.style.overflow='hidden';
+});
+$('auth-close')?.addEventListener('click',()=>{
+  $('auth-overlay')?.classList.remove('open');
+  document.body.style.overflow='';
+});
+$('auth-overlay')?.addEventListener('click',function(e){
+  if(e.target===this){this.classList.remove('open');document.body.style.overflow='';}
+});
+document.querySelectorAll('.auth-tab').forEach(tab=>{
+  tab.addEventListener('click',function(){
+    switchAuthTab(this.dataset.tab);
+  });
+});
+function switchAuthTab(tab){
+  document.querySelectorAll('.auth-tab').forEach(t=>t.classList.toggle('active',t.dataset.tab===tab));
+  $('login-form').style.display=tab==='login'?'block':'none';
+  $('signup-form').style.display=tab==='signup'?'block':'none';
+  $('auth-subtitle').textContent=tab==='login'?'Sign in to access your watchlist and more':'Join AnimeVault for free today';
+}
+// Simulated login/signup (real auth via Worker)
+$('login-btn')?.addEventListener('click',()=>{
+  const email=$('login-email')?.value.trim();
+  const pass=$('login-pass')?.value;
+  if(!email||!pass){toast('Please fill all fields','error');return}
+  // Simulate auth (replace with Worker API call in production)
+  const user={name:email.split('@')[0],email,id:Date.now()};
+  localStorage.setItem('av_user',JSON.stringify(user));
+  authUser=user;
+  updateProfileBtn();
+  $('auth-overlay')?.classList.remove('open');
+  document.body.style.overflow='';
+  toast('Welcome back, '+user.name+'!','success');
+});
+$('signup-btn')?.addEventListener('click',()=>{
+  const name=$('signup-name')?.value.trim();
+  const username=$('signup-username')?.value.trim();
+  const email=$('signup-email')?.value.trim();
+  const pass=$('signup-pass')?.value;
+  const confirm=$('signup-confirm')?.value;
+  const terms=$('terms-check')?.checked;
+  if(!name||!username||!email||!pass){toast('Please fill all fields','error');return}
+  if(pass!==confirm){toast('Passwords do not match','error');return}
+  if(!terms){toast('Please accept the terms','error');return}
+  if(pass.length<8){toast('Password must be at least 8 characters','error');return}
+  const user={name,username,email,id:Date.now()};
+  localStorage.setItem('av_user',JSON.stringify(user));
+  authUser=user;
+  updateProfileBtn();
+  $('auth-overlay')?.classList.remove('open');
+  document.body.style.overflow='';
+  toast('Welcome to AnimeVault, '+name+'!','success');
+});
+
+// ─── KEYBOARD SHORTCUTS ───
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){
+    closeSearch();
+    $('auth-overlay')?.classList.remove('open');
+    document.body.style.overflow='';
+  }
+  if(e.key==='/'&&!['INPUT','TEXTAREA'].includes(e.target.tagName)){
+    e.preventDefault();openSearch();
+  }
+});
+
+// ─── ANIME CARD ───
+function makeCard(a){
+  const img=a.images?.jpg?.large_image_url||a.images?.jpg?.image_url||'';
+  const score=a.score?`★${a.score}`:'N/A';
+  const eps=a.episodes?`EP ${a.episodes}`:'';
+  const type=a.type||'';
+  return `
+    <div class="anime-card" onclick="location.href='anime.html?id=${a.mal_id}'" tabindex="0" 
+         role="link" aria-label="${a.title||''}">
+      <div class="card-poster">
+        <img src="${img}" alt="${a.title||''}" loading="lazy"
+             onerror="this.src='data:image/svg+xml,<svg xmlns=\\"http://www.w3.org/2000/svg\\" width=\\"200\\" height=\\"300\\" viewBox=\\"0 0 200 300\\"><rect fill=\\"\\%230d0d1a\\" width=\\"200\\" height=\\"300\\"/><text fill=\\"\\%235a5a7a\\" x=\\"100\\" y=\\"160\\" text-anchor=\\"middle\\" font-size=\\"12\\">No Image</text></svg>'"/>
+        <div class="card-badges">
+          <span class="card-badge hd">HD</span>
+          ${score!=='N/A'?`<span class="card-badge score">${score}</span>`:''}
+          ${eps?`<span class="card-badge ep">${eps}</span>`:''}
+          ${type?`<span class="card-badge type">${type}</span>`:''}
+        </div>
+        <div class="card-hover-overlay">
+          <div class="play-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          </div>
+        </div>
+      </div>
+      <div class="card-info">
+        <div class="card-title">${a.title||'Unknown'}</div>
+        <div class="card-meta">
+          <span>${type}</span>
+          <span>${a.year||''}</span>
+        </div>
+      </div>
+    </div>`;
+}
+
+function makeSkeleton(n=8){
+  return Array(n).fill(`<div class="skeleton" style="width:clamp(130px,14vw,180px);aspect-ratio:3/4;flex-shrink:0;border-radius:12px"></div>`).join('');
+}
+
+// ─── SLIDER INIT ───
+function initSlider(wrap){
+  const container=wrap.querySelector('.slider-container');
+  const leftBtn=wrap.querySelector('.slider-arrow.left');
+  const rightBtn=wrap.querySelector('.slider-arrow.right');
+  if(!container)return;
+
+  let isDragging=false,startX=0,scrollLeft=0;
+
+  function updateArrows(){
+    const atStart=container.scrollLeft<=4;
+    const atEnd=container.scrollLeft>=container.scrollWidth-container.clientWidth-4;
+    leftBtn?.classList.toggle('hidden',atStart);
+    rightBtn?.classList.toggle('hidden',atEnd);
+  }
+
+  container.addEventListener('scroll',updateArrows,{passive:true});
+  leftBtn?.addEventListener('click',()=>{container.scrollBy({left:-container.clientWidth*.8,behavior:'smooth'})});
+  rightBtn?.addEventListener('click',()=>{container.scrollBy({left:container.clientWidth*.8,behavior:'smooth'})});
+
+  // Drag
+  container.addEventListener('mousedown',e=>{isDragging=true;startX=e.pageX-container.offsetLeft;scrollLeft=container.scrollLeft;container.style.userSelect='none'});
+  container.addEventListener('mousemove',e=>{if(!isDragging)return;const x=e.pageX-container.offsetLeft;container.scrollLeft=scrollLeft-(x-startX)});
+  ['mouseup','mouseleave'].forEach(ev=>container.addEventListener(ev,()=>{isDragging=false;container.style.userSelect=''}));
+
+  updateArrows();
+  setTimeout(updateArrows,300);
+}
+
+function initAllSliders(){
+  document.querySelectorAll('.slider-wrap').forEach(initSlider);
+}
+
+// ─── LOAD WIDGET ───
+async function loadWidget(endpoint,sliderId){
+  const slider=$(sliderId);
+  if(!slider)return;
+  slider.innerHTML=makeSkeleton();
+  try{
+    const d=await apiFetch(`${API}/${endpoint}`);
+    const items=d?.data?.slice(0,20)||[];
+    if(!items.length){slider.innerHTML='<p style="color:var(--text-muted);padding:20px">No data available</p>';return}
+    slider.innerHTML=items.map(makeCard).join('');
+  }catch(e){
+    slider.innerHTML='<p style="color:var(--text-muted);padding:20px">Failed to load. Retrying...</p>';
+    setTimeout(()=>loadWidget(endpoint,sliderId),3000);
+  }
+}
+
+// ─── HERO SLIDER ───
+let heroSlides=[];let heroIdx=0;let heroTimer=null;let heroTransitioning=false;
+
+function buildHeroSlide(a,idx){
+  const img=a.images?.jpg?.large_image_url||a.images?.jpg?.image_url||'';
+  const genres=a.genres?.slice(0,3).map(g=>`<span class="badge badge-genre">${g.name}</span>`).join('')||'';
+  const score=a.score?`<span class="badge badge-score">★ ${a.score}</span>`:'';
+  const synopsis=(a.synopsis||'').replace(/\[Written by.*?\]/g,'').trim();
+  return `
+    <div class="hero-slide${idx===0?' active':''}" data-idx="${idx}">
+      <div class="hero-bg" style="background-image:url('${img}')"></div>
+      <div class="hero-gradient"></div>
+      <div class="hero-content">
+        <div class="hero-badges">${genres}${score}</div>
+        <h1 class="hero-title">${a.title||'Unknown'}</h1>
+        <div class="hero-meta">
+          <span>${a.type||'Anime'}</span>
+          ${a.episodes?`<span>${a.episodes} Episodes</span>`:''}
+          ${a.status?`<span>${a.status}</span>`:''}
+          ${a.year?`<span>${a.year}</span>`:''}
+        </div>
+        <p class="hero-synopsis">${synopsis.length>200?synopsis.slice(0,200)+'…':synopsis}</p>
+        <div class="hero-btns">
+          <a href="watch.html?id=${a.mal_id}&ep=1" class="btn-watch">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            Watch Now
+          </a>
+          <a href="anime.html?id=${a.mal_id}" class="btn-details">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            Details
+          </a>
+        </div>
+      </div>
+    </div>`;
+}
+
+function goToHeroSlide(idx){
+  if(heroTransitioning||heroSlides.length===0)return;
+  heroTransitioning=true;
+  const slides=document.querySelectorAll('.hero-slide');
+  const dots=document.querySelectorAll('.hero-dot');
+  slides.forEach(s=>s.classList.remove('active'));
+  dots.forEach(d=>d.classList.remove('active'));
+  heroIdx=(idx+heroSlides.length)%heroSlides.length;
+  slides[heroIdx]?.classList.add('active');
+  dots[heroIdx]?.classList.add('active');
+  const track=$('hero-track');
+  if(track)track.style.transform=`translateX(-${heroIdx*100}%)`;
+  setTimeout(()=>{heroTransitioning=false},750);
+}
+
+function startHeroAuto(){
+  stopHeroAuto();
+  heroTimer=setInterval(()=>goToHeroSlide(heroIdx+1),5500);
+}
+function stopHeroAuto(){clearInterval(heroTimer)}
+
+async function loadHero(){
+  const track=$('hero-track');
+  const dotsWrap=$('hero-dots');
+  if(!track)return;
+  track.innerHTML='<div style="width:100%;height:100%;background:linear-gradient(135deg,#0d0d1a,#030305);display:flex;align-items:center;justify-content:center"><p style="color:var(--text-muted);font-family:Cinzel,serif">Loading AnimeVault...</p></div>';
+  try{
+    const d=await apiFetch(`${API}/top/anime?filter=bypopularity&limit=15`);
+    heroSlides=d?.data?.filter(a=>a.images?.jpg?.large_image_url)?.slice(0,12)||[];
+    if(!heroSlides.length){track.innerHTML='<div style="width:100%;height:100%;background:linear-gradient(135deg,#0d0d1a,#030305)"></div>';return}
+    track.innerHTML=heroSlides.map(buildHeroSlide).join('');
+    dotsWrap.innerHTML=heroSlides.map((_,i)=>`<button class="hero-dot${i===0?' active':''}" aria-label="Slide ${i+1}"></button>`).join('');
+    document.querySelectorAll('.hero-dot').forEach((dot,i)=>{
+      dot.addEventListener('click',()=>{goToHeroSlide(i);stopHeroAuto();startHeroAuto()});
+    });
+    startHeroAuto();
+    // Touch/drag
+    let ts=0,tx=0;
+    track.addEventListener('touchstart',e=>{ts=e.touches[0].clientX},{passive:true});
+    track.addEventListener('touchend',e=>{
+      const diff=ts-e.changedTouches[0].clientX;
+      if(Math.abs(diff)>50){diff>0?goToHeroSlide(heroIdx+1):goToHeroSlide(heroIdx-1);stopHeroAuto();startHeroAuto();}
+    },{passive:true});
+    track.addEventListener('mousedown',e=>{tx=e.clientX;stopHeroAuto()});
+    track.addEventListener('mouseup',e=>{
+      const diff=tx-e.clientX;
+      if(Math.abs(diff)>50){diff>0?goToHeroSlide(heroIdx+1):goToHeroSlide(heroIdx-1);}
+      startHeroAuto();
+    });
+  }catch(e){track.innerHTML='<div style="width:100%;height:100%;background:linear-gradient(135deg,#0d0d1a,#030305)"></div>'}
+}
+
+$('hero-prev')?.addEventListener('click',()=>{goToHeroSlide(heroIdx-1);stopHeroAuto();startHeroAuto()});
+$('hero-next')?.addEventListener('click',()=>{goToHeroSlide(heroIdx+1);stopHeroAuto();startHeroAuto()});
+
+// ─── GENRES ───
+async function loadGenres(){
+  const grid=$('genres-grid');
+  if(!grid)return;
+  try{
+    const d=await apiFetch(`${API}/genres/anime`);
+    const genres=d?.data?.slice(0,24)||[];
+    grid.innerHTML=genres.map(g=>`<a href="az-list.html?genre=${g.mal_id}&name=${encodeURIComponent(g.name)}" class="mega-drop-item">${g.name}</a>`).join('');
+  }catch(e){grid.innerHTML='<a class="mega-drop-item" href="az-list.html">Browse All</a>'}
+}
+
+// ─── ORIENTATION CHANGE ───
+window.addEventListener('orientationchange',()=>{
+  setTimeout(()=>{
+    document.querySelectorAll('.slider-container').forEach(s=>s.scrollLeft=0);
+    initAllSliders();
+  },300);
+});
+
+// ─── RESIZE OBSERVER ───
+const ro=new ResizeObserver(()=>initAllSliders());
+ro.observe(document.body);
+
+// ─── INIT ───
+async function init(){
+  initLang();
+  updateProfileBtn();
+  // Load in parallel with stagger to avoid rate limiting
+  loadHero();
+  await new Promise(r=>setTimeout(r,300));
+  
+  const widgets=[
+    {endpoint:'top/anime?filter=bypopularity&limit=20',id:'trending-slider'},
+    {endpoint:'top/anime?filter=airing&limit=20',id:'airing-slider'},
+    {endpoint:'top/anime?limit=20',id:'toprated-slider'},
+    {endpoint:'top/anime?filter=upcoming&limit=20',id:'upcoming-slider'},
+    {endpoint:'top/anime?type=movie&limit=20',id:'movies-slider'},
+    {endpoint:'seasons/now?limit=20',id:'newrel-slider'},
+  ];
+  
+  for(const w of widgets){
+    loadWidget(w.endpoint,w.id).then(()=>{
+      const sliderEl=$(w.id)?.closest('.slider-wrap');
+      if(sliderEl)initSlider(sliderEl);
+    });
+    await new Promise(r=>setTimeout(r,400));
+  }
+  
+  loadGenres();
+}
+
+document.addEventListener('DOMContentLoaded',init);
+</script>
 </body>
 </html>
