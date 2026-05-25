@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+  <title>Watch — NexStream</title>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { overflow-x: hidden; max-width: 100%; min-height: 100dvh; }
+    body {
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      background: #0a0a0f; color: #e2e8f0; line-height: 1.6;
+    }
+    a { text-decoration: none; color: inherit; }
+    button { border: none; background: none; cursor: pointer; font-family: inherit; color: inherit; }
+    img { max-width: 100%; display: block; }
+    
+    :root {
+      --primary: #8b5cf6; --primary-light: #a855f7; --primary-glow: rgba(139,92,246,0.4);
+      --bg-deep: #0a0a0f; --bg-surface: #13131f; --bg-elevated: #1a1a2e;
+      --text-primary: #f1f5f9; --text-secondary: #94a3b8; --text-muted: #64748b;
+      --border: rgba(255,255,255,0.08);
+      --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+      --transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+    }
+    
+    .header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      background: rgba(10,10,15,0.95); backdrop-filter: blur(20px);
+      padding: 0 4vw; height: 60px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .logo { font-size: 1.3rem; font-weight: 800; background: linear-gradient(135deg, var(--primary), var(--primary-light)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .header-actions { display: flex; gap: 0.75rem; align-items: center; }
+    .icon-btn { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: var(--bg-elevated); border: 1px solid var(--border); color: var(--text-secondary); transition: var(--transition); }
+    .icon-btn:hover { background: var(--primary); color: white; }
+    
+    .watch-container { padding-top: 60px; }
+    .player-wrapper {
+      position: relative;
+      width: 100%;
+      background: #000;
+      aspect-ratio: 16/9;
+    }
+    .player-wrapper iframe {
+      width: 100%; height: 100%; border: none; display: block;
+    }
+    .player-overlay {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(0,0,0,0.7);
+      opacity: 0; visibility: hidden;
+      transition: var(--transition);
+    }
+    .player-overlay.active { opacity: 1; visibility: visible; }
+    
+    .player-controls-bar {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+      padding: 1rem;
+      display: flex; justify-content: space-between; align-items: center;
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .player-wrapper:hover .player-controls-bar { opacity: 1; }
+    
+    .server-selector {
+      display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap;
+    }
+    .server-btn {
+      padding: 0.5rem 1rem;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      transition: var(--transition);
+    }
+    .server-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+    .server-btn:hover:not(.active) { border-color: var(--primary); color: var(--primary); }
+    
+    .watch-layout {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 1.5rem;
+      padding: 1.5rem 4vw;
+    }
+    
+    .episode-list {
+      background: var(--bg-surface);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      max-height: calc(100vh - 200px);
+      overflow-y: auto;
+    }
+    .episode-list-header {
+      padding: 1rem;
+      border-bottom: 1px solid var(--border);
+      font-weight: 700;
+      position: sticky; top: 0;
+      background: var(--bg-surface);
+      z-index: 10;
+    }
+    .episode-item {
+      display: flex; align-items: center; gap: 0.75rem;
+      padding: 0.875rem 1rem;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .episode-item:hover, .episode-item.active { background: rgba(139,92,246,0.1); }
+    .episode-item.active { border-left: 3px solid var(--primary); }
+    .episode-num { font-weight: 700; color: var(--primary); min-width: 30px; }
+    .episode-title { font-size: 0.9rem; flex: 1; }
+    .episode-duration { font-size: 0.8rem; color: var(--text-muted); }
+    
+    .anime-info-bar {
+      display: flex; align-items: center; gap: 1rem;
+      padding: 1rem 4vw;
+      border-bottom: 1px solid var(--border);
+    }
+    .anime-info-bar img {
+      width: 60px; height: 80px; object-fit: cover; border-radius: var(--radius-sm);
+    }
+    .anime-info-text { flex: 1; }
+    .anime-info-title { font-weight: 700; font-size: 1.1rem; }
+    .anime-info-meta { font-size: 0.85rem; color: var(--text-muted); }
+    
+    .action-btns { display: flex; gap: 0.75rem; margin-top: 1rem; }
+    .btn { padding: 0.625rem 1.25rem; border-radius: var(--radius-md); font-weight: 600; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 0.5rem; transition: var(--transition); cursor: pointer; }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: var(--primary-light); }
+    .btn-secondary { background: var(--bg-elevated); color: var(--text-secondary); border: 1px solid var(--border); }
+    .btn-secondary:hover { border-color: var(--primary); color: var(--primary); }
+    
+    .related-section { padding: 1.5rem 4vw; }
+    .related-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1rem; margin-top: 1rem; }
+    .related-card { background: var(--bg-surface); border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--border); transition: var(--transition); cursor: pointer; }
+    .related-card:hover { transform: translateY(-4px); border-color: var(--primary); }
+    .related-card img { width: 100%; aspect-ratio: 3/4; object-fit: cover; }
+    .related-info { padding: 0.75rem; }
+    .related-title { font-size: 0.85rem; font-weight: 600; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    
+    @media (max-width: 1024px) {
+      .watch-layout { grid-template-columns: 1fr; }
+      .episode-list { max-height: 400px; }
+    }
+    @media (max-width: 768px) {
+      .header { padding: 0 1rem; }
+      .watch-layout { padding: 1rem; }
+      .anime-info-bar { padding: 1rem; }
+      .related-section { padding: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <a href="index.html" class="logo">NexStream</a>
+    <div class="header-actions">
+      <a href="anime.html" class="icon-btn" id="backBtn" title="Back">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"/></svg>
+      </a>
+      <button class="icon-btn" onclick="toggleTheater()" title="Theater Mode">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15"/></svg>
+      </button>
+      <button class="icon-btn" onclick="toggleFullscreen()" title="Fullscreen">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="watch-container">
+    <div class="anime-info-bar" id="animeInfoBar">
+      <div class="skeleton" style="width:60px;height:80px;border-radius:8px;"></div>
+      <div class="anime-info-text">
+        <div class="skeleton" style="height:20px;width:200px;margin-bottom:0.5rem;"></div>
+        <div class="skeleton" style="height:14px;width:150px;"></div>
+      </div>
+    </div>
+
+    <div class="player-wrapper" id="playerWrapper">
+      <iframe id="videoFrame" src="" allowfullscreen allow="fullscreen"></iframe>
+    </div>
+
+    <div class="watch-layout">
+      <div>
+        <div class="server-selector">
+          <button class="server-btn active" data-server="sub" onclick="switchServer('sub')">Sub</button>
+          <button class="server-btn" data-server="dub" onclick="switchServer('dub')">Dub</button>
+        </div>
+        
+        <div class="action-btns">
+          <button class="btn btn-secondary" onclick="prevEp()">← Previous</button>
+          <button class="btn btn-primary" onclick="nextEp()">Next →</button>
+          <button class="btn btn-secondary" onclick="toggleBookmark()">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 019.186 0z"/></svg>
+            Bookmark
+          </button>
+        </div>
+      </div>
+
+      <div class="episode-list" id="episodeList">
+        <div class="episode-list-header">Episodes</div>
+        <div id="episodeItems"></div>
+      </div>
+    </div>
+
+    <section class="related-section">
+      <h2 style="font-size:1.3rem;font-weight:700;">Related Anime</h2>
+      <div class="related-grid" id="relatedGrid"></div>
+    </section>
+  </div>
+
+  <script>
+    const CONFIG = {
+      API_BASE: 'https://api.jikan.moe/v4',
+      BACKEND_URL: localStorage.getItem('backend_url') || 'https://nexstream-api.your-subdomain.workers.dev',
+    };
+
+    const $ = (sel) => document.querySelector(sel);
+    let currentAnimeId = null;
+    let currentEp = 1;
+    let maxEp = 12;
+    let currentServer = 'sub';
+    let animeData = null;
+
+    function getParams() {
+      const p = new URLSearchParams(window.location.search);
+      return { id: p.get('id'), ep: parseInt(p.get('ep')) || 1 };
+    }
+
+    function updatePlayer() {
+      const { id, ep } = getParams();
+      currentAnimeId = id;
+      currentEp = ep;
+      const src = `https://megaplay.buzz/stream/mal/${id}/${ep}/${currentServer}`;
+      $('#videoFrame').src = src;
+      
+      // Update active episode
+      $$('.episode-item').forEach((el, i) => {
+        el.classList.toggle('active', i + 1 === ep);
+      });
+      
+      // Save history
+      saveHistory();
+    }
+
+    function switchServer(server) {
+      currentServer = server;
+      $$('.server-btn').forEach(b => b.classList.toggle('active', b.dataset.server === server));
+      updatePlayer();
+    }
+
+    function nextEp() {
+      if (currentEp < maxEp) {
+        window.location.href = `watch.html?id=${currentAnimeId}&ep=${currentEp + 1}`;
+      }
+    }
+
+    function prevEp() {
+      if (currentEp > 1) {
+        window.location.href = `watch.html?id=${currentAnimeId}&ep=${currentEp - 1}`;
+      }
+    }
+
+    function toggleFullscreen() {
+      const wrapper = $('#playerWrapper');
+      if (!document.fullscreenElement) {
+        wrapper.requestFullscreen?.();
+      } else {
+        document.exitFullscreen?.();
+      }
+    }
+
+    function toggleTheater() {
+      document.body.classList.toggle('theater-mode');
+    }
+
+    async function loadAnime() {
+      const { id } = getParams();
+      if (!id) return;
+      
+      try {
+        const res = await fetch(`${CONFIG.API_BASE}/anime/${id}`);
+        const data = await res.json();
+        animeData = data.data;
+        maxEp = animeData.episodes || 12;
+        
+        // Update info bar
+        const img = animeData.images?.webp?.small_image_url || '';
+        $('#animeInfoBar').innerHTML = `
+          <img src="${img}" alt="${animeData.title}">
+          <div class="anime-info-text">
+            <div class="anime-info-title">${animeData.title_english || animeData.title}</div>
+            <div class="anime-info-meta">Episode ${currentEp} of ${maxEp} · ${animeData.type || 'TV'}</div>
+          </div>
+        `;
+        
+        // Update back button
+        $('#backBtn').href = `anime.html?id=${id}`;
+        
+        // Generate episode list
+        $('#episodeItems').innerHTML = Array.from({ length: maxEp }, (_, i) => `
+          <a href="watch.html?id=${id}&ep=${i + 1}" class="episode-item ${i + 1 === currentEp ? 'active' : ''}">
+            <span class="episode-num">${i + 1}</span>
+            <span class="episode-title">Episode ${i + 1}</span>
+            <span class="episode-duration">24:00</span>
+          </a>
+        `).join('');
+        
+        // Load related
+        loadRelated(id);
+        
+        // Update player
+        updatePlayer();
+        
+        document.title = `EP ${currentEp} — ${animeData.title_english || animeData.title}`;
+      } catch (err) {
+        console.error('Failed to load anime:', err);
+      }
+    }
+
+    async function loadRelated(id) {
+      try {
+        const res = await fetch(`${CONFIG.API_BASE}/anime/${id}/recommendations`);
+        const data = await res.json();
+        $('#relatedGrid').innerHTML = (data.data?.slice(0, 6) || []).map(item => `
+          <a href="anime.html?id=${item.entry.mal_id}" class="related-card">
+            <img src="${item.entry.images?.webp?.image_url || ''}" alt="${item.entry.title}" loading="lazy">
+            <div class="related-info">
+              <div class="related-title">${item.entry.title}</div>
+            </div>
+          </a>
+        `).join('');
+      } catch (err) {
+        $('#relatedGrid').innerHTML = '<p style="color:var(--text-muted);">No related anime.</p>';
+      }
+    }
+
+    async function saveHistory() {
+      const token = localStorage.getItem('nexstream_token');
+      if (!token || !animeData) return;
+      try {
+        await fetch(`${CONFIG.BACKEND_URL}/api/user/history`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+          body: JSON.stringify({
+            mal_id: currentAnimeId,
+            title: animeData.title_english || animeData.title,
+            image: animeData.images?.webp?.image_url || '',
+            episode: currentEp,
+            progress: 0,
+            url: window.location.href
+          })
+        });
+      } catch (err) {
+        console.error('History save failed:', err);
+      }
+    }
+
+    async function toggleBookmark() {
+      const token = localStorage.getItem('nexstream_token');
+      if (!token) { window.location.href = 'login.html'; return; }
+      if (!animeData) return;
+      
+      try {
+        await fetch(`${CONFIG.BACKEND_URL}/api/user/bookmarks`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+          body: JSON.stringify({
+            mal_id: currentAnimeId,
+            title: animeData.title_english || animeData.title,
+            image: animeData.images?.webp?.image_url || '',
+            episode: currentEp,
+            timestamp: 0,
+            url: window.location.href
+          })
+        });
+        alert('Bookmarked!');
+      } catch (err) {
+        alert('Failed to bookmark.');
+      }
+    }
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      switch(e.key) {
+        case 'ArrowRight': nextEp(); break;
+        case 'ArrowLeft': prevEp(); break;
+        case 'f': toggleFullscreen(); break;
+        case 't': toggleTheater(); break;
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', loadAnime);
+  </script>
+</body>
+</html>
