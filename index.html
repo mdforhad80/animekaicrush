@@ -669,13 +669,15 @@
         .hero-section {
             margin-bottom: 40px;
             position: relative;
-            border-radius: var(--radius-lg);
-            overflow: hidden;
-            aspect-ratio: 16/7;
-            min-height: 320px;
-            max-height: 70vh;
+            width: 100%;
+            max-width: 100%;
+            aspect-ratio: 16 / 9;
+            min-height: 240px;
+            max-height: 85vh;
             background: var(--bg-secondary);
-            box-shadow: var(--shadow-card);
+            overflow: hidden;
+            border-radius: 0;
+            box-shadow: none;
         }
 
         .hero-slider {
@@ -778,7 +780,7 @@
             font-size: 0.95rem;
         }
 
-        /* Hero controls — removed dots but keep arrows */
+        /* Hero controls */
         .hero-controls {
             position: absolute;
             bottom: 20px;
@@ -1249,8 +1251,7 @@
 
             .hero-section {
                 aspect-ratio: 16/9;
-                min-height: 240px;
-                border-radius: var(--radius-md);
+                min-height: 180px;
             }
             .hero-slide .content {
                 padding: 20px 20px 16px;
@@ -1322,8 +1323,7 @@
                 padding: 0 12px;
             }
             .hero-section {
-                min-height: 180px;
-                border-radius: var(--radius-sm);
+                min-height: 140px;
             }
             .hero-slide .content {
                 padding: 14px 14px 12px;
@@ -1384,7 +1384,7 @@
         @media (orientation: landscape) and (max-height: 500px) {
             .hero-section {
                 aspect-ratio: 16/6;
-                min-height: 160px;
+                min-height: 120px;
             }
             .hero-slide .content .synopsis {
                 display: none;
@@ -1755,7 +1755,8 @@
     <main role="main">
 
         <!-- ===== HERO SLIDER ===== -->
-        <section class="container hero-section" aria-label="Featured anime">
+        <!-- Full width hero, not inside .container -->
+        <section class="hero-section" aria-label="Featured anime">
             <div class="hero-slider" id="heroSlider">
                 <!-- Slides injected via JS -->
                 <div class="hero-controls">
@@ -1958,17 +1959,33 @@
             }
 
             function cacheFetch(key, fetchFn, ttl = CONFIG.CACHE_TTL) {
-                const cached = localStorage.getItem('av_cache_' + key);
-                if (cached) {
-                    const { data, timestamp } = JSON.parse(cached);
-                    if (Date.now() - timestamp < ttl) return Promise.resolve(data);
-                }
-                return fetchFn().then(data => {
+                const cachedStr = localStorage.getItem('av_cache_' + key);
+                let staleData = null;
+
+                if (cachedStr) {
                     try {
-                        localStorage.setItem('av_cache_' + key, JSON.stringify({ data, timestamp: Date.now() }));
-                    } catch (_) { /* ignore */ }
-                    return data;
-                });
+                        const { data, timestamp } = JSON.parse(cachedStr);
+                        if (Date.now() - timestamp < ttl) {
+                            return Promise.resolve(data);
+                        }
+                        staleData = data;
+                    } catch (_) { /* ignore corrupted cache */ }
+                }
+
+                return fetchFn()
+                    .then(data => {
+                        try {
+                            localStorage.setItem('av_cache_' + key, JSON.stringify({ data, timestamp: Date.now() }));
+                        } catch (_) {}
+                        return data;
+                    })
+                    .catch(err => {
+                        if (staleData) {
+                            console.warn(`Cache stale for ${key}, returning cached data due to fetch error:`, err);
+                            return staleData;
+                        }
+                        throw err;
+                    });
             }
 
             function toast(message, type = 'info', duration = 3500) {
@@ -2372,8 +2389,11 @@
                 }
                 track.innerHTML = '';
                 if (!data || !data.length) {
-                    track.innerHTML =
-                        '<div style="color:var(--text-muted);padding:20px;text-align:center;width:100%;">No anime available.</div>';
+                    track.innerHTML = `
+                        <div style="color:var(--text-muted);padding:20px;text-align:center;width:100%;">
+                            <p>No anime available.</p>
+                            <button class="btn btn-secondary" style="margin-top:10px;" onclick="location.reload()">Refresh</button>
+                        </div>`;
                     return;
                 }
                 data.forEach(anime => {
