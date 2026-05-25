@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+  <title>NexStream — Premium Anime Streaming</title>
+  <meta name="description" content="Watch premium anime in HD with sub and dub. Trending, top rated, airing, and more.">
+  <meta property="og:title" content="NexStream Anime">
+  <meta property="og:description" content="Premium anime streaming platform">
+  <meta property="og:type" content="website">
+  
+  <style>
+    /* ==================== CSS RESET & BASE ==================== */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { overflow-x: hidden; max-width: 100%; min-height: 100dvh; }
+    body {
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: #0a0a0f;
+      color: #e2e8f0;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    a { text-decoration: none; color: inherit; }
+    button { border: none; background: none; cursor: pointer; font-family: inherit; color: inherit; }
+    img { max-width: 100%; display: block; }
+    ul, ol { list-style: none; }
+    
+    /* ==================== DESIGN TOKENS ==================== */
+    :root {
+      --primary: #8b5cf6;
+      --primary-light: #a855f7;
+      --primary-glow: rgba(139, 92, 246, 0.4);
+      --bg-deep: #0a0a0f;
+      --bg-surface: #13131f;
+      --bg-elevated: #1a1a2e;
+      --bg-glass: rgba(19, 19, 31, 0.85);
+      --text-primary: #f1f5f9;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --border: rgba(255,255,255,0.08);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 24px;
+      --shadow-glow: 0 0 40px rgba(139, 92, 246, 0.15);
+      --shadow-card: 0 4px 24px rgba(0,0,0,0.4);
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    /* ==================== SCROLLBAR ==================== */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: var(--bg-deep); }
+    ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--primary-light); }
+    
+    /* ==================== HEADER ==================== */
+    .header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      background: linear-gradient(to bottom, rgba(10,10,15,0.95) 0%, rgba(10,10,15,0.8) 60%, transparent 100%);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      padding: 0 4vw;
+      height: 70px;
+      display: flex; align-items: center; justify-content: space-between;
+      transition: var(--transition);
+    }
+    .header.scrolled { background: rgba(10,10,15,0.98); box-shadow: 0 4px 30px rgba(0,0,0,0.3); }
+    .logo {
+      font-size: clamp(1.2rem, 2vw, 1.6rem);
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      letter-spacing: -0.5px;
+    }
+    .nav-desktop { display: flex; gap: clamp(0.5rem, 1.5vw, 1.5rem); align-items: center; }
+    .nav-link {
+      font-size: clamp(0.8rem, 1vw, 0.9rem);
+      font-weight: 500;
+      color: var(--text-secondary);
+      padding: 0.5rem 0.8rem;
+      border-radius: var(--radius-sm);
+      transition: var(--transition);
+      white-space: nowrap;
+    }
+    .nav-link:hover, .nav-link.active { color: var(--text-primary); background: rgba(139,92,246,0.15); }
+    
+    .header-actions { display: flex; gap: 0.75rem; align-items: center; }
+    .icon-btn {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      transition: var(--transition);
+      position: relative;
+    }
+    .icon-btn:hover { background: var(--primary); color: white; border-color: var(--primary); }
+    .icon-btn svg { width: 18px; height: 18px; }
+    
+    .lang-dropdown {
+      position: relative;
+    }
+    .lang-menu {
+      position: absolute; top: calc(100% + 8px); right: 0;
+      background: var(--bg-glass);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 0.5rem;
+      min-width: 140px;
+      opacity: 0; visibility: hidden; transform: translateY(-10px);
+      transition: var(--transition);
+      z-index: 1001;
+    }
+    .lang-dropdown.active .lang-menu { opacity: 1; visibility: visible; transform: translateY(0); }
+    .lang-option {
+      padding: 0.5rem 0.75rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .lang-option:hover { background: rgba(139,92,246,0.2); color: var(--primary-light); }
+    .lang-option.active { color: var(--primary); font-weight: 600; }
+    
+    .mobile-menu-btn { display: none; }
+    
+    /* ==================== MOBILE SIDEBAR ==================== */
+    .sidebar-overlay {
+      position: fixed; inset: 0; z-index: 1999;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(4px);
+      opacity: 0; visibility: hidden;
+      transition: opacity 0.3s ease;
+    }
+    .sidebar-overlay.active { opacity: 1; visibility: visible; }
+    .sidebar {
+      position: fixed; top: 0; left: 0; bottom: 0; z-index: 2000;
+      width: min(80vw, 300px);
+      background: var(--bg-surface);
+      border-right: 1px solid var(--border);
+      transform: translateX(-100%);
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow-y: auto;
+      padding: 1.5rem;
+    }
+    .sidebar.active { transform: translateX(0); }
+    .sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+    .sidebar-close { width: 36px; height: 36px; border-radius: 50%; background: var(--bg-elevated); display: flex; align-items: center; justify-content: center; }
+    .sidebar-nav { display: flex; flex-direction: column; gap: 0.25rem; }
+    .sidebar-link {
+      padding: 0.875rem 1rem;
+      border-radius: var(--radius-md);
+      font-weight: 500;
+      color: var(--text-secondary);
+      transition: var(--transition);
+      display: flex; align-items: center; gap: 0.75rem;
+    }
+    .sidebar-link:hover, .sidebar-link.active { background: rgba(139,92,246,0.15); color: var(--text-primary); }
+    
+    /* ==================== SEARCH OVERLAY ==================== */
+    .search-overlay {
+      position: fixed; inset: 0; z-index: 1500;
+      background: rgba(10,10,15,0.95);
+      backdrop-filter: blur(20px);
+      opacity: 0; visibility: hidden;
+      transition: all 0.4s ease;
+      display: flex; flex-direction: column;
+      padding: 2rem 4vw;
+    }
+    .search-overlay.active { opacity: 1; visibility: visible; }
+    .search-header {
+      max-width: 800px; width: 100%; margin: 0 auto;
+      display: flex; gap: 1rem; align-items: center;
+    }
+    .search-input-wrapper {
+      flex: 1; position: relative;
+    }
+    .search-input {
+      width: 100%;
+      background: var(--bg-elevated);
+      border: 2px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 1rem 1.5rem 1rem 3rem;
+      font-size: 1.1rem;
+      color: var(--text-primary);
+      outline: none;
+      transition: var(--transition);
+    }
+    .search-input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px var(--primary-glow); }
+    .search-icon { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
+    .search-close { padding: 0.75rem; border-radius: 50%; background: var(--bg-elevated); color: var(--text-secondary); }
+    .search-filters {
+      max-width: 800px; width: 100%; margin: 1.5rem auto;
+      display: flex; gap: 0.75rem; flex-wrap: wrap;
+    }
+    .filter-chip {
+      padding: 0.5rem 1rem;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      transition: var(--transition);
+      cursor: pointer;
+    }
+    .filter-chip:hover, .filter-chip.active { background: var(--primary); color: white; border-color: var(--primary); }
+    .search-results {
+      max-width: 800px; width: 100%; margin: 0 auto;
+      flex: 1; overflow-y: auto;
+    }
+    .search-suggestions { display: flex; flex-direction: column; gap: 0.5rem; }
+    .suggestion-item {
+      display: flex; align-items: center; gap: 1rem;
+      padding: 0.75rem;
+      border-radius: var(--radius-md);
+      transition: var(--transition);
+      cursor: pointer;
+    }
+    .suggestion-item:hover { background: var(--bg-elevated); }
+    .suggestion-img { width: 48px; height: 64px; border-radius: var(--radius-sm); object-fit: cover; background: var(--bg-elevated); }
+    .suggestion-info { flex: 1; }
+    .suggestion-title { font-weight: 600; font-size: 0.95rem; }
+    .suggestion-meta { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem; }
+    
+    /* ==================== HERO SLIDER ==================== */
+    .hero {
+      position: relative;
+      width: 100%;
+      height: clamp(500px, 70vh, 900px);
+      overflow: hidden;
+      margin-top: 0;
+    }
+    .hero-slider {
+      position: relative; width: 100%; height: 100%;
+    }
+    .hero-slide {
+      position: absolute; inset: 0;
+      opacity: 0; visibility: hidden;
+      transition: opacity 0.8s ease, visibility 0.8s ease;
+    }
+    .hero-slide.active { opacity: 1; visibility: visible; }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background-size: cover;
+      background-position: center top;
+      transition: transform 8s ease;
+    }
+    .hero-slide.active .hero-bg { transform: scale(1.05); }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, var(--bg-deep) 0%, rgba(10,10,15,0.6) 40%, rgba(10,10,15,0.3) 100%);
+    }
+    .hero-content {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 4rem 4vw 3rem;
+      z-index: 2;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: rgba(139,92,246,0.2);
+      border: 1px solid rgba(139,92,246,0.3);
+      color: var(--primary-light);
+      padding: 0.375rem 0.875rem;
+      border-radius: 100px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .hero-title {
+      font-size: clamp(1.8rem, 4vw, 3.5rem);
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 1rem;
+      max-width: 700px;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.5);
+    }
+    .hero-meta {
+      display: flex; gap: 1rem; align-items: center;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+    .hero-meta span { display: flex; align-items: center; gap: 0.35rem; }
+    .hero-score { color: #fbbf24; font-weight: 700; }
+    .hero-genres { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.25rem; }
+    .hero-genre {
+      padding: 0.25rem 0.75rem;
+      background: rgba(255,255,255,0.1);
+      border-radius: 100px;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+    .hero-synopsis {
+      font-size: clamp(0.9rem, 1.2vw, 1.05rem);
+      color: var(--text-secondary);
+      max-width: 600px;
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .hero-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+    .btn {
+      padding: 0.875rem 1.75rem;
+      border-radius: var(--radius-md);
+      font-weight: 600;
+      font-size: 0.95rem;
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      transition: var(--transition);
+      cursor: pointer;
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      box-shadow: 0 4px 20px var(--primary-glow);
+    }
+    .btn-primary:hover { background: var(--primary-light); transform: translateY(-2px); box-shadow: 0 8px 30px var(--primary-glow); }
+    .btn-secondary {
+      background: rgba(255,255,255,0.1);
+      color: var(--text-primary);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.15);
+    }
+    .btn-secondary:hover { background: rgba(255,255,255,0.2); }
+    
+    .hero-dots {
+      position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+      display: flex; gap: 0.5rem; z-index: 3;
+    }
+    .hero-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.3);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .hero-dot.active { background: var(--primary); width: 24px; border-radius: 4px; }
+    
+    .hero-nav {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      background: rgba(10,10,15,0.6);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border);
+      color: white;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      z-index: 3;
+      transition: var(--transition);
+    }
+    .hero-nav:hover { background: var(--primary); border-color: var(--primary); }
+    .hero-nav.prev { left: 1.5rem; }
+    .hero-nav.next { right: 1.5rem; }
+    
+    /* ==================== SECTIONS ==================== */
+    .section {
+      padding: 2.5rem 4vw;
+      position: relative;
+    }
+    .section-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 1.25rem;
+    }
+    .section-title {
+      font-size: clamp(1.1rem, 1.8vw, 1.4rem);
+      font-weight: 700;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .section-title::before {
+      content: '';
+      width: 4px; height: 24px;
+      background: linear-gradient(to bottom, var(--primary), var(--primary-light));
+      border-radius: 2px;
+    }
+    .view-all {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      display: flex; align-items: center; gap: 0.25rem;
+      transition: var(--transition);
+    }
+    .view-all:hover { color: var(--primary-light); }
+    
+    /* ==================== UNIVERSAL SLIDER ==================== */
+    .slider-container {
+      position: relative;
+      overflow: hidden;
+      margin: 0 -4vw;
+      padding: 0 4vw;
+    }
+    .slider-track {
+      display: flex;
+      gap: 1rem;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding: 0.5rem 0;
+    }
+    .slider-track::-webkit-scrollbar { display: none; }
+    .slider-arrow {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: var(--bg-glass);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 10;
+      cursor: pointer;
+      opacity: 0;
+      transition: var(--transition);
+      box-shadow: var(--shadow-card);
+    }
+    .slider-container:hover .slider-arrow { opacity: 1; }
+    .slider-arrow:hover { background: var(--primary); border-color: var(--primary); }
+    .slider-arrow.prev { left: 1rem; }
+    .slider-arrow.next { right: 1rem; }
+    
+    /* ==================== ANIME CARD ==================== */
+    .anime-card {
+      flex: 0 0 auto;
+      width: clamp(160px, 18vw, 220px);
+      scroll-snap-align: start;
+      position: relative;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      background: var(--bg-surface);
+      transition: var(--transition);
+      cursor: pointer;
+    }
+    .anime-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-glow); }
+    .anime-card-img {
+      width: 100%;
+      aspect-ratio: 3/4;
+      object-fit: cover;
+      background: linear-gradient(135deg, #1a1a2e, #0f0f1a);
+    }
+    .anime-card-badge {
+      position: absolute; top: 0.5rem; left: 0.5rem;
+      padding: 0.25rem 0.5rem;
+      background: var(--primary);
+      color: white;
+      font-size: 0.7rem;
+      font-weight: 700;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+    .anime-card-score {
+      position: absolute; top: 0.5rem; right: 0.5rem;
+      padding: 0.25rem 0.5rem;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(4px);
+      color: #fbbf24;
+      font-size: 0.75rem;
+      font-weight: 700;
+      border-radius: 4px;
+      display: flex; align-items: center; gap: 0.2rem;
+    }
+    .anime-card-info { padding: 0.75rem; }
+    .anime-card-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      margin-bottom: 0.35rem;
+    }
+    .anime-card-meta {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      display: flex; justify-content: space-between;
+    }
+    
+    /* ==================== SKELETON LOADING ==================== */
+    .skeleton {
+      background: linear-gradient(90deg, var(--bg-elevated) 25%, var(--bg-surface) 50%, var(--bg-elevated) 75%);
+      background-size: 200% 100%;
+      animation: skeleton-loading 1.5s infinite;
+      border-radius: var(--radius-sm);
+    }
+    @keyframes skeleton-loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+    .skeleton-card { width: clamp(160px, 18vw, 220px); flex: 0 0 auto; }
+    .skeleton-img { width: 100%; aspect-ratio: 3/4; border-radius: var(--radius-md); }
+    .skeleton-text { height: 16px; margin-top: 8px; border-radius: 4px; }
+    .skeleton-text.short { width: 60%; }
+    
+    /* ==================== FOOTER ==================== */
+    .footer {
+      padding: 2rem 4vw;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+    .footer-socials {
+      display: flex; justify-content: center; gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    .footer-social {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: var(--bg-elevated);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-secondary);
+      transition: var(--transition);
+    }
+    .footer-social:hover { background: var(--primary); color: white; }
+    
+    /* ==================== RESPONSIVE ==================== */
+    @media (max-width: 1024px) {
+      .nav-desktop { display: none; }
+      .mobile-menu-btn { display: flex; }
+      .hero-nav { display: none; }
+    }
+    @media (max-width: 768px) {
+      .header { padding: 0 1rem; height: 60px; }
+      .hero { height: clamp(400px, 60vh, 600px); }
+      .hero-content { padding: 2rem 1rem 2rem; }
+      .section { padding: 1.5rem 1rem; }
+      .slider-container { margin: 0 -1rem; padding: 0 1rem; }
+      .anime-card { width: 140px; }
+      .search-overlay { padding: 1rem; }
+    }
+    @media (max-width: 480px) {
+      .anime-card { width: 120px; }
+      .btn { padding: 0.75rem 1.25rem; font-size: 0.85rem; }
+    }
+    
+    /* ==================== UTILITY ==================== */
+    .hidden { display: none !important; }
+    .fade-in { animation: fadeIn 0.5s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== HEADER ==================== -->
+  <header class="header" id="header">
+    <div style="display:flex;align-items:center;gap:1rem;">
+      <button class="icon-btn mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+      <a href="index.html" class="logo">NexStream</a>
+      <nav class="nav-desktop">
+        <a href="index.html" class="nav-link active" data-i18n="nav.home">Home</a>
+        <a href="recent.html" class="nav-link" data-i18n="nav.recent">Recent</a>
+        <a href="new-releases.html" class="nav-link" data-i18n="nav.new">New</a>
+        <a href="ongoing.html" class="nav-link" data-i18n="nav.ongoing">Ongoing</a>
+        <a href="genres.html" class="nav-link" data-i18n="nav.genres">Genres</a>
+        <a href="schedule.html" class="nav-link" data-i18n="nav.schedule">Schedule</a>
+        <a href="az-list.html" class="nav-link" data-i18n="nav.az">A-Z</a>
+      </nav>
+    </div>
+    <div class="header-actions">
+      <div class="lang-dropdown" id="langDropdown">
+        <button class="icon-btn" id="langBtn" aria-label="Language">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418"/></svg>
+        </button>
+        <div class="lang-menu">
+          <div class="lang-option active" data-lang="en">🇺🇸 English</div>
+          <div class="lang-option" data-lang="jp">🇯🇵 日本語</div>
+          <div class="lang-option" data-lang="bn">🇧🇩 বাংলা</div>
+        </div>
+      </div>
+      <button class="icon-btn" id="searchBtn" aria-label="Search">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
+      </button>
+      <a href="favorites.html" class="icon-btn" aria-label="Favorites">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg>
+      </a>
+      <a href="profile.html" class="icon-btn" id="profileBtn" aria-label="Profile">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg>
+      </a>
+    </div>
+  </header>
+
+  <!-- ==================== MOBILE SIDEBAR ==================== -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <span class="logo">NexStream</span>
+      <button class="sidebar-close" id="sidebarClose">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="index.html" class="sidebar-link active" data-i18n="nav.home">Home</a>
+      <a href="trending.html" class="sidebar-link" data-i18n="nav.trending">Trending</a>
+      <a href="recent.html" class="sidebar-link" data-i18n="nav.recent">Recent</a>
+      <a href="new-releases.html" class="sidebar-link" data-i18n="nav.new">New Releases</a>
+      <a href="updates.html" class="sidebar-link" data-i18n="nav.updates">Updates</a>
+      <a href="ongoing.html" class="sidebar-link" data-i18n="nav.ongoing">Ongoing</a>
+      <a href="types.html" class="sidebar-link" data-i18n="nav.types">Types</a>
+      <a href="genres.html" class="sidebar-link" data-i18n="nav.genres">Genres</a>
+      <a href="schedule.html" class="sidebar-link" data-i18n="nav.schedule">Schedule</a>
+      <a href="az-list.html" class="sidebar-link" data-i18n="nav.az">A-Z List</a>
+      <a href="favorites.html" class="sidebar-link" data-i18n="nav.favorites">Favorites</a>
+      <a href="bookmarks.html" class="sidebar-link" data-i18n="nav.bookmarks">Bookmarks</a>
+      <a href="profile.html" class="sidebar-link" data-i18n="nav.profile">Profile</a>
+      <a href="login.html" class="sidebar-link" data-i18n="nav.login">Login</a>
+      <a href="signup.html" class="sidebar-link" data-i18n="nav.signup">Signup</a>
+    </nav>
+  </aside>
+
+  <!-- ==================== SEARCH OVERLAY ==================== -->
+  <div class="search-overlay" id="searchOverlay">
+    <div class="search-header">
+      <div class="search-input-wrapper">
+        <svg class="search-icon" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
+        <input type="text" class="search-input" id="searchInput" placeholder="Search anime, genres, studios..." autocomplete="off">
+      </div>
+      <button class="search-close" id="searchClose">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="search-filters">
+      <button class="filter-chip active" data-filter="all">All</button>
+      <button class="filter-chip" data-filter="tv">TV</button>
+      <button class="filter-chip" data-filter="movie">Movie</button>
+      <button class="filter-chip" data-filter="ova">OVA</button>
+      <button class="filter-chip" data-filter="ona">ONA</button>
+      <button class="filter-chip" data-filter="special">Special</button>
+    </div>
+    <div class="search-results" id="searchResults">
+      <div class="search-suggestions" id="searchSuggestions"></div>
+    </div>
+  </div>
+
+  <!-- ==================== HERO SLIDER ==================== -->
+  <section class="hero" id="hero">
+    <div class="hero-slider" id="heroSlider"></div>
+    <div class="hero-dots" id="heroDots"></div>
+    <button class="hero-nav prev" id="heroPrev" aria-label="Previous slide">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5"/></svg>
+    </button>
+    <button class="hero-nav next" id="heroNext" aria-label="Next slide">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/></svg>
+    </button>
+  </section>
+
+  <!-- ==================== WIDGETS ==================== -->
+  <main id="mainContent">
+    <!-- Trending -->
+    <section class="section">
+      <div class="section-header">
+        <h2 class="section-title" data-i18n="widgets.trending">Trending Now</h2>
+        <a href="recent.html" class="view-all">View All →</a>
+      </div>
+      <div class="slider-container">
+        <div class="slider-track" id="trendingSlider"></div>
+        <button class="slider-arrow prev" data-target="trendingSlider">←</button>
+        <button class="slider-arrow next" data-target="trendingSlider">→</button>
+      </div>
+    </section>
+
+    <!-- Top Rated -->
+    <section class="section">
+      <div class="section-header">
+        <h2 class="section-title" data-i18n="widgets.top">Top Rated</h2>
+        <a href="recent.html" class="view-all">View All →</a>
+      </div>
+      <div class="slider-container">
+        <div class="slider-track" id="topSlider"></div>
+        <button class="slider-arrow prev" data-target="topSlider">←</button>
+        <button class="slider-arrow next" data-target="topSlider">→</button>
+      </div>
+    </section>
+
+    <!-- Top Airing -->
+    <section class="section">
+      <div class="section-header">
+        <h2 class="section-title" data-i18n="widgets.airing">Top Airing</h2>
+        <a href="ongoing.html" class="view-all">View All →</a>
+      </div>
+      <div class="slider-container">
+        <div class="slider-track" id="airingSlider"></div>
+        <button class="slider-arrow prev" data-target="airingSlider">←</button>
+        <button class="slider-arrow next" data-target="airingSlider">→</button>
+      </div>
+    </section>
+
+    <!-- Upcoming -->
+    <section class="section">
+      <div class="section-header">
+        <h2 class="section-title" data-i18n="widgets.upcoming">Upcoming</h2>
+        <a href="new-releases.html" class="view-all">View All →</a>
+      </div>
+      <div class="slider-container">
+        <div class="slider-track" id="upcomingSlider"></div>
+        <button class="slider-arrow prev" data-target="upcomingSlider">←</button>
+        <button class="slider-arrow next" data-target="upcomingSlider">→</button>
+      </div>
+    </section>
+
+    <!-- Completed -->
+    <section class="section">
+      <div class="section-header">
+        <h2 class="section-title" data-i18n="widgets.completed">Completed</h2>
+        <a href="recent.html" class="view-all">View All →</a>
+      </div>
+      <div class="slider-container">
+        <div class="slider-track" id="completedSlider"></div>
+        <button class="slider-arrow prev" data-target="completedSlider">←</button>
+        <button class="slider-arrow next" data-target="completedSlider">→</button>
+      </div>
+    </section>
+
+    <!-- Ongoing -->
+    <section class="section">
+      <div class="section-header">
+        <h2 class="section-title" data-i18n="widgets.ongoing">Ongoing</h2>
+        <a href="ongoing.html" class="view-all">View All →</a>
+      </div>
+      <div class="slider-container">
+        <div class="slider-track" id="ongoingSlider"></div>
+        <button class="slider-arrow prev" data-target="ongoingSlider">←</button>
+        <button class="slider-arrow next" data-target="ongoingSlider">→</button>
+      </div>
+    </section>
+
+    <!-- New Releases -->
+    <section class="section">
+      <div class="section-header">
+        <h2 class="section-title" data-i18n="widgets.new">New Releases</h2>
+        <a href="new-releases.html" class="view-all">View All →</a>
+      </div>
+      <div class="slider-container">
+        <div class="slider-track" id="newSlider"></div>
+        <button class="slider-arrow prev" data-target="newSlider">←</button>
+        <button class="slider-arrow next" data-target="newSlider">→</button>
+      </div>
+    </section>
+
+    <!-- Recent Updates -->
+    <section class="section">
+      <div class="section-header">
+        <h2 class="section-title" data-i18n="widgets.updates">Recent Updates</h2>
+        <a href="updates.html" class="view-all">View All →</a>
+      </div>
+      <div class="slider-container">
+        <div class="slider-track" id="updatesSlider"></div>
+        <button class="slider-arrow prev" data-target="updatesSlider">←</button>
+        <button class="slider-arrow next" data-target="updatesSlider">→</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="footer">
+    <div class="footer-socials">
+      <a href="#" class="footer-social" aria-label="Twitter">
+        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
+      <a href="#" class="footer-social" aria-label="Discord">
+        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 00-.041-.106 13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098
