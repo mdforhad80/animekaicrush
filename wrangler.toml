@@ -1,24 +1,15 @@
-name = "animekaicrush"
+name = "animekai-backend"
 main = "worker.js"
-compatibility_date = "2024-01-01"
-compatibility_flags = ["nodejs_compat"]
+compatibility_date = "2024-03-01"
 
-# D1 Database Binding
+[vars]
+JWT_SECRET = "super-secure-high-entropy-jwt-secret-key-change-this"
+
 [[d1_databases]]
-binding = "NEXSTREAM_DB"
-database_name = "nexstream-db"
-# Replace with your actual D1 database ID from: https://dash.cloudflare.com → Workers & Pages → D1
+binding = "DB"
+database_name = "alnuraraf_sql_d1"
 database_id = "be7e97d9-b7ee-449c-9de5-7468fd570d92"
 
-# KV Namespace (for rate limiting & cache)
-[[kv_namespaces]]
-binding = "NEXSTREAM_KV"
-# Replace with your actual KV namespace ID from: https://dash.cloudflare.com → Workers & Pages → KV
-id = "48972b70ce694c159bee7476b58910f7"
-
-# Environment Variables
-[vars]
-# FRONTEND_URL = "https://your-username.github.io/nexstream-anime"
-
-# Secrets (set via wrangler secret put, NOT in this file)
-# JWT_SECRET = "your-super-secret-jwt-key-min-32-chars-long"
+[assets]
+directory = "./public"
+binding = "ASSETS"
