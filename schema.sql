@@ -1,76 +1,69 @@
--- schema.sql — Cloudflare D1 Database Schema
--- Run: wrangler d1 execute nexstream-db --file=./schema.sql
-
--- Users table
+-- Users Table
 CREATE TABLE IF NOT EXISTS users (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    username TEXT UNIQUE NOT NULL,
-    email TEXT UNIQUE NOT NULL,
-    password_hash TEXT NOT NULL,
-    name TEXT,
-    avatar TEXT,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  id TEXT PRIMARY KEY,
+  username TEXT UNIQUE NOT NULL,
+  email TEXT UNIQUE NOT NULL,
+  password_hash TEXT NOT NULL,
+  avatar TEXT DEFAULT 'https://api.dicebear.com/7.x/bottts/svg?seed=Enma',
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
--- Favorites table
-CREATE TABLE IF NOT EXISTS favorites (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id INTEGER NOT NULL,
-    mal_id INTEGER NOT NULL,
-    title TEXT NOT NULL,
-    image TEXT,
-    url TEXT,
-    added_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE(user_id, mal_id),
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-);
-
--- Bookmarks / Continue Watching
-CREATE TABLE IF NOT EXISTS bookmarks (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id INTEGER NOT NULL,
-    mal_id INTEGER NOT NULL,
-    title TEXT NOT NULL,
-    image TEXT,
-    episode INTEGER DEFAULT 1,
-    timestamp INTEGER DEFAULT 0,
-    url TEXT,
-    added_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE(user_id, mal_id),
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-);
-
--- Watch History
+-- Watch History Table (Continue Watching)
 CREATE TABLE IF NOT EXISTS watch_history (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id INTEGER NOT NULL,
-    mal_id INTEGER NOT NULL,
-    title TEXT NOT NULL,
-    image TEXT,
-    episode INTEGER DEFAULT 1,
-    progress INTEGER DEFAULT 0,
-    url TEXT,
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE(user_id, mal_id),
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id TEXT NOT NULL,
+  mal_id TEXT NOT NULL,
+  title TEXT NOT NULL,
+  image_url TEXT,
+  episode INTEGER NOT NULL,
+  progress_percent REAL DEFAULT 0,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE,
+  UNIQUE(user_id, mal_id)
 );
 
--- Comments
+-- Favorites Table
+CREATE TABLE IF NOT EXISTS favorites (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id TEXT NOT NULL,
+  mal_id TEXT NOT NULL,
+  title TEXT NOT NULL,
+  image_url TEXT NOT NULL,
+  type TEXT,
+  score REAL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE,
+  UNIQUE(user_id, mal_id)
+);
+
+-- Bookmarks Table (Watchlist)
+CREATE TABLE IF NOT EXISTS bookmarks (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id TEXT NOT NULL,
+  mal_id TEXT NOT NULL,
+  title TEXT NOT NULL,
+  image_url TEXT NOT NULL,
+  type TEXT,
+  score REAL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE,
+  UNIQUE(user_id, mal_id)
+);
+
+-- Comments Table
 CREATE TABLE IF NOT EXISTS comments (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id INTEGER NOT NULL,
-    anime_id INTEGER NOT NULL,
-    content TEXT NOT NULL,
-    parent_id INTEGER,
-    likes INTEGER DEFAULT 0,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY (parent_id) REFERENCES comments(id) ON DELETE CASCADE
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  mal_id TEXT NOT NULL,
+  episode INTEGER NOT NULL,
+  user_id TEXT NOT NULL,
+  username TEXT NOT NULL,
+  avatar TEXT NOT NULL,
+  comment_text TEXT NOT NULL,
+  likes INTEGER DEFAULT 0,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
--- Indexes for performance
-CREATE INDEX IF NOT EXISTS idx_favorites_user ON favorites(user_id);
-CREATE INDEX IF NOT EXISTS idx_bookmarks_user ON bookmarks(user_id);
+-- Index optimization for low latency queries
+CREATE INDEX IF NOT EXISTS idx_comments_mal_ep ON comments(mal_id, episode);
 CREATE INDEX IF NOT EXISTS idx_history_user ON watch_history(user_id);
-CREATE INDEX IF NOT EXISTS idx_comments_anime ON comments(anime_id);
-CREATE INDEX IF NOT EXISTS idx_comments_user ON comments(user_id);
