@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login — NexStream</title>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { overflow-x: hidden; max-width: 100%; min-height: 100dvh; }
+    body {
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      background: #0a0a0f; color: #e2e8f0;
+      display: flex; align-items: center; justify-content: center;
+      background-image: radial-gradient(circle at 50% 0%, rgba(139,92,246,0.15) 0%, transparent 50%);
+    }
+    :root {
+      --primary: #8b5cf6; --primary-light: #a855f7; --primary-glow: rgba(139,92,246,0.4);
+      --bg-surface: #13131f; --bg-elevated: #1a1a2e;
+      --text-primary: #f1f5f9; --text-secondary: #94a3b8; --text-muted: #64748b;
+      --border: rgba(255,255,255,0.08);
+      --radius-md: 12px; --radius-lg: 16px;
+      --transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+    }
+    .auth-container {
+      width: 100%; max-width: 420px;
+      padding: 2rem;
+      margin: 1rem;
+    }
+    .auth-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    }
+    .auth-logo {
+      text-align: center;
+      font-size: 1.8rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+    }
+    .auth-subtitle {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 2rem;
+    }
+    .form-group { margin-bottom: 1.25rem; }
+    .form-label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 0.5rem;
+    }
+    .form-input {
+      width: 100%;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 0.875rem 1rem;
+      color: var(--text-primary);
+      font-size: 0.95rem;
+      outline: none;
+      transition: var(--transition);
+    }
+    .form-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-glow); }
+    .form-input::placeholder { color: var(--text-muted); }
+    .btn {
+      width: 100%;
+      padding: 0.875rem;
+      background: var(--primary);
+      color: white;
+      border-radius: var(--radius-md);
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: var(--transition);
+      border: none;
+    }
+    .btn:hover { background: var(--primary-light); transform: translateY(-1px); }
+    .btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+    .auth-footer {
+      text-align: center;
+      margin-top: 1.5rem;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+    .auth-footer a { color: var(--primary-light); font-weight: 600; }
+    .auth-footer a:hover { text-decoration: underline; }
+    .error-msg {
+      background: rgba(239,68,68,0.1);
+      border: 1px solid rgba(239,68,68,0.3);
+      color: #ef4444;
+      padding: 0.75rem 1rem;
+      border-radius: var(--radius-md);
+      font-size: 0.85rem;
+      margin-bottom: 1rem;
+      display: none;
+    }
+    .error-msg.show { display: block; }
+  </style>
+</head>
+<body>
+  <div class="auth-container">
+    <div class="auth-card">
+      <div class="auth-logo">NexStream</div>
+      <p class="auth-subtitle">Welcome back! Sign in to continue.</p>
+      <div class="error-msg" id="errorMsg"></div>
+      <form id="loginForm">
+        <div class="form-group">
+          <label class="form-label">Username or Email</label>
+          <input type="text" class="form-input" id="username" placeholder="Enter username or email" required autocomplete="username">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input type="password" class="form-input" id="password" placeholder="Enter password" required autocomplete="current-password">
+        </div>
+        <button type="submit" class="btn" id="submitBtn">Sign In</button>
+      </form>
+      <div class="auth-footer">
+        Don't have an account? <a href="signup.html">Sign Up</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const CONFIG = {
+      BACKEND_URL: localStorage.getItem('backend_url') || 'https://nexstream-api.your-subdomain.workers.dev',
+    };
+
+    $('#loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = $('#submitBtn');
+      const error = $('#errorMsg');
+      btn.disabled = true;
+      btn.textContent = 'Signing in...';
+      error.classList.remove('show');
+
+      try {
+        const res = await fetch(`${CONFIG.BACKEND_URL}/api/auth/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            username: $('#username').value.trim(),
+            password: $('#password').value
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          localStorage.setItem('nexstream_token', data.token || '');
+          localStorage.setItem('nexstream_user', JSON.stringify(data.user));
+          window.location.href = 'index.html';
+        } else {
+          error.textContent = data.error || 'Login failed';
+          error.classList.add('show');
+        }
+      } catch (err) {
+        error.textContent = 'Network error. Please try again.';
+        error.classList.add('show');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Sign In';
+      }
+    });
+
+    function $(sel) { return document.querySelector(sel); }
+  </script>
+</body>
+</html>
