@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Favorites — NexStream</title> <!-- Change for bookmarks/history -->
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { overflow-x: hidden; max-width: 100%; min-height: 100dvh; }
+    body {
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      background: #0a0a0f; color: #e2e8f0;
+    }
+    a { text-decoration: none; color: inherit; }
+    button { border: none; background: none; cursor: pointer; font-family: inherit; color: inherit; }
+    img { max-width: 100%; display: block; }
+    
+    :root {
+      --primary: #8b5cf6; --primary-light: #a855f7;
+      --bg-deep: #0a0a0f; --bg-surface: #13131f; --bg-elevated: #1a1a2e;
+      --text-primary: #f1f5f9; --text-secondary: #94a3b8; --text-muted: #64748b;
+      --border: rgba(255,255,255,0.08);
+      --radius-md: 12px; --radius-lg: 16px;
+      --transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+    }
+    
+    .header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      background: rgba(10,10,15,0.95); backdrop-filter: blur(20px);
+      padding: 0 4vw; height: 70px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .logo { font-size: 1.4rem; font-weight: 800; background: linear-gradient(135deg, var(--primary), var(--primary-light)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .icon-btn { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: var(--bg-elevated); border: 1px solid var(--border); color: var(--text-secondary); transition: var(--transition); }
+    .icon-btn:hover { background: var(--primary); color: white; }
+    
+    .page-header {
+      padding: 100px 4vw 2rem;
+      max-width: 1200px; margin: 0 auto;
+    }
+    .page-title { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 800; margin-bottom: 0.5rem; }
+    .page-desc { color: var(--text-muted); }
+    
+    .content-grid {
+      padding: 0 4vw 4rem;
+      max-width: 1200px; margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 1.25rem;
+    }
+    .card {
+      background: var(--bg-surface);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      border: 1px solid var(--border);
+      transition: var(--transition);
+      position: relative;
+    }
+    .card:hover { transform: translateY(-4px); border-color: var(--primary); }
+    .card img { width: 100%; aspect-ratio: 3/4; object-fit: cover; }
+    .card-info { padding: 0.875rem; }
+    .card-title { font-size: 0.9rem; font-weight: 600; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .card-meta { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.35rem; }
+    .card-actions {
+      position: absolute; top: 0.5rem; right: 0.5rem;
+      display: flex; gap: 0.35rem;
+      opacity: 0;
+      transition: var(--transition);
+    }
+    .card:hover .card-actions { opacity: 1; }
+    .card-action-btn {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(4px);
+      display: flex; align-items: center; justify-content: center;
+      color: white;
+      transition: var(--transition);
+    }
+    .card-action-btn:hover { background: #ef4444; }
+    
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 4rem;
+      color: var(--text-muted);
+    }
+    
+    @media (max-width: 768px) {
+      .header { padding: 0 1rem; }
+      .page-header { padding: 90px 1rem 1.5rem; }
+      .content-grid { padding: 0 1rem 3rem; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <div style="display:flex;align-items:center;gap:1rem;">
+      <button class="icon-btn" onclick="history.back()">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"/></svg>
+      </button>
+      <a href="index.html" class="logo">NexStream</a>
+    </div>
+    <a href="profile.html" class="icon-btn">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg>
+    </a>
+  </header>
+
+  <div class="page-header">
+    <h1 class="page-title">My Favorites</h1> <!-- Change for bookmarks/history -->
+    <p class="page-desc">Your saved anime collection</p> <!-- Change description -->
+  </div>
+
+  <div class="content-grid" id="contentGrid">
+    <div class="empty-state">Loading...</div>
+  </div>
+
+  <script>
+    const CONFIG = {
+      BACKEND_URL: localStorage.getItem('backend_url') || 'https://nexstream-api.your-subdomain.workers.dev',
+      // Change endpoint for bookmarks/history:
+      ENDPOINT: '/api/user/favorites', // '/api/user/bookmarks' or '/api/user/history'
+    };
+
+    async function loadData() {
+      const token = localStorage.getItem('nexstream_token');
+      if (!token) { window.location.href = 'login.html'; return; }
+
+      try {
+        const res = await fetch(`${CONFIG.BACKEND_URL}${CONFIG.ENDPOINT}`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+        const items = data.favorites || data.bookmarks || data.history || []; // Adjust based on endpoint
+        
+        if (!items.length) {
+          $('#contentGrid').innerHTML = '<div class="empty-state">No items found.</div>';
+          return;
+        }
+
+        $('#contentGrid').innerHTML = items.map(item => `
+          <div class="card">
+            <div class="card-actions">
+              <button class="card-action-btn" onclick="removeItem(${item.mal_id})" title="Remove">
+                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+              </button>
+            </div>
+            <a href="anime.html?id=${item.mal_id}">
+              <img src="${item.image}" alt="${item.title}" loading="lazy">
+            </a>
+            <div class="card-info">
+              <div class="card-title">${item.title}</div>
+              <div class="card-meta">${item.episode ? `EP ${item.episode}` : ''}</div>
+            </div>
+          </div>
+        `).join('');
+      } catch (err) {
+        $('#contentGrid').innerHTML = '<div class="empty-state">Failed to load data.</div>';
+      }
+    }
+
+    async function removeItem(malId) {
+      const token = localStorage.getItem('nexstream_token');
+      // Adjust endpoint for remove:
+      const endpoint = '/api/user/favorites/'; // '/api/user/bookmarks/' or '/api/user/history/'
+      try {
+        await fetch(`${CONFIG.BACKEND_URL}${endpoint}${malId}`, {
+          method: 'DELETE',
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        loadData();
+      } catch (err) {
+        alert('Failed to remove item.');
+      }
+    }
+
+    function $(sel) { return document.querySelector(sel); }
+
+    document.addEventListener('DOMContentLoaded', loadData);
+  </script>
+</body>
+</html>
