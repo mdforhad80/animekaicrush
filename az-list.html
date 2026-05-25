@@ -1,220 +1,1926 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>A-Z List — NexStream</title>
-  <style>
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body { overflow-x: hidden; max-width: 100%; min-height: 100dvh; }
-    body {
-      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-      background: #0a0a0f; color: #e2e8f0;
-    }
-    a { text-decoration: none; color: inherit; }
-    button { border: none; background: none; cursor: pointer; font-family: inherit; color: inherit; }
-    img { max-width: 100%; display: block; }
-    
-    :root {
-      --primary: #8b5cf6; --primary-light: #a855f7;
-      --bg-deep: #0a0a0f; --bg-surface: #13131f; --bg-elevated: #1a1a2e;
-      --text-primary: #f1f5f9; --text-secondary: #94a3b8; --text-muted: #64748b;
-      --border: rgba(255,255,255,0.08);
-      --radius-md: 12px; --radius-lg: 16px;
-      --transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
-    }
-    
-    .header {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
-      background: rgba(10,10,15,0.95); backdrop-filter: blur(20px);
-      padding: 0 4vw; height: 70px;
-      display: flex; align-items: center; justify-content: space-between;
-    }
-    .logo { font-size: 1.4rem; font-weight: 800; background: linear-gradient(135deg, var(--primary), var(--primary-light)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .icon-btn { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: var(--bg-elevated); border: 1px solid var(--border); color: var(--text-secondary); transition: var(--transition); }
-    .icon-btn:hover { background: var(--primary); color: white; }
-    
-    .alphabet-bar {
-      position: sticky; top: 70px; z-index: 100;
-      background: var(--bg-deep);
-      padding: 1rem 4vw;
-      border-bottom: 1px solid var(--border);
-      overflow-x: auto;
-      scrollbar-width: none;
-      -webkit-overflow-scrolling: touch;
-    }
-    .alphabet-bar::-webkit-scrollbar { display: none; }
-    .alphabet-list {
-      display: flex; gap: 0.5rem;
-      min-width: max-content;
-    }
-    .alpha-btn {
-      padding: 0.5rem 0.875rem;
-      background: var(--bg-elevated);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      font-weight: 600;
-      font-size: 0.9rem;
-      color: var(--text-secondary);
-      transition: var(--transition);
-      white-space: nowrap;
-    }
-    .alpha-btn:hover, .alpha-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
-    
-    .page-header {
-      padding: 2rem 4vw 1rem;
-      max-width: 1400px; margin: 0 auto;
-    }
-    .page-title { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 800; }
-    
-    .anime-grid {
-      padding: 1rem 4vw 4rem;
-      max-width: 1400px; margin: 0 auto;
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-      gap: 1.25rem;
-    }
-    .anime-card {
-      background: var(--bg-surface);
-      border-radius: var(--radius-md);
-      overflow: hidden;
-      border: 1px solid var(--border);
-      transition: var(--transition);
-      cursor: pointer;
-    }
-    .anime-card:hover { transform: translateY(-4px); border-color: var(--primary); }
-    .anime-card img { width: 100%; aspect-ratio: 3/4; object-fit: cover; background: var(--bg-elevated); }
-    .anime-card-info { padding: 0.875rem; }
-    .anime-card-title { font-size: 0.9rem; font-weight: 600; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-    .anime-card-meta { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.35rem; }
-    
-    .loading-more {
-      text-align: center;
-      padding: 2rem;
-      color: var(--text-muted);
-    }
-    
-    @media (max-width: 768px) {
-      .header { padding: 0 1rem; }
-      .alphabet-bar { padding: 1rem; top: 60px; }
-      .page-header { padding: 1.5rem 1rem 0.5rem; }
-      .anime-grid { padding: 0.5rem 1rem 3rem; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
-    }
-  </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#0a0a0f" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <title>AnimeVault — A-Z List</title>
+    <meta name="description" content="AnimeVault is a premium anime streaming platform with cinematic quality, ultra-modern design, and a massive library of anime content." />
+    <meta name="keywords" content="anime, streaming, premium, jikan, animevault, watch anime" />
+
+    <!-- OpenGraph -->
+    <meta property="og:title" content="AnimeVault — Premium Anime Streaming" />
+    <meta property="og:description" content="AnimeVault is a premium anime streaming platform with cinematic quality and a massive library." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://animevault.pages.dev" />
+    <meta property="og:image" content="https://animevault.pages.dev/og-image.jpg" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="AnimeVault — Premium Anime Streaming" />
+    <meta name="twitter:description" content="Premium anime streaming platform with cinematic quality." />
+
+    <style>
+        /* ===== RESET + BASE ===== */
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #111118;
+            --bg-card: rgba(20, 20, 30, 0.75);
+            --bg-glass: rgba(255, 255, 255, 0.04);
+            --border-glass: rgba(255, 255, 255, 0.07);
+            --text-primary: #f0f0f5;
+            --text-secondary: #a0a0b8;
+            --text-muted: #6a6a82;
+            --accent-purple: #8b5cf6;
+            --accent-glow: rgba(139, 92, 246, 0.35);
+            --accent-glow-soft: rgba(139, 92, 246, 0.12);
+            --accent-pink: #ec4899;
+            --accent-blue: #3b82f6;
+            --radius-lg: 16px;
+            --radius-md: 12px;
+            --radius-sm: 8px;
+            --font-sans: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.6);
+            --shadow-glow: 0 0 60px rgba(139, 92, 246, 0.15);
+            --transition-smooth: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-bounce: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        html {
+            scroll-behavior: smooth;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html,
+        body {
+            overflow-x: hidden;
+            max-width: 100%;
+            width: 100%;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            min-height: 100dvh;
+            padding-top: 70px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-purple);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a78bfa;
+        }
+
+        /* ===== UTILITY ===== */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .glass {
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-glass);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
+        }
+
+        /* ===== BUTTONS ===== */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 24px;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            font-size: 0.9rem;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            font-family: var(--font-sans);
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: var(--accent-purple);
+            color: #fff;
+            box-shadow: 0 4px 20px var(--accent-glow);
+        }
+        .btn-primary:hover {
+            background: #7c3aed;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px var(--accent-glow);
+        }
+        .btn-primary:active {
+            transform: scale(0.97);
+        }
+
+        .btn-secondary {
+            background: var(--bg-glass);
+            color: var(--text-primary);
+            border: 1px solid var(--border-glass);
+        }
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--text-secondary);
+        }
+        .btn-ghost:hover {
+            color: var(--text-primary);
+            background: var(--bg-glass);
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: #fff;
+        }
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(10, 10, 15, 0.92);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-bottom: 1px solid var(--border-glass);
+            height: 70px;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: var(--transition-smooth);
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-shrink: 0;
+        }
+
+        .header-brand .logo {
+            font-size: 1.4rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #8b5cf6, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+            text-decoration: none;
+        }
+
+        .header-brand .logo span {
+            -webkit-text-fill-color: #fff;
+            background: none;
+        }
+
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            padding: 0 4px;
+            flex: 1;
+            justify-content: center;
+        }
+        .header-nav::-webkit-scrollbar {
+            display: none;
+        }
+
+        .header-nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            padding: 6px 14px;
+            border-radius: var(--radius-sm);
+            transition: var(--transition-smooth);
+            white-space: nowrap;
+            position: relative;
+        }
+        .header-nav a:hover,
+        .header-nav a.active {
+            color: var(--text-primary);
+            background: var(--bg-glass);
+        }
+        .header-nav a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 2px;
+            border-radius: 10px;
+            background: var(--accent-purple);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+
+        .header-actions button {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            padding: 6px 8px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .header-actions button:hover {
+            color: var(--text-primary);
+            background: var(--bg-glass);
+        }
+
+        .header-actions .profile-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--accent-purple);
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            overflow: hidden;
+        }
+        .header-actions .profile-btn img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+        .header-actions .profile-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px var(--accent-glow);
+        }
+
+        /* Hamburger */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 4px;
+            background: none;
+            border: none;
+            padding: 6px;
+            cursor: pointer;
+        }
+        .hamburger span {
+            width: 22px;
+            height: 2px;
+            background: var(--text-primary);
+            border-radius: 10px;
+            transition: var(--transition-smooth);
+        }
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 4px);
+        }
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -4px);
+        }
+
+        /* ===== SIDEBAR ===== */
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 1100;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.35s ease;
+        }
+        .sidebar-overlay.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -300px;
+            width: 280px;
+            height: 100%;
+            background: var(--bg-secondary);
+            z-index: 1200;
+            padding: 24px 20px;
+            overflow-y: auto;
+            transition: left 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            border-right: 1px solid var(--border-glass);
+        }
+        .sidebar.open {
+            left: 0;
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 28px;
+        }
+        .sidebar-header .logo {
+            font-size: 1.2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #8b5cf6, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .sidebar-close {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.6rem;
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .sidebar-nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: var(--transition-smooth);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .sidebar-nav a:hover,
+        .sidebar-nav a.active {
+            color: var(--text-primary);
+            background: var(--bg-glass);
+        }
+        .sidebar-nav a.active {
+            border-left: 3px solid var(--accent-purple);
+        }
+
+        .sidebar-divider {
+            height: 1px;
+            background: var(--border-glass);
+            margin: 16px 0;
+        }
+
+        /* ===== AUTH MODAL ===== */
+        .auth-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+            padding: 20px;
+        }
+        .auth-overlay.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .auth-modal {
+            background: rgba(18, 18, 28, 0.97);
+            backdrop-filter: blur(32px);
+            -webkit-backdrop-filter: blur(32px);
+            border: 1px solid var(--border-glass);
+            border-radius: var(--radius-lg);
+            padding: 40px 36px;
+            max-width: 440px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: scale(0.92) translateY(20px);
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+            opacity: 0;
+            box-shadow: var(--shadow-card), var(--shadow-glow);
+        }
+        .auth-overlay.open .auth-modal {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+        }
+
+        .auth-modal .close-auth {
+            float: right;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.4rem;
+            cursor: pointer;
+            padding: 4px 8px;
+            transition: var(--transition-smooth);
+        }
+        .auth-modal .close-auth:hover {
+            color: var(--text-primary);
+        }
+
+        .auth-modal h2 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+            background: linear-gradient(135deg, #8b5cf6, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .auth-modal .subtitle {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 24px;
+        }
+
+        .auth-modal .tabs {
+            display: flex;
+            gap: 4px;
+            background: var(--bg-glass);
+            border-radius: var(--radius-sm);
+            padding: 4px;
+            margin-bottom: 24px;
+        }
+        .auth-modal .tabs button {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: var(--radius-sm);
+            background: transparent;
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            font-family: var(--font-sans);
+        }
+        .auth-modal .tabs button.active {
+            background: var(--accent-purple);
+            color: #fff;
+            box-shadow: 0 4px 16px var(--accent-glow);
+        }
+        .auth-modal .tabs button:not(.active):hover {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .auth-modal .form-group {
+            margin-bottom: 16px;
+        }
+        .auth-modal .form-group label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+        }
+        .auth-modal .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-glass);
+            background: rgba(255, 255, 255, 0.04);
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            transition: var(--transition-smooth);
+            font-family: var(--font-sans);
+            outline: none;
+        }
+        .auth-modal .form-group input:focus {
+            border-color: var(--accent-purple);
+            box-shadow: 0 0 0 3px var(--accent-glow-soft);
+        }
+        .auth-modal .form-group input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .auth-modal .form-options {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 12px 0 20px;
+            font-size: 0.85rem;
+        }
+        .auth-modal .form-options label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+        .auth-modal .form-options label input[type="checkbox"] {
+            accent-color: var(--accent-purple);
+            width: 16px;
+            height: 16px;
+        }
+        .auth-modal .form-options a {
+            color: var(--accent-purple);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .auth-modal .form-options a:hover {
+            text-decoration: underline;
+        }
+
+        .auth-modal .btn-submit {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: var(--radius-sm);
+            background: var(--accent-purple);
+            color: #fff;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            font-family: var(--font-sans);
+            box-shadow: 0 4px 20px var(--accent-glow);
+        }
+        .auth-modal .btn-submit:hover {
+            background: #7c3aed;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px var(--accent-glow);
+        }
+        .auth-modal .btn-submit:active {
+            transform: scale(0.97);
+        }
+
+        .auth-modal .switch-link {
+            text-align: center;
+            margin-top: 18px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        .auth-modal .switch-link button {
+            background: none;
+            border: none;
+            color: var(--accent-purple);
+            font-weight: 600;
+            cursor: pointer;
+            font-family: var(--font-sans);
+            font-size: 0.9rem;
+        }
+        .auth-modal .switch-link button:hover {
+            text-decoration: underline;
+        }
+
+        .auth-modal .terms-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 12px 0;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+        .auth-modal .terms-row input[type="checkbox"] {
+            accent-color: var(--accent-purple);
+            width: 16px;
+            height: 16px;
+            flex-shrink: 0;
+        }
+        .auth-modal .terms-row a {
+            color: var(--accent-purple);
+            text-decoration: none;
+        }
+
+        /* ===== A-Z LIST PAGE SPECIFIC ===== */
+        .az-page {
+            padding: 20px 0 40px;
+        }
+
+        .az-page h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+            background: linear-gradient(135deg, #8b5cf6, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .alphabet-bar {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+            background: var(--bg-glass);
+            border-radius: var(--radius-sm);
+            padding: 8px 12px;
+            margin-bottom: 28px;
+            position: sticky;
+            top: 70px;
+            z-index: 50;
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--border-glass);
+        }
+
+        .alphabet-bar button {
+            padding: 6px 12px;
+            border: none;
+            border-radius: var(--radius-sm);
+            background: transparent;
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            font-family: var(--font-sans);
+            flex-shrink: 0;
+        }
+        .alphabet-bar button:hover {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .alphabet-bar button.active {
+            background: var(--accent-purple);
+            color: #fff;
+            box-shadow: 0 4px 16px var(--accent-glow);
+        }
+
+        .az-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(min(160px, 100%), 1fr));
+            gap: 16px;
+        }
+
+        .az-grid .anime-card {
+            aspect-ratio: auto;
+        }
+
+        .az-empty {
+            text-align: center;
+            color: var(--text-muted);
+            padding: 40px 0;
+            font-size: 1.1rem;
+        }
+
+        .load-more-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 28px;
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            padding: 24px 0 20px;
+            border-top: 1px solid var(--border-glass);
+            margin-top: 40px;
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+        .footer .socials {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 8px;
+        }
+        .footer .socials a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 1.1rem;
+            transition: var(--transition-smooth);
+        }
+        .footer .socials a:hover {
+            color: var(--accent-purple);
+        }
+        .footer .disclaimer {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 8px auto 0;
+            opacity: 0.7;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .header-nav a {
+                font-size: 0.75rem;
+                padding: 4px 10px;
+            }
+            .az-page h1 {
+                font-size: 1.6rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding-top: 60px;
+            }
+            .header {
+                height: 60px;
+                padding: 0 16px;
+            }
+            .header-nav {
+                display: none;
+            }
+            .hamburger {
+                display: flex;
+            }
+            .header-brand .logo {
+                font-size: 1.1rem;
+            }
+            .header-actions button {
+                font-size: 1rem;
+                padding: 4px 6px;
+            }
+            .header-actions .profile-btn {
+                width: 32px;
+                height: 32px;
+                font-size: 0.75rem;
+            }
+
+            .az-page {
+                padding: 12px 0 30px;
+            }
+            .az-page h1 {
+                font-size: 1.3rem;
+                margin-bottom: 16px;
+            }
+            .alphabet-bar {
+                top: 60px;
+                padding: 6px 10px;
+                gap: 2px;
+            }
+            .alphabet-bar button {
+                font-size: 0.7rem;
+                padding: 4px 8px;
+            }
+            .az-grid {
+                grid-template-columns: repeat(auto-fill, minmax(min(130px, 100%), 1fr));
+                gap: 12px;
+            }
+
+            .auth-modal {
+                padding: 28px 20px;
+                margin: 10px;
+            }
+            .auth-modal h2 {
+                font-size: 1.3rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 12px;
+            }
+            .az-page h1 {
+                font-size: 1.1rem;
+            }
+            .alphabet-bar button {
+                font-size: 0.6rem;
+                padding: 3px 6px;
+            }
+            .az-grid {
+                grid-template-columns: repeat(auto-fill, minmax(min(100px, 100%), 1fr));
+                gap: 8px;
+            }
+        }
+
+        /* ===== SAFE AREA ===== */
+        @supports (padding: max(0px)) {
+            .header {
+                padding-left: max(24px, env(safe-area-inset-left));
+                padding-right: max(24px, env(safe-area-inset-right));
+            }
+            .auth-overlay {
+                padding: max(20px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right)) max(20px, env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left));
+            }
+            .search-overlay {
+                padding: max(24px, env(safe-area-inset-top)) max(24px, env(safe-area-inset-right)) max(24px, env(safe-area-inset-bottom)) max(24px, env(safe-area-inset-left));
+            }
+            .sidebar {
+                padding-top: max(24px, env(safe-area-inset-top));
+                padding-bottom: max(24px, env(safe-area-inset-bottom));
+            }
+        }
+
+        /* ===== TOAST ===== */
+        .toast-container {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 5000;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-width: 360px;
+            width: 100%;
+        }
+        .toast {
+            padding: 14px 20px;
+            border-radius: var(--radius-sm);
+            background: rgba(18, 18, 28, 0.97);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border-glass);
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            box-shadow: var(--shadow-card);
+            animation: toastIn 0.35s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .toast.success {
+            border-left: 4px solid #22c55e;
+        }
+        .toast.error {
+            border-left: 4px solid #ef4444;
+        }
+        .toast.info {
+            border-left: 4px solid var(--accent-purple);
+        }
+        @keyframes toastIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        .toast .toast-close {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 1.2rem;
+            margin-left: auto;
+            padding: 0 4px;
+        }
+    </style>
 </head>
 <body>
 
-  <header class="header">
-    <div style="display:flex;align-items:center;gap:1rem;">
-      <button class="icon-btn" onclick="history.back()">
-        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"/></svg>
-      </button>
-      <a href="index.html" class="logo">NexStream</a>
+    <!-- ===== HEADER ===== -->
+    <header class="header" role="banner">
+        <div class="header-brand">
+            <button class="hamburger" id="hamburgerBtn" aria-label="Toggle navigation">
+                <span></span><span></span><span></span>
+            </button>
+            <a href="/" class="logo">Anime<span>Vault</span></a>
+        </div>
+
+        <nav class="header-nav" role="navigation" aria-label="Main navigation">
+            <a href="/">Home</a>
+            <a href="/schedule.html">Schedule</a>
+            <a href="/az-list.html" class="active">A-Z</a>
+
+            <!-- Genres Dropdown -->
+            <div class="nav-dropdown" id="genresDropdown">
+                <a href="#" class="dropdown-toggle">Genres</a>
+                <div class="dropdown-menu" id="genresMenu"></div>
+            </div>
+
+            <!-- Types Dropdown -->
+            <div class="nav-dropdown">
+                <a href="#" class="dropdown-toggle">Types</a>
+                <div class="dropdown-menu">
+                    <a href="/search.html?type=tv">TV</a>
+                    <a href="/search.html?type=movie">Movie</a>
+                    <a href="/search.html?type=ova">OVA</a>
+                    <a href="/search.html?type=ona">ONA</a>
+                    <a href="/search.html?type=special">Special</a>
+                    <a href="/search.html?type=music">Music</a>
+                </div>
+            </div>
+
+            <!-- Status Dropdown -->
+            <div class="nav-dropdown">
+                <a href="#" class="dropdown-toggle">Status</a>
+                <div class="dropdown-menu">
+                    <a href="/search.html?status=airing">Airing</a>
+                    <a href="/search.html?status=completed">Completed</a>
+                    <a href="/search.html?status=upcoming">Upcoming</a>
+                    <a href="/search.html?status=releasing">Releasing</a>
+                </div>
+            </div>
+
+            <a href="/search.html">Search</a>
+            <a href="/profile.html">Profile</a>
+        </nav>
+
+        <div class="header-actions">
+            <button id="searchToggle" aria-label="Search" title="Search">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            </button>
+
+            <button id="langToggle" aria-label="Language" title="Language" style="font-weight:600;font-size:0.75rem;padding:4px 8px;">EN</button>
+
+            <button class="profile-btn" id="profileBtn" aria-label="Profile">
+                <span id="profileInitial">U</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- ===== SIDEBAR ===== -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <aside class="sidebar" id="sidebar" role="navigation" aria-label="Sidebar navigation">
+        <div class="sidebar-header">
+            <span class="logo">AnimeVault</span>
+            <button class="sidebar-close" id="sidebarClose" aria-label="Close sidebar">✕</button>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="/">🏠 Home</a>
+            <a href="/schedule.html">📅 Schedule</a>
+            <a href="/az-list.html" class="active">🔤 A-Z List</a>
+            <a href="/search.html">🔍 Search</a>
+            <a href="/profile.html">👤 Profile</a>
+            <div class="sidebar-divider"></div>
+            <a href="#" id="sidebarGenres">🎭 Genres</a>
+            <a href="#" id="sidebarTypes">📺 Types</a>
+            <a href="#" id="sidebarStatus">📌 Status</a>
+        </nav>
+    </aside>
+
+    <!-- ===== AUTH MODAL ===== -->
+    <div class="auth-overlay" id="authOverlay">
+        <div class="auth-modal" role="dialog" aria-labelledby="authTitle">
+            <button class="close-auth" id="closeAuth" aria-label="Close">✕</button>
+            <h2 id="authTitle">Welcome back</h2>
+            <p class="subtitle">Sign in to continue your anime journey.</p>
+
+            <div class="tabs" role="tablist">
+                <button role="tab" aria-selected="true" data-tab="login" class="active">Login</button>
+                <button role="tab" aria-selected="false" data-tab="signup">Sign Up</button>
+            </div>
+
+            <!-- Login Form -->
+            <form id="loginForm" data-form="login">
+                <div class="form-group">
+                    <label for="loginEmail">Email or Username</label>
+                    <input type="text" id="loginEmail" placeholder="Enter your email or username" required autocomplete="username" />
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" placeholder="Enter your password" required autocomplete="current-password" />
+                </div>
+                <div class="form-options">
+                    <label><input type="checkbox" id="rememberMe" /> Remember me</label>
+                    <a href="#" id="forgotPassword">Forgot password?</a>
+                </div>
+                <button type="submit" class="btn-submit">Sign In</button>
+                <div class="switch-link">
+                    Don't have an account? <button type="button" id="switchToSignup">Sign up</button>
+                </div>
+            </form>
+
+            <!-- Signup Form -->
+            <form id="signupForm" data-form="signup" class="hidden">
+                <div class="form-group">
+                    <label for="signupName">Full Name</label>
+                    <input type="text" id="signupName" placeholder="Enter your full name" required autocomplete="name" />
+                </div>
+                <div class="form-group">
+                    <label for="signupUsername">Username</label>
+                    <input type="text" id="signupUsername" placeholder="Choose a username" required autocomplete="username" />
+                </div>
+                <div class="form-group">
+                    <label for="signupEmail">Email</label>
+                    <input type="email" id="signupEmail" placeholder="Enter your email" required autocomplete="email" />
+                </div>
+                <div class="form-group">
+                    <label for="signupPassword">Password</label>
+                    <input type="password" id="signupPassword" placeholder="Create a password" required autocomplete="new-password" />
+                </div>
+                <div class="form-group">
+                    <label for="signupConfirm">Confirm Password</label>
+                    <input type="password" id="signupConfirm" placeholder="Confirm your password" required autocomplete="new-password" />
+                </div>
+                <div class="terms-row">
+                    <input type="checkbox" id="termsCheck" required />
+                    <label for="termsCheck">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></label>
+                </div>
+                <button type="submit" class="btn-submit">Create Account</button>
+                <div class="switch-link">
+                    Already have an account? <button type="button" id="switchToLogin">Sign in</button>
+                </div>
+            </form>
+        </div>
     </div>
-  </header>
 
-  <div class="alphabet-bar">
-    <div class="alphabet-list" id="alphabetList"></div>
-  </div>
+    <!-- ===== SEARCH OVERLAY ===== -->
+    <div class="search-overlay" id="searchOverlay">
+        <div class="search-header">
+            <input type="text" id="searchInput" placeholder="Search for anime, genres, or characters..." autofocus />
+            <button class="close-search" id="closeSearch" aria-label="Close search">✕</button>
+        </div>
+        <div class="search-filters">
+            <select id="searchGenre">
+                <option value="">All Genres</option>
+            </select>
+            <select id="searchType">
+                <option value="">All Types</option>
+                <option value="tv">TV</option>
+                <option value="movie">Movie</option>
+                <option value="ova">OVA</option>
+                <option value="ona">ONA</option>
+                <option value="special">Special</option>
+                <option value="music">Music</option>
+            </select>
+            <select id="searchYear">
+                <option value="">All Years</option>
+            </select>
+            <select id="searchSort">
+                <option value="score">Sort by Score</option>
+                <option value="title">Sort by Title</option>
+                <option value="popularity">Sort by Popularity</option>
+            </select>
+        </div>
+        <div class="search-results" id="searchResults">
+            <div class="no-results">Start typing to search for anime.</div>
+        </div>
+    </div>
 
-  <div class="page-header" style="padding-top:100px;">
-    <h1 class="page-title">A-Z Anime List</h1>
-  </div>
+    <!-- ===== TOAST CONTAINER ===== -->
+    <div class="toast-container" id="toastContainer"></div>
 
-  <div class="anime-grid" id="animeGrid"></div>
-  <div class="loading-more" id="loadingMore"></div>
+    <!-- ===== MAIN CONTENT ===== -->
+    <main role="main" class="az-page">
+        <div class="container">
+            <h1>🔤 A-Z List</h1>
 
-  <script>
-    const CONFIG = { API_BASE: 'https://api.jikan.moe/v4' };
-    const alphabet = ['All', '0-9', 'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
-    let currentLetter = 'All';
-    let currentPage = 1;
-    let isLoading = false;
-    let hasMore = true;
+            <div class="alphabet-bar" id="alphabetBar">
+                <button data-letter="all" class="active">All</button>
+                <button data-letter="0-9">0-9</button>
+                <button data-letter="a">A</button>
+                <button data-letter="b">B</button>
+                <button data-letter="c">C</button>
+                <button data-letter="d">D</button>
+                <button data-letter="e">E</button>
+                <button data-letter="f">F</button>
+                <button data-letter="g">G</button>
+                <button data-letter="h">H</button>
+                <button data-letter="i">I</button>
+                <button data-letter="j">J</button>
+                <button data-letter="k">K</button>
+                <button data-letter="l">L</button>
+                <button data-letter="m">M</button>
+                <button data-letter="n">N</button>
+                <button data-letter="o">O</button>
+                <button data-letter="p">P</button>
+                <button data-letter="q">Q</button>
+                <button data-letter="r">R</button>
+                <button data-letter="s">S</button>
+                <button data-letter="t">T</button>
+                <button data-letter="u">U</button>
+                <button data-letter="v">V</button>
+                <button data-letter="w">W</button>
+                <button data-letter="x">X</button>
+                <button data-letter="y">Y</button>
+                <button data-letter="z">Z</button>
+            </div>
 
-    function renderAlphabet() {
-      $('#alphabetList').innerHTML = alphabet.map(l => `
-        <button class="alpha-btn ${l === currentLetter ? 'active' : ''}" data-letter="${l}" onclick="filterLetter('${l}')">${l}</button>
-      `).join('');
-    }
+            <div class="az-grid" id="azGrid">
+                <div class="az-empty">Loading anime list...</div>
+            </div>
 
-    async function filterLetter(letter) {
-      currentLetter = letter;
-      currentPage = 1;
-      hasMore = true;
-      $('#animeGrid').innerHTML = '';
-      renderAlphabet();
-      await loadMore();
-    }
+            <div class="load-more-container">
+                <button class="btn btn-secondary" id="loadMoreBtn" style="display:none;">Load More</button>
+            </div>
+        </div>
+    </main>
 
-    async function loadMore() {
-      if (isLoading || !hasMore) return;
-      isLoading = true;
-      $('#loadingMore').textContent = 'Loading...';
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer" role="contentinfo">
+        <div class="container">
+            <div class="socials">
+                <a href="#" aria-label="Twitter">🐦</a>
+                <a href="#" aria-label="Discord">💬</a>
+                <a href="#" aria-label="GitHub">🐙</a>
+                <a href="#" aria-label="Reddit">🤖</a>
+            </div>
+            <p>&copy; 2026 AnimeVault. All rights reserved.</p>
+            <p class="disclaimer">This site does not store any files on its server. All contents are provided by non-affiliated third parties.</p>
+        </div>
+    </footer>
 
-      try {
-        let url = `${CONFIG.API_BASE}/anime?limit=24&page=${currentPage}&order_by=title&sort=asc`;
-        if (currentLetter !== 'All') {
-          if (currentLetter === '0-9') {
-            // Jikan doesn't support regex, so we fetch all and filter client-side
-            // For production, you'd handle this differently
-          } else {
-            url += `&letter=${currentLetter}`;
-          }
-        }
-        
-        const res = await fetch(url);
-        const data = await res.json();
-        const items = data.data || [];
-        
-        if (currentLetter === '0-9') {
-          const filtered = items.filter(a => /^\d/.test(a.title));
-          renderItems(filtered);
-        } else {
-          renderItems(items);
-        }
-        
-        hasMore = data.pagination?.has_next_page || false;
-        currentPage++;
-      } catch (err) {
-        console.error('Load failed:', err);
-      } finally {
-        isLoading = false;
-        $('#loadingMore').textContent = hasMore ? 'Scroll to load more' : 'No more results';
-      }
-    }
+    <script>
+        // ============================================================
+        //  ANIMEVAULT — A-Z LIST PAGE
+        // ============================================================
 
-    function renderItems(items) {
-      const html = items.map(anime => `
-        <a href="anime.html?id=${anime.mal_id}" class="anime-card">
-          <img src="${anime.images?.webp?.image_url || ''}" alt="${anime.title}" loading="lazy">
-          <div class="anime-card-info">
-            <div class="anime-card-title">${anime.title_english || anime.title}</div>
-            <div class="anime-card-meta">${anime.type || 'TV'} · ${anime.score ? `★ ${anime.score}` : 'N/A'}</div>
-          </div>
-        </a>
-      `).join('');
-      
-      if (currentPage === 1) {
-        $('#animeGrid').innerHTML = html;
-      } else {
-        $('#animeGrid').insertAdjacentHTML('beforeend', html);
-      }
-    }
+        (function() {
+            'use strict';
 
-    // Infinite scroll
-    window.addEventListener('scroll', () => {
-      if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 500) {
-        loadMore();
-      }
-    });
+            // ===== CONFIG =====
+            const CONFIG = {
+                API_BASE: 'https://api.jikan.moe/v4',
+                CACHE_TTL: 3600000, // 1 hour
+                MAX_RETRIES: 3,
+                RETRY_DELAY: 1000,
+                ITEMS_PER_PAGE: 24,
+            };
 
-    function $(sel) { return document.querySelector(sel); }
+            // ===== STATE =====
+            const state = {
+                user: null,
+                token: localStorage.getItem('av_token') || null,
+                language: localStorage.getItem('av_lang') || 'en',
+                currentLetter: 'all',
+                currentPage: 1,
+                totalPages: 1,
+                isLoading: false,
+                isSearchOpen: false,
+                isAuthOpen: false,
+                isSidebarOpen: false,
+                authTab: 'login',
+                searchController: null,
+            };
 
-    document.addEventListener('DOMContentLoaded', () => {
-      renderAlphabet();
-      loadMore();
-    });
-  </script>
+            // ===== UTILITY FUNCTIONS =====
+            function $(sel, ctx) { return (ctx || document).querySelector(sel); }
+
+            function $$(sel, ctx) { return Array.from((ctx || document).querySelectorAll(sel)); }
+
+            function debounce(fn, ms) {
+                let timer;
+                return function(...args) {
+                    clearTimeout(timer);
+                    timer = setTimeout(() => fn.apply(this, args), ms);
+                };
+            }
+
+            function throttle(fn, ms) {
+                let last = 0;
+                return function(...args) {
+                    const now = Date.now();
+                    if (now - last >= ms) { last = now;
+                        fn.apply(this, args); }
+                };
+            }
+
+            function fetchWithRetry(url, options = {}, retries = CONFIG.MAX_RETRIES) {
+                return new Promise((resolve, reject) => {
+                    const attempt = (n) => {
+                        fetch(url, options)
+                            .then(res => {
+                                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                                return res.json();
+                            })
+                            .then(resolve)
+                            .catch(err => {
+                                if (n > 0) {
+                                    setTimeout(() => attempt(n - 1), CONFIG.RETRY_DELAY);
+                                } else {
+                                    reject(err);
+                                }
+                            });
+                    };
+                    attempt(retries);
+                });
+            }
+
+            function cacheFetch(key, fetchFn, ttl = CONFIG.CACHE_TTL) {
+                const cachedStr = localStorage.getItem('av_cache_' + key);
+                let staleData = null;
+
+                if (cachedStr) {
+                    try {
+                        const { data, timestamp } = JSON.parse(cachedStr);
+                        if (Date.now() - timestamp < ttl) {
+                            return Promise.resolve(data);
+                        }
+                        staleData = data;
+                    } catch (_) { /* ignore corrupted cache */ }
+                }
+
+                return fetchFn()
+                    .then(data => {
+                        try {
+                            localStorage.setItem('av_cache_' + key, JSON.stringify({ data, timestamp: Date.now() }));
+                        } catch (_) {}
+                        return data;
+                    })
+                    .catch(err => {
+                        if (staleData) {
+                            console.warn(`Cache stale for ${key}, returning cached data due to fetch error:`, err);
+                            return staleData;
+                        }
+                        throw err;
+                    });
+            }
+
+            function toast(message, type = 'info', duration = 3500) {
+                const container = document.getElementById('toastContainer');
+                const el = document.createElement('div');
+                el.className = `toast ${type}`;
+                el.innerHTML = `<span>${message}</span><button class="toast-close">✕</button>`;
+                container.appendChild(el);
+                el.querySelector('.toast-close').addEventListener('click', () => el.remove());
+                setTimeout(() => {
+                    if (el.parentNode) el.remove();
+                }, duration);
+            }
+
+            function getInitials(name) {
+                if (!name) return 'U';
+                return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+            }
+
+            function escapeHTML(str) {
+                const div = document.createElement('div');
+                div.textContent = str;
+                return div.innerHTML;
+            }
+
+            function truncate(str, len = 120) {
+                return str.length > len ? str.slice(0, len) + '…' : str;
+            }
+
+            // ===== API =====
+            const API = {
+                async getAnimeList(page = 1, letter = null) {
+                    let url = `${CONFIG.API_BASE}/anime?page=${page}&limit=${CONFIG.ITEMS_PER_PAGE}`;
+                    if (letter && letter !== 'all' && letter !== '0-9') {
+                        url += `&letter=${letter}`;
+                    }
+                    if (letter === '0-9') {
+                        url += `&letter=0-9`;
+                    }
+                    return fetchWithRetry(url);
+                },
+                async getGenres() {
+                    return cacheFetch('genres', () =>
+                        fetchWithRetry(`${CONFIG.API_BASE}/genres/anime`)
+                    );
+                },
+                async search(query, filters = {}) {
+                    const params = new URLSearchParams({ q: query, limit: 20, ...filters });
+                    return fetchWithRetry(`${CONFIG.API_BASE}/anime?${params}`);
+                },
+            };
+
+            // ===== AUTH SYSTEM =====
+            const Auth = {
+                _user: null,
+
+                get user() {
+                    if (this._user) return this._user;
+                    const stored = localStorage.getItem('av_user');
+                    if (stored) {
+                        try { this._user = JSON.parse(stored); } catch (_) {}
+                    }
+                    return this._user;
+                },
+
+                isLoggedIn() {
+                    return !!this.user && !!state.token;
+                },
+
+                async login(email, password, remember = false) {
+                    await new Promise(r => setTimeout(r, 600));
+                    if (password.length < 4) throw new Error('Invalid credentials');
+                    const user = {
+                        id: 'usr_' + Date.now(),
+                        name: email.split('@')[0] || 'User',
+                        username: email.split('@')[0] || 'user',
+                        email: email,
+                        avatar: null,
+                        favorites: [],
+                        bookmarks: [],
+                        history: [],
+                        createdAt: new Date().toISOString(),
+                    };
+                    this._user = user;
+                    state.token = 'jwt_' + btoa(JSON.stringify({ uid: user.id, exp: Date.now() + 86400000 }));
+                    localStorage.setItem('av_user', JSON.stringify(user));
+                    localStorage.setItem('av_token', state.token);
+                    if (remember) {
+                        localStorage.setItem('av_remember', 'true');
+                    }
+                    return user;
+                },
+
+                async signup(name, username, email, password) {
+                    await new Promise(r => setTimeout(r, 600));
+                    if (password.length < 6) throw new Error('Password must be at least 6 characters');
+                    const user = {
+                        id: 'usr_' + Date.now(),
+                        name: name,
+                        username: username,
+                        email: email,
+                        avatar: null,
+                        favorites: [],
+                        bookmarks: [],
+                        history: [],
+                        createdAt: new Date().toISOString(),
+                    };
+                    this._user = user;
+                    state.token = 'jwt_' + btoa(JSON.stringify({ uid: user.id, exp: Date.now() + 86400000 }));
+                    localStorage.setItem('av_user', JSON.stringify(user));
+                    localStorage.setItem('av_token', state.token);
+                    return user;
+                },
+
+                logout() {
+                    this._user = null;
+                    state.token = null;
+                    localStorage.removeItem('av_user');
+                    localStorage.removeItem('av_token');
+                    localStorage.removeItem('av_remember');
+                    updateProfileUI();
+                    toast('Logged out successfully', 'info');
+                },
+
+                updateProfile(data) {
+                    if (!this.user) return;
+                    const updated = { ...this.user, ...data };
+                    this._user = updated;
+                    localStorage.setItem('av_user', JSON.stringify(updated));
+                    updateProfileUI();
+                    return updated;
+                },
+            };
+
+            // ===== UI UPDATES =====
+            function updateProfileUI() {
+                const user = Auth.user;
+                const initial = document.getElementById('profileInitial');
+                const profileBtn = document.getElementById('profileBtn');
+                if (user && Auth.isLoggedIn()) {
+                    const display = user.avatar ? `<img src="${user.avatar}" alt="${user.name}" />` : getInitials(user.name);
+                    profileBtn.innerHTML = display;
+                    profileBtn.style.background = user.avatar ? 'transparent' : 'var(--accent-purple)';
+                } else {
+                    profileBtn.innerHTML = '<span id="profileInitial">U</span>';
+                    profileBtn.style.background = 'var(--accent-purple)';
+                }
+            }
+
+            // ===== CARD RENDER =====
+            function renderAnimeCard(anime, clickable = true) {
+                const title = anime.title || anime.name || 'Unknown';
+                const score = anime.score ? anime.score.toFixed(1) : 'N/A';
+                const episodes = anime.episodes || '?';
+                const type = anime.type || 'TV';
+                const img = anime.images?.jpg?.image_url || anime.images?.jpg?.small_image_url || '';
+
+                const card = document.createElement('div');
+                card.className = 'anime-card';
+                if (clickable) {
+                    card.addEventListener('click', () => {
+                        window.location.href = `/anime.html?id=${anime.mal_id}`;
+                    });
+                }
+
+                card.innerHTML = `
+              <div class="poster-wrapper">
+                <img class="poster" src="${img}" alt="${escapeHTML(title)}" loading="lazy" onerror="this.style.background='var(--bg-secondary)'" />
+                <div class="meta-strip">
+                  <span class="meta-item hd">HD</span>
+                  <span class="meta-item score">★ ${score}</span>
+                  <span class="meta-item eps">${episodes} eps</span>
+                  <span class="meta-item type">${type}</span>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="title">${escapeHTML(title)}</div>
+              </div>
+            `;
+                return card;
+            }
+
+            // ===== A-Z LIST =====
+            const AZList = {
+                _currentLetter: 'all',
+                _currentPage: 1,
+                _totalPages: 1,
+                _isLoading: false,
+
+                async init() {
+                    const bar = document.getElementById('alphabetBar');
+                    const buttons = bar.querySelectorAll('button');
+
+                    buttons.forEach(btn => {
+                        btn.addEventListener('click', () => {
+                            buttons.forEach(b => b.classList.remove('active'));
+                            btn.classList.add('active');
+                            this._currentLetter = btn.dataset.letter;
+                            this._currentPage = 1;
+                            document.getElementById('loadMoreBtn').style.display = 'none';
+                            this._loadPage();
+                        });
+                    });
+
+                    await this._loadPage();
+
+                    // Load genres for dropdown
+                    loadGenres();
+                },
+
+                async _loadPage() {
+                    if (this._isLoading) return;
+                    this._isLoading = true;
+
+                    const grid = document.getElementById('azGrid');
+                    if (this._currentPage === 1) {
+                        grid.innerHTML = '<div class="az-empty">Loading anime list...</div>';
+                    }
+
+                    try {
+                        const resp = await API.getAnimeList(this._currentPage, this._currentLetter);
+                        const data = resp.data || [];
+                        this._totalPages = resp.pagination?.last_visible_page || 1;
+
+                        if (this._currentPage === 1) {
+                            grid.innerHTML = '';
+                        }
+
+                        if (!data.length) {
+                            if (this._currentPage === 1) {
+                                grid.innerHTML = '<div class="az-empty">No anime found.</div>';
+                            }
+                            document.getElementById('loadMoreBtn').style.display = 'none';
+                            this._isLoading = false;
+                            return;
+                        }
+
+                        data.forEach(anime => {
+                            const card = renderAnimeCard(anime);
+                            grid.appendChild(card);
+                        });
+
+                        if (this._currentPage < this._totalPages) {
+                            document.getElementById('loadMoreBtn').style.display = 'block';
+                        } else {
+                            document.getElementById('loadMoreBtn').style.display = 'none';
+                        }
+
+                        this._isLoading = false;
+                    } catch (err) {
+                        console.error('AZ list load error:', err);
+                        if (this._currentPage === 1) {
+                            grid.innerHTML =
+                                '<div class="az-empty">Failed to load anime list. <button class="btn btn-secondary" onclick="location.reload()">Refresh</button></div>';
+                        }
+                        document.getElementById('loadMoreBtn').style.display = 'none';
+                        this._isLoading = false;
+                    }
+                },
+
+                loadMore() {
+                    if (this._isLoading || this._currentPage >= this._totalPages) return;
+                    this._currentPage++;
+                    this._loadPage();
+                },
+            };
+
+            // ===== GENRES DROPDOWN =====
+            async function loadGenres() {
+                try {
+                    const resp = await API.getGenres();
+                    const genres = resp.data || [];
+                    const menu = document.getElementById('genresMenu');
+                    menu.innerHTML = genres.slice(0, 20).map(g =>
+                        `<a href="/search.html?genre=${g.mal_id}">${g.name}</a>`
+                    ).join('');
+                } catch (err) {
+                    console.error('Genres load error:', err);
+                }
+            }
+
+            // ===== SEARCH SYSTEM =====
+            const Search = {
+                _input: null,
+                _results: null,
+                _debounced: null,
+
+                init() {
+                    this._input = document.getElementById('searchInput');
+                    this._results = document.getElementById('searchResults');
+                    this._debounced = debounce(this._perform.bind(this), 400);
+                    this._input.addEventListener('input', this._debounced);
+                    this._input.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter') this._perform();
+                        if (e.key === 'Escape') this.close();
+                    });
+                    document.getElementById('closeSearch').addEventListener('click', () => this.close());
+                    document.getElementById('searchToggle').addEventListener('click', () => this.open());
+
+                    ['searchGenre', 'searchType', 'searchYear', 'searchSort'].forEach(id => {
+                        const el = document.getElementById(id);
+                        if (el) el.addEventListener('change', () => this._perform());
+                    });
+
+                    const yearSelect = document.getElementById('searchYear');
+                    const currentYear = new Date().getFullYear();
+                    for (let y = currentYear; y >= 1980; y--) {
+                        const opt = document.createElement('option');
+                        opt.value = y;
+                        opt.textContent = y;
+                        yearSelect.appendChild(opt);
+                    }
+
+                    this._loadGenresFilter();
+                },
+
+                async _loadGenresFilter() {
+                    try {
+                        const resp = await API.getGenres();
+                        const genres = resp.data || [];
+                        const sel = document.getElementById('searchGenre');
+                        genres.slice(0, 20).forEach(g => {
+                            const opt = document.createElement('option');
+                            opt.value = g.mal_id;
+                            opt.textContent = g.name;
+                            sel.appendChild(opt);
+                        });
+                    } catch (_) {}
+                },
+
+                async _perform() {
+                    const query = this._input.value.trim();
+                    if (query.length < 2) {
+                        this._results.innerHTML =
+                        '<div class="no-results">Type at least 2 characters to search.</div>';
+                        return;
+                    }
+
+                    if (this._searchController) {
+                        this._searchController.abort();
+                    }
+                    this._searchController = new AbortController();
+
+                    const filters = {
+                        genre: document.getElementById('searchGenre').value || undefined,
+                        type: document.getElementById('searchType').value || undefined,
+                        year: document.getElementById('searchYear').value || undefined,
+                        order_by: document.getElementById('searchSort').value || 'score',
+                        sort: 'desc',
+                    };
+
+                    try {
+                        this._results.innerHTML =
+                            '<div class="no-results" style="color:var(--text-secondary);">Searching...</div>';
+                        const resp = await API.search(query, filters);
+                        const data = resp.data || [];
+                        if (data.length === 0) {
+                            this._results.innerHTML =
+                                '<div class="no-results">No results found. Try a different search.</div>';
+                            return;
+                        }
+                        this._results.innerHTML = '';
+                        data.forEach(anime => {
+                            const card = renderAnimeCard(anime);
+                            this._results.appendChild(card);
+                        });
+                    } catch (err) {
+                        if (err.name === 'AbortError') return;
+                        console.error('Search error:', err);
+                        this._results.innerHTML =
+                            '<div class="no-results">An error occurred. Please try again.</div>';
+                    } finally {
+                        this._searchController = null;
+                    }
+                },
+
+                open() {
+                    document.getElementById('searchOverlay').classList.add('open');
+                    this._input.focus();
+                    state.isSearchOpen = true;
+                    document.body.style.overflow = 'hidden';
+                },
+
+                close() {
+                    document.getElementById('searchOverlay').classList.remove('open');
+                    state.isSearchOpen = false;
+                    document.body.style.overflow = '';
+                    this._input.value = '';
+                    this._results.innerHTML = '<div class="no-results">Start typing to search for anime.</div>';
+                    if (this._searchController) {
+                        this._searchController.abort();
+                        this._searchController = null;
+                    }
+                },
+            };
+
+            // ===== AUTH MODAL =====
+            const AuthModal = {
+                _overlay: null,
+                _modal: null,
+
+                init() {
+                    this._overlay = document.getElementById('authOverlay');
+                    this._modal = document.querySelector('.auth-modal');
+
+                    document.getElementById('profileBtn').addEventListener('click', () => {
+                        if (Auth.isLoggedIn()) {
+                            window.location.href = '/profile.html';
+                        } else {
+                            this.open();
+                        }
+                    });
+
+                    document.getElementById('closeAuth').addEventListener('click', () => this.close());
+
+                    this._overlay.addEventListener('click', (e) => {
+                        if (e.target === this._overlay) this.close();
+                    });
+
+                    document.addEventListener('keydown', (e) => {
+                        if (e.key === 'Escape' && state.isAuthOpen) this.close();
+                    });
+
+                    const tabs = $$('.auth-modal .tabs button');
+                    tabs.forEach(btn => {
+                        btn.addEventListener('click', () => {
+                            tabs.forEach(b => b.classList.remove('active'));
+                            btn.classList.add('active');
+                            const tab = btn.dataset.tab;
+                            state.authTab = tab;
+                            document.getElementById('loginForm').classList.toggle('hidden', tab !== 'login');
+                            document.getElementById('signupForm').classList.toggle('hidden', tab !== 'signup');
+                            const title = document.getElementById('authTitle');
+                            title.textContent = tab === 'login' ? 'Welcome back' : 'Join AnimeVault';
+                            document.querySelector('.auth-modal .subtitle').textContent =
+                                tab === 'login' ? 'Sign in to continue your anime journey.' :
+                                'Create your free account and start watching.';
+                        });
+                    });
+
+                    document.getElementById('switchToSignup').addEventListener('click', () => {
+                        $$('.auth-modal .tabs button')[1].click();
+                    });
+                    document.getElementById('switchToLogin').addEventListener('click', () => {
+                        $$('.auth-modal .tabs button')[0].click();
+                    });
+
+                    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+                        e.preventDefault();
+                        const email = document.getElementById('loginEmail').value.trim();
+                        const password = document.getElementById('loginPassword').value;
+                        const remember = document.getElementById('rememberMe').checked;
+                        try {
+                            await Auth.login(email, password, remember);
+                            this.close();
+                            updateProfileUI();
+                            toast('Welcome back, ' + Auth.user.name + '!', 'success');
+                            window.location.reload();
+                        } catch (err) {
+                            toast(err.message || 'Login failed', 'error');
+                        }
+                    });
+
+                    document.getElementById('signupForm').addEventListener('submit', async (e) => {
+                        e.preventDefault();
+                        const name = document.getElementById('signupName').value.trim();
+                        const username = document.getElementById('signupUsername').value.trim();
+                        const email = document.getElementById('signupEmail').value.trim();
+                        const password = document.getElementById('signupPassword').value;
+                        const confirm = document.getElementById('signupConfirm').value;
+                        const terms = document.getElementById('termsCheck').checked;
+
+                        if (password !== confirm) {
+                            toast('Passwords do not match', 'error');
+                            return;
+                        }
+                        if (!terms) {
+                            toast('You must agree to the Terms of Service', 'error');
+                            return;
+                        }
+                        try {
+                            await Auth.signup(name, username, email, password);
+                            this.close();
+                            updateProfileUI();
+                            toast('Welcome to AnimeVault, ' + Auth.user.name + '!', 'success');
+                            window.location.reload();
+                        } catch (err) {
+                            toast(err.message || 'Signup failed', 'error');
+                        }
+                    });
+
+                    document.getElementById('forgotPassword').addEventListener('click', (e) => {
+                        e.preventDefault();
+                        toast('Password reset link sent to your email (demo).', 'info');
+                    });
+                },
+
+                open() {
+                    this._overlay.classList.add('open');
+                    state.isAuthOpen = true;
+                    document.body.style.overflow = 'hidden';
+                    if (!Auth.isLoggedIn()) {
+                        $$('.auth-modal .tabs button')[0].click();
+                    }
+                },
+
+                close() {
+                    this._overlay.classList.remove('open');
+                    state.isAuthOpen = false;
+                    document.body.style.overflow = '';
+                },
+            };
+
+            // ===== SIDEBAR =====
+            const Sidebar = {
+                init() {
+                    const overlay = document.getElementById('sidebarOverlay');
+                    const sidebar = document.getElementById('sidebar');
+                    const openBtn = document.getElementById('hamburgerBtn');
+                    const closeBtn = document.getElementById('sidebarClose');
+
+                    openBtn.addEventListener('click', () => this.open());
+                    closeBtn.addEventListener('click', () => this.close());
+                    overlay.addEventListener('click', () => this.close());
+
+                    document.addEventListener('keydown', (e) => {
+                        if (e.key === 'Escape' && state.isSidebarOpen) this.close();
+                    });
+
+                    document.getElementById('sidebarGenres').addEventListener('click', (e) => {
+                        e.preventDefault();
+                        window.location.href = '/search.html';
+                    });
+                    document.getElementById('sidebarTypes').addEventListener('click', (e) => {
+                        e.preventDefault();
+                        window.location.href = '/search.html';
+                    });
+                    document.getElementById('sidebarStatus').addEventListener('click', (e) => {
+                        e.preventDefault();
+                        window.location.href = '/search.html';
+                    });
+                },
+
+                open() {
+                    document.getElementById('sidebar').classList.add('open');
+                    document.getElementById('sidebarOverlay').classList.add('open');
+                    state.isSidebarOpen = true;
+                    document.body.style.overflow = 'hidden';
+                },
+
+                close() {
+                    document.getElementById('sidebar').classList.remove('open');
+                    document.getElementById('sidebarOverlay').classList.remove('open');
+                    state.isSidebarOpen = false;
+                    document.body.style.overflow = '';
+                },
+            };
+
+            // ===== LANGUAGE SWITCHER =====
+            const Lang = {
+                _current: 'en',
+
+                init() {
+                    this._current = localStorage.getItem('av_lang') || 'en';
+                    const btn = document.getElementById('langToggle');
+                    btn.textContent = this._current.toUpperCase();
+                    btn.addEventListener('click', () => {
+                        const langs = ['en', 'jp', 'bn'];
+                        const idx = langs.indexOf(this._current);
+                        this._current = langs[(idx + 1) % langs.length];
+                        localStorage.setItem('av_lang', this._current);
+                        btn.textContent = this._current.toUpperCase();
+                        toast(`Language switched to ${this._current.toUpperCase()}`, 'info');
+                    });
+                }
+            };
+
+            // ===== RESPONSIVE FIXES =====
+            function fixOverflows() {
+                document.querySelectorAll('*').forEach(el => {
+                    const style = window.getComputedStyle(el);
+                    if (style.overflowX === 'hidden' && el.scrollWidth > el.clientWidth) {}
+                });
+                document.querySelectorAll('iframe').forEach(iframe => {
+                    iframe.style.maxWidth = '100%';
+                });
+            }
+
+            // ===== INIT =====
+            async function initApp() {
+                try {
+                    if (Auth.isLoggedIn()) {
+                        updateProfileUI();
+                    }
+
+                    Lang.init();
+                    Sidebar.init();
+                    AuthModal.init();
+                    Search.init();
+
+                    // Load A-Z list
+                    await AZList.init();
+
+                    // Load More button
+                    document.getElementById('loadMoreBtn').addEventListener('click', () => {
+                        AZList.loadMore();
+                    });
+
+                    setTimeout(fixOverflows, 500);
+                    window.addEventListener('resize', throttle(fixOverflows, 300));
+
+                    window.addEventListener('orientationchange', () => {
+                        setTimeout(fixOverflows, 400);
+                    });
+
+                    console.log('🚀 AnimeVault A-Z page initialized successfully');
+                } catch (err) {
+                    console.error('Init error:', err);
+                    toast('Failed to load anime list. Please refresh.', 'error');
+                }
+            }
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initApp);
+            } else {
+                initApp();
+            }
+
+            window.__AV = {
+                state,
+                API,
+                Auth,
+                Search,
+                toast,
+                AZList,
+            };
+
+        })();
+    </script>
+
 </body>
 </html>
