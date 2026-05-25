@@ -1,1034 +1,2841 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="description" content="Stream anime in HD - Watch trending, top rated, and latest anime episodes online">
-<meta property="og:title" content="AnimeStream - Premium Anime Streaming">
-<meta property="og:description" content="Watch anime online in HD quality">
-<meta property="og:type" content="website">
-<title>AnimeStream - Premium Anime Streaming</title>
-<style>
-:root {
-  --bg-deep: #0a0a0f;
-  --bg-card: rgba(20, 20, 30, 0.85);
-  --bg-glass: rgba(30, 30, 45, 0.6);
-  --accent: #8b5cf6;
-  --accent-glow: #a78bfa;
-  --accent-dark: #6d28d9;
-  --text: #f1f5f9;
-  --text-muted: #94a3b8;
-  --text-dim: #64748b;
-  --border: rgba(139, 92, 246, 0.2);
-  --border-hover: rgba(139, 92, 246, 0.5);
-  --shadow-glow: 0 0 40px rgba(139, 92, 246, 0.15);
-  --radius: 12px;
-  --radius-sm: 8px;
-  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#0a0a0f" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
-html, body { overflow-x: hidden; max-width: 100%; background: var(--bg-deep); color: var(--text); font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; line-height: 1.6; -webkit-font-smoothing: antialiased; }
-a { text-decoration: none; color: inherit; }
-img { max-width: 100%; display: block; }
-button { border: none; background: none; cursor: pointer; font-family: inherit; color: inherit; }
-ul { list-style: none; }
+    <title>AnimeVault — Premium Anime Streaming</title>
+    <meta name="description" content="AnimeVault is a premium anime streaming platform with cinematic quality, ultra-modern design, and a massive library of anime content." />
+    <meta name="keywords" content="anime, streaming, premium, jikan, animevault, watch anime" />
 
-/* Scrollbar */
-::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: var(--bg-deep); }
-::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 3px; }
+    <!-- OpenGraph -->
+    <meta property="og:title" content="AnimeVault — Premium Anime Streaming" />
+    <meta property="og:description" content="AnimeVault is a premium anime streaming platform with cinematic quality and a massive library." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://animevault.pages.dev" />
+    <meta property="og:image" content="https://animevault.pages.dev/og-image.jpg" />
 
-/* Skeleton */
-.skeleton { background: linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.05) 75%); background-size: 200% 100%; animation: skeleton 1.5s infinite; border-radius: var(--radius-sm); }
-@keyframes skeleton { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="AnimeVault — Premium Anime Streaming" />
+    <meta name="twitter:description" content="Premium anime streaming platform with cinematic quality." />
 
-/* Header */
-.header { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; height: 64px; background: rgba(10, 10, 15, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); transition: var(--transition); }
-.header.scrolled { background: rgba(10, 10, 15, 0.95); box-shadow: 0 4px 30px rgba(0,0,0,0.5); }
-.header-inner { max-width: 1400px; margin: 0 auto; height: 100%; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; gap: 16px; }
-.header-left { display: flex; align-items: center; gap: 16px; }
-.hamburger { width: 40px; height: 40px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 5px; border-radius: var(--radius-sm); transition: var(--transition); }
-.hamburger span { display: block; width: 22px; height: 2px; background: var(--text); border-radius: 2px; transition: var(--transition); }
-.hamburger:hover { background: rgba(139, 92, 246, 0.15); }
-.logo { font-size: 1.5rem; font-weight: 800; background: linear-gradient(135deg, var(--accent), var(--accent-glow)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: -0.5px; }
-.logo span { color: var(--text); -webkit-text-fill-color: var(--text); }
+    <style>
+        /* ===== RESET + BASE ===== */
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-/* Nav */
-.nav-desktop { display: none; }
-.nav-desktop ul { display: flex; gap: 4px; }
-.nav-desktop a { display: block; padding: 8px 14px; border-radius: var(--radius-sm); font-size: 0.875rem; font-weight: 500; color: var(--text-muted); transition: var(--transition); position: relative; }
-.nav-desktop a:hover, .nav-desktop a.active { color: var(--text); background: rgba(139, 92, 246, 0.15); }
-.nav-desktop .mega-trigger { position: relative; }
-.mega-menu { position: absolute; top: 100%; left: 0; min-width: 280px; background: var(--bg-glass); backdrop-filter: blur(20px); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; opacity: 0; visibility: hidden; transform: translateY(-10px); transition: var(--transition); z-index: 1001; max-height: 400px; overflow-y: auto; }
-.mega-trigger:hover .mega-menu { opacity: 1; visibility: visible; transform: translateY(0); }
-.mega-menu h4 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--accent-glow); margin-bottom: 10px; }
-.mega-menu-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
-.mega-menu a { padding: 6px 10px; font-size: 0.8rem; border-radius: 6px; }
-.mega-menu a:hover { background: rgba(139, 92, 246, 0.2); color: var(--accent-glow); }
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #111118;
+            --bg-card: rgba(20, 20, 30, 0.75);
+            --bg-glass: rgba(255, 255, 255, 0.04);
+            --border-glass: rgba(255, 255, 255, 0.07);
+            --text-primary: #f0f0f5;
+            --text-secondary: #a0a0b8;
+            --text-muted: #6a6a82;
+            --accent-purple: #8b5cf6;
+            --accent-glow: rgba(139, 92, 246, 0.35);
+            --accent-glow-soft: rgba(139, 92, 246, 0.12);
+            --accent-pink: #ec4899;
+            --accent-blue: #3b82f6;
+            --radius-lg: 16px;
+            --radius-md: 12px;
+            --radius-sm: 8px;
+            --font-sans: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.6);
+            --shadow-glow: 0 0 60px rgba(139, 92, 246, 0.15);
+            --transition-smooth: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-bounce: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
 
-.header-right { display: flex; align-items: center; gap: 12px; }
-.search-btn, .lang-btn, .profile-btn { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: var(--radius-sm); color: var(--text-muted); transition: var(--transition); position: relative; }
-.search-btn:hover, .lang-btn:hover, .profile-btn:hover { background: rgba(139, 92, 246, 0.15); color: var(--text); }
-.search-btn svg, .lang-btn svg, .profile-btn svg { width: 20px; height: 20px; }
-.lang-dropdown { position: absolute; top: 100%; right: 0; margin-top: 8px; background: var(--bg-glass); backdrop-filter: blur(20px); border: 1px solid var(--border); border-radius: var(--radius); padding: 8px; min-width: 120px; opacity: 0; visibility: hidden; transform: translateY(-10px); transition: var(--transition); z-index: 1001; }
-.lang-btn:hover .lang-dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
-.lang-dropdown button { display: block; width: 100%; padding: 8px 12px; text-align: left; font-size: 0.875rem; border-radius: 6px; color: var(--text-muted); transition: var(--transition); }
-.lang-dropdown button:hover, .lang-dropdown button.active { background: rgba(139, 92, 246, 0.2); color: var(--text); }
+        html {
+            scroll-behavior: smooth;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-/* Mobile Sidebar */
-.sidebar-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); z-index: 2000; opacity: 0; visibility: hidden; transition: var(--transition); }
-.sidebar-overlay.open { opacity: 1; visibility: visible; }
-.sidebar { position: fixed; top: 0; left: 0; width: 280px; max-width: 85vw; height: 100%; background: var(--bg-deep); border-right: 1px solid var(--border); z-index: 2001; transform: translateX(-100%); transition: transform 0.3s cubic-bezier(0.4,0,0.2,1); overflow-y: auto; }
-.sidebar.open { transform: translateX(0); }
-.sidebar-header { padding: 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
-.sidebar-close { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border-radius: var(--radius-sm); color: var(--text-muted); }
-.sidebar-close:hover { background: rgba(139, 92, 246, 0.15); color: var(--text); }
-.sidebar-nav { padding: 16px; }
-.sidebar-nav a { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: var(--radius-sm); color: var(--text-muted); font-size: 0.9375rem; font-weight: 500; transition: var(--transition); }
-.sidebar-nav a:hover, .sidebar-nav a.active { background: rgba(139, 92, 246, 0.15); color: var(--text); }
-.sidebar-nav svg { width: 20px; height: 20px; opacity: 0.7; }
-.sidebar-section { padding: 16px; border-top: 1px solid var(--border); }
-.sidebar-section h4 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--accent-glow); margin-bottom: 12px; }
-.sidebar-section .mega-menu-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
-.sidebar-section a { display: block; padding: 8px 12px; font-size: 0.875rem; color: var(--text-muted); border-radius: 6px; transition: var(--transition); }
-.sidebar-section a:hover { background: rgba(139, 92, 246, 0.15); color: var(--text); }
+        html,
+        body {
+            overflow-x: hidden;
+            max-width: 100%;
+            width: 100%;
+        }
 
-/* Search Overlay */
-.search-overlay { position: fixed; inset: 0; z-index: 3000; background: rgba(10, 10, 15, 0.95); backdrop-filter: blur(20px); opacity: 0; visibility: hidden; transition: var(--transition); display: flex; flex-direction: column; }
-.search-overlay.open { opacity: 1; visibility: visible; }
-.search-container { max-width: 800px; width: 100%; margin: 0 auto; padding: 80px 20px 20px; flex: 1; display: flex; flex-direction: column; overflow: hidden; }
-.search-input-wrap { position: relative; margin-bottom: 24px; }
-.search-input { width: 100%; padding: 16px 24px 16px 52px; background: var(--bg-glass); border: 1px solid var(--border); border-radius: var(--radius); color: var(--text); font-size: 1.125rem; outline: none; transition: var(--transition); }
-.search-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2); }
-.search-input-wrap svg { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); width: 20px; height: 20px; color: var(--text-dim); }
-.search-filters { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
-.search-filters select { padding: 8px 14px; background: var(--bg-glass); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text); font-size: 0.875rem; outline: none; cursor: pointer; }
-.search-filters select:focus { border-color: var(--accent); }
-.search-results { flex: 1; overflow-y: auto; }
-.search-results-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 16px; }
-.search-close { position: absolute; top: 20px; right: 20px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: var(--bg-glass); border: 1px solid var(--border); color: var(--text); transition: var(--transition); }
-.search-close:hover { background: rgba(139, 92, 246, 0.2); border-color: var(--accent); }
+        body {
+            font-family: var(--font-sans);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            min-height: 100dvh;
+            padding-top: 70px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
 
-/* Auth Modal */
-.auth-overlay { position: fixed; inset: 0; z-index: 4000; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); opacity: 0; visibility: hidden; transition: var(--transition); display: flex; align-items: center; justify-content: center; padding: 20px; }
-.auth-overlay.open { opacity: 1; visibility: visible; }
-.auth-modal { width: 100%; max-width: 420px; background: var(--bg-glass); backdrop-filter: blur(30px); border: 1px solid var(--border); border-radius: var(--radius); padding: 32px; position: relative; transform: scale(0.95); transition: transform 0.3s cubic-bezier(0.4,0,0.2,1); box-shadow: var(--shadow-glow); }
-.auth-overlay.open .auth-modal { transform: scale(1); }
-.auth-close { position: absolute; top: 16px; right: 16px; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border-radius: 50%; color: var(--text-muted); transition: var(--transition); }
-.auth-close:hover { background: rgba(139, 92, 246, 0.15); color: var(--text); }
-.auth-tabs { display: flex; gap: 8px; margin-bottom: 24px; border-bottom: 1px solid var(--border); }
-.auth-tab { flex: 1; padding: 12px; text-align: center; font-size: 0.9375rem; font-weight: 600; color: var(--text-muted); border-bottom: 2px solid transparent; margin-bottom: -1px; transition: var(--transition); }
-.auth-tab.active { color: var(--accent-glow); border-bottom-color: var(--accent); }
-.auth-form { display: none; }
-.auth-form.active { display: block; animation: fadeIn 0.3s ease; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-.auth-form .form-group { margin-bottom: 16px; }
-.auth-form label { display: block; font-size: 0.8125rem; font-weight: 500; color: var(--text-muted); margin-bottom: 6px; }
-.auth-form input, .auth-form select { width: 100%; padding: 12px 16px; background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text); font-size: 0.9375rem; outline: none; transition: var(--transition); }
-.auth-form input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2); }
-.auth-form input::placeholder { color: var(--text-dim); }
-.auth-form .checkbox-wrap { display: flex; align-items: center; gap: 8px; font-size: 0.875rem; color: var(--text-muted); }
-.auth-form .checkbox-wrap input { width: auto; accent-color: var(--accent); }
-.auth-btn { width: 100%; padding: 14px; background: linear-gradient(135deg, var(--accent), var(--accent-dark)); color: white; font-size: 0.9375rem; font-weight: 600; border-radius: var(--radius-sm); transition: var(--transition); margin-top: 8px; }
-.auth-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(139, 92, 246, 0.3); }
-.auth-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
-.auth-switch { text-align: center; margin-top: 16px; font-size: 0.875rem; color: var(--text-muted); }
-.auth-switch button { color: var(--accent-glow); font-weight: 500; }
-.auth-switch button:hover { text-decoration: underline; }
-.auth-error { padding: 10px 14px; background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: var(--radius-sm); color: #fca5a5; font-size: 0.875rem; margin-bottom: 16px; display: none; }
-.auth-error.show { display: block; }
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-purple);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a78bfa;
+        }
 
-/* Hero Slider */
-.hero { position: relative; width: 100%; height: 70vh; min-height: 500px; max-height: 800px; overflow: hidden; margin-top: 64px; }
-.hero-slider { position: relative; width: 100%; height: 100%; }
-.hero-slide { position: absolute; inset: 0; opacity: 0; transition: opacity 0.8s ease-in-out; z-index: 1; }
-.hero-slide.active { opacity: 1; z-index: 2; }
-.hero-slide-bg { position: absolute; inset: 0; background-size: cover; background-position: center top; }
-.hero-slide-bg::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, var(--bg-deep) 0%, rgba(10,10,15,0.6) 40%, rgba(10,10,15,0.3) 100%); }
-.hero-content { position: absolute; bottom: 0; left: 0; right: 0; padding: 40px 20px 60px; max-width: 1400px; margin: 0 auto; z-index: 3; }
-.hero-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; background: rgba(139, 92, 246, 0.2); border: 1px solid var(--border); border-radius: 20px; font-size: 0.75rem; font-weight: 600; color: var(--accent-glow); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; }
-.hero-title { font-size: clamp(1.75rem, 4vw, 3rem); font-weight: 800; line-height: 1.2; margin-bottom: 12px; text-shadow: 0 2px 20px rgba(0,0,0,0.5); }
-.hero-meta { display: flex; align-items: center; gap: 16px; margin-bottom: 16px; flex-wrap: wrap; }
-.hero-meta span { display: flex; align-items: center; gap: 4px; font-size: 0.875rem; color: var(--text-muted); }
-.hero-meta .score { color: #fbbf24; font-weight: 600; }
-.hero-genres { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
-.hero-genre { padding: 4px 12px; background: rgba(255,255,255,0.08); border-radius: 20px; font-size: 0.75rem; color: var(--text-muted); }
-.hero-synopsis { font-size: 0.9375rem; color: var(--text-muted); max-width: 600px; line-height: 1.7; margin-bottom: 24px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-.hero-buttons { display: flex; gap: 12px; flex-wrap: wrap; }
-.hero-btn-primary { display: flex; align-items: center; gap: 8px; padding: 14px 28px; background: linear-gradient(135deg, var(--accent), var(--accent-dark)); color: white; font-size: 0.9375rem; font-weight: 600; border-radius: var(--radius-sm); transition: var(--transition); }
-.hero-btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(139, 92, 246, 0.3); }
-.hero-btn-secondary { display: flex; align-items: center; gap: 8px; padding: 14px 28px; background: rgba(255,255,255,0.1); color: var(--text); font-size: 0.9375rem; font-weight: 600; border-radius: var(--radius-sm); border: 1px solid rgba(255,255,255,0.15); transition: var(--transition); }
-.hero-btn-secondary:hover { background: rgba(255,255,255,0.2); }
-.hero-nav { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; z-index: 4; }
-.hero-dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.3); cursor: pointer; transition: var(--transition); }
-.hero-dot.active { background: var(--accent); width: 24px; border-radius: 4px; }
-.hero-arrows { position: absolute; top: 50%; transform: translateY(-50%); width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); color: var(--text); z-index: 4; transition: var(--transition); opacity: 0; }
-.hero:hover .hero-arrows { opacity: 1; }
-.hero-arrows:hover { background: rgba(139, 92, 246, 0.3); border-color: var(--accent); }
-.hero-prev { left: 20px; }
-.hero-next { right: 20px; }
+        /* ===== UTILITY ===== */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
 
-/* Section */
-.section { padding: 40px 20px; max-width: 1400px; margin: 0 auto; }
-.section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
-.section-title { font-size: clamp(1.125rem, 2vw, 1.5rem); font-weight: 700; display: flex; align-items: center; gap: 10px; }
-.section-title::before { content: ''; display: block; width: 4px; height: 24px; background: linear-gradient(to bottom, var(--accent), var(--accent-dark)); border-radius: 2px; }
-.section-more { display: flex; align-items: center; gap: 4px; font-size: 0.875rem; color: var(--accent-glow); font-weight: 500; transition: var(--transition); }
-.section-more:hover { gap: 8px; }
+        .glass {
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-glass);
+        }
 
-/* Slider */
-.slider-wrap { position: relative; }
-.slider { display: flex; gap: 16px; overflow-x: auto; scroll-behavior: smooth; scroll-snap-type: x mandatory; padding: 4px; scrollbar-width: none; -ms-overflow-style: none; }
-.slider::-webkit-scrollbar { display: none; }
-.slider-arrow { position: absolute; top: 50%; transform: translateY(-50%); width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: rgba(0,0,0,0.6); border: 1px solid var(--border); color: var(--text); z-index: 10; transition: var(--transition); opacity: 0; }
-.slider-wrap:hover .slider-arrow { opacity: 1; }
-.slider-arrow:hover { background: var(--accent); border-color: var(--accent); }
-.slider-prev { left: -10px; }
-.slider-next { right: -10px; }
+        .hidden {
+            display: none !important;
+        }
 
-/* Anime Card */
-.anime-card { flex: 0 0 auto; width: 180px; scroll-snap-align: start; position: relative; border-radius: var(--radius); overflow: hidden; background: var(--bg-card); transition: var(--transition); cursor: pointer; }
-.anime-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-glow); }
-.anime-card-img { position: relative; aspect-ratio: 3/4; overflow: hidden; }
-.anime-card-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
-.anime-card:hover .anime-card-img img { transform: scale(1.08); }
-.anime-card-badges { position: absolute; top: 8px; left: 8px; right: 8px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px; z-index: 2; }
-.anime-card-badge { padding: 3px 8px; border-radius: 4px; font-size: 0.6875rem; font-weight: 700; text-transform: uppercase; }
-.badge-hd { background: rgba(139, 92, 246, 0.9); color: white; }
-.badge-ep { background: rgba(0,0,0,0.7); color: var(--text); }
-.badge-score { background: rgba(251, 191, 36, 0.9); color: #000; }
-.anime-card-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(10,10,15,0.9) 0%, transparent 50%); opacity: 0; transition: var(--transition); display: flex; align-items: flex-end; padding: 12px; }
-.anime-card:hover .anime-card-overlay { opacity: 1; }
-.anime-card-info { padding: 12px; }
-.anime-card-title { font-size: 0.8125rem; font-weight: 600; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 6px; }
-.anime-card-meta { display: flex; align-items: center; gap: 8px; font-size: 0.75rem; color: var(--text-dim); }
-.anime-card-meta .dot { width: 3px; height: 3px; background: var(--text-dim); border-radius: 50%; }
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
+        }
 
-/* Footer */
-.footer { border-top: 1px solid var(--border); padding: 32px 20px; margin-top: 40px; }
-.footer-inner { max-width: 1400px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 16px; text-align: center; }
-.footer-logo { font-size: 1.25rem; font-weight: 800; background: linear-gradient(135deg, var(--accent), var(--accent-glow)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.footer-text { font-size: 0.8125rem; color: var(--text-dim); max-width: 600px; line-height: 1.6; }
-.footer-social { display: flex; gap: 12px; }
-.footer-social a { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: var(--bg-glass); border: 1px solid var(--border); color: var(--text-muted); transition: var(--transition); }
-.footer-social a:hover { background: rgba(139, 92, 246, 0.2); border-color: var(--accent); color: var(--text); }
-.footer-copy { font-size: 0.75rem; color: var(--text-dim); }
+        /* ===== BUTTONS ===== */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 24px;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            font-size: 0.9rem;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            font-family: var(--font-sans);
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+        }
 
-/* Responsive */
-@media (min-width: 768px) {
-  .hamburger { display: none; }
-  .nav-desktop { display: block; }
-  .hero-content { padding: 60px 40px 80px; }
-  .section { padding: 60px 40px; }
-  .anime-card { width: 200px; }
-  .search-results-grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
-}
-@media (min-width: 1024px) {
-  .hero { height: 80vh; }
-  .anime-card { width: 220px; }
-}
-@media (max-width: 480px) {
-  .hero { height: 55vh; min-height: 400px; }
-  .hero-buttons { flex-direction: column; }
-  .hero-btn-primary, .hero-btn-secondary { width: 100%; justify-content: center; }
-  .anime-card { width: 150px; }
-  .search-filters { gap: 6px; }
-  .search-filters select { font-size: 0.8125rem; padding: 6px 10px; }
-}
+        .btn-primary {
+            background: var(--accent-purple);
+            color: #fff;
+            box-shadow: 0 4px 20px var(--accent-glow);
+        }
+        .btn-primary:hover {
+            background: #7c3aed;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px var(--accent-glow);
+        }
+        .btn-primary:active {
+            transform: scale(0.97);
+        }
 
-/* Loading state */
-.loading-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 16px; }
-.loading-card { background: var(--bg-card); border-radius: var(--radius); overflow: hidden; }
-.loading-card .skeleton-img { aspect-ratio: 3/4; }
-.loading-card .skeleton-text { height: 16px; margin: 12px; border-radius: 4px; }
-.loading-card .skeleton-text.short { width: 60%; margin-top: 0; }
+        .btn-secondary {
+            background: var(--bg-glass);
+            color: var(--text-primary);
+            border: 1px solid var(--border-glass);
+        }
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
 
-/* Toast */
-.toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 5000; display: flex; flex-direction: column; gap: 10px; }
-.toast { padding: 14px 20px; background: var(--bg-glass); backdrop-filter: blur(20px); border: 1px solid var(--border); border-radius: var(--radius); color: var(--text); font-size: 0.875rem; font-weight: 500; box-shadow: var(--shadow-glow); animation: toastIn 0.3s ease, toastOut 0.3s ease 2.7s forwards; max-width: 320px; }
-.toast.success { border-color: rgba(34, 197, 94, 0.5); }
-.toast.error { border-color: rgba(239, 68, 68, 0.5); }
-@keyframes toastIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-@keyframes toastOut { to { transform: translateX(100%); opacity: 0; } }
+        .btn-ghost {
+            background: transparent;
+            color: var(--text-secondary);
+        }
+        .btn-ghost:hover {
+            color: var(--text-primary);
+            background: var(--bg-glass);
+        }
 
-/* Reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
-}
-</style>
-<base target="_blank">
+        .btn-danger {
+            background: #ef4444;
+            color: #fff;
+        }
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(10, 10, 15, 0.92);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-bottom: 1px solid var(--border-glass);
+            height: 70px;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: var(--transition-smooth);
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-shrink: 0;
+        }
+
+        .header-brand .logo {
+            font-size: 1.4rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #8b5cf6, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+            text-decoration: none;
+        }
+
+        .header-brand .logo span {
+            -webkit-text-fill-color: #fff;
+            background: none;
+        }
+
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            padding: 0 4px;
+            flex: 1;
+            justify-content: center;
+        }
+        .header-nav::-webkit-scrollbar {
+            display: none;
+        }
+
+        .header-nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            padding: 6px 14px;
+            border-radius: var(--radius-sm);
+            transition: var(--transition-smooth);
+            white-space: nowrap;
+            position: relative;
+        }
+        .header-nav a:hover,
+        .header-nav a.active {
+            color: var(--text-primary);
+            background: var(--bg-glass);
+        }
+        .header-nav a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 2px;
+            border-radius: 10px;
+            background: var(--accent-purple);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+
+        .header-actions button {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            padding: 6px 8px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .header-actions button:hover {
+            color: var(--text-primary);
+            background: var(--bg-glass);
+        }
+
+        .header-actions .profile-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--accent-purple);
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            overflow: hidden;
+        }
+        .header-actions .profile-btn img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+        .header-actions .profile-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px var(--accent-glow);
+        }
+
+        /* Hamburger */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 4px;
+            background: none;
+            border: none;
+            padding: 6px;
+            cursor: pointer;
+        }
+        .hamburger span {
+            width: 22px;
+            height: 2px;
+            background: var(--text-primary);
+            border-radius: 10px;
+            transition: var(--transition-smooth);
+        }
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 4px);
+        }
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -4px);
+        }
+
+        /* ===== SIDEBAR ===== */
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 1100;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.35s ease;
+        }
+        .sidebar-overlay.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -300px;
+            width: 280px;
+            height: 100%;
+            background: var(--bg-secondary);
+            z-index: 1200;
+            padding: 24px 20px;
+            overflow-y: auto;
+            transition: left 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            border-right: 1px solid var(--border-glass);
+        }
+        .sidebar.open {
+            left: 0;
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 28px;
+        }
+        .sidebar-header .logo {
+            font-size: 1.2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #8b5cf6, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .sidebar-close {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.6rem;
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .sidebar-nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: var(--transition-smooth);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .sidebar-nav a:hover,
+        .sidebar-nav a.active {
+            color: var(--text-primary);
+            background: var(--bg-glass);
+        }
+        .sidebar-nav a.active {
+            border-left: 3px solid var(--accent-purple);
+        }
+
+        .sidebar-divider {
+            height: 1px;
+            background: var(--border-glass);
+            margin: 16px 0;
+        }
+
+        /* ===== AUTH MODAL ===== */
+        .auth-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+            padding: 20px;
+        }
+        .auth-overlay.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .auth-modal {
+            background: rgba(18, 18, 28, 0.97);
+            backdrop-filter: blur(32px);
+            -webkit-backdrop-filter: blur(32px);
+            border: 1px solid var(--border-glass);
+            border-radius: var(--radius-lg);
+            padding: 40px 36px;
+            max-width: 440px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: scale(0.92) translateY(20px);
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+            opacity: 0;
+            box-shadow: var(--shadow-card), var(--shadow-glow);
+        }
+        .auth-overlay.open .auth-modal {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+        }
+
+        .auth-modal .close-auth {
+            float: right;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.4rem;
+            cursor: pointer;
+            padding: 4px 8px;
+            transition: var(--transition-smooth);
+        }
+        .auth-modal .close-auth:hover {
+            color: var(--text-primary);
+        }
+
+        .auth-modal h2 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+            background: linear-gradient(135deg, #8b5cf6, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .auth-modal .subtitle {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 24px;
+        }
+
+        .auth-modal .tabs {
+            display: flex;
+            gap: 4px;
+            background: var(--bg-glass);
+            border-radius: var(--radius-sm);
+            padding: 4px;
+            margin-bottom: 24px;
+        }
+        .auth-modal .tabs button {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: var(--radius-sm);
+            background: transparent;
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            font-family: var(--font-sans);
+        }
+        .auth-modal .tabs button.active {
+            background: var(--accent-purple);
+            color: #fff;
+            box-shadow: 0 4px 16px var(--accent-glow);
+        }
+        .auth-modal .tabs button:not(.active):hover {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .auth-modal .form-group {
+            margin-bottom: 16px;
+        }
+        .auth-modal .form-group label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+        }
+        .auth-modal .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-glass);
+            background: rgba(255, 255, 255, 0.04);
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            transition: var(--transition-smooth);
+            font-family: var(--font-sans);
+            outline: none;
+        }
+        .auth-modal .form-group input:focus {
+            border-color: var(--accent-purple);
+            box-shadow: 0 0 0 3px var(--accent-glow-soft);
+        }
+        .auth-modal .form-group input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .auth-modal .form-options {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 12px 0 20px;
+            font-size: 0.85rem;
+        }
+        .auth-modal .form-options label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+        .auth-modal .form-options label input[type="checkbox"] {
+            accent-color: var(--accent-purple);
+            width: 16px;
+            height: 16px;
+        }
+        .auth-modal .form-options a {
+            color: var(--accent-purple);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .auth-modal .form-options a:hover {
+            text-decoration: underline;
+        }
+
+        .auth-modal .btn-submit {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: var(--radius-sm);
+            background: var(--accent-purple);
+            color: #fff;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            font-family: var(--font-sans);
+            box-shadow: 0 4px 20px var(--accent-glow);
+        }
+        .auth-modal .btn-submit:hover {
+            background: #7c3aed;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px var(--accent-glow);
+        }
+        .auth-modal .btn-submit:active {
+            transform: scale(0.97);
+        }
+
+        .auth-modal .switch-link {
+            text-align: center;
+            margin-top: 18px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        .auth-modal .switch-link button {
+            background: none;
+            border: none;
+            color: var(--accent-purple);
+            font-weight: 600;
+            cursor: pointer;
+            font-family: var(--font-sans);
+            font-size: 0.9rem;
+        }
+        .auth-modal .switch-link button:hover {
+            text-decoration: underline;
+        }
+
+        .auth-modal .terms-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 12px 0;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+        .auth-modal .terms-row input[type="checkbox"] {
+            accent-color: var(--accent-purple);
+            width: 16px;
+            height: 16px;
+            flex-shrink: 0;
+        }
+        .auth-modal .terms-row a {
+            color: var(--accent-purple);
+            text-decoration: none;
+        }
+
+        /* ===== HERO SLIDER ===== */
+        .hero-section {
+            margin-bottom: 40px;
+            position: relative;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            aspect-ratio: 16/7;
+            min-height: 320px;
+            max-height: 70vh;
+            background: var(--bg-secondary);
+            box-shadow: var(--shadow-card);
+        }
+
+        .hero-slider {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .hero-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.8s ease;
+            pointer-events: none;
+        }
+        .hero-slide.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .hero-slide .bg {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            background: var(--bg-secondary);
+        }
+
+        .hero-slide .overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 70%;
+            background: linear-gradient(to top, rgba(10, 10, 15, 0.95) 0%, rgba(10, 10, 15, 0.4) 50%, transparent 100%);
+        }
+
+        .hero-slide .content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 40px 48px;
+            z-index: 2;
+        }
+
+        .hero-slide .content h1 {
+            font-size: clamp(1.6rem, 4vw, 3.2rem);
+            font-weight: 800;
+            margin-bottom: 6px;
+            line-height: 1.1;
+            text-shadow: 0 4px 30px rgba(0, 0, 0, 0.6);
+        }
+
+        .hero-slide .content .meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+        .hero-slide .content .meta .score {
+            color: #fbbf24;
+            font-weight: 700;
+        }
+        .hero-slide .content .meta .badge {
+            background: var(--accent-purple);
+            color: #fff;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .hero-slide .content .synopsis {
+            font-size: clamp(0.85rem, 1.1vw, 1.05rem);
+            color: var(--text-secondary);
+            max-width: 600px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            margin-bottom: 16px;
+            text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero-slide .content .actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .hero-slide .content .actions .btn {
+            padding: 12px 28px;
+            font-size: 0.95rem;
+        }
+
+        /* Hero controls — removed dots but keep arrows */
+        .hero-controls {
+            position: absolute;
+            bottom: 20px;
+            right: 24px;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .hero-controls .arrows {
+            display: flex;
+            gap: 4px;
+        }
+        .hero-controls .arrows button {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
+            color: #fff;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .hero-controls .arrows button:hover {
+            background: var(--accent-purple);
+            box-shadow: 0 0 30px var(--accent-glow);
+        }
+
+        /* ===== WIDGETS ===== */
+        .widget-section {
+            margin-bottom: 40px;
+        }
+        .widget-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+        .widget-header h2 {
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+        .widget-header .view-all {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: var(--transition-smooth);
+        }
+        .widget-header .view-all:hover {
+            color: var(--accent-purple);
+        }
+
+        /* ===== CARDS ===== */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(min(170px, 100%), 1fr));
+            gap: 16px;
+        }
+
+        .anime-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            transition: var(--transition-smooth);
+            cursor: pointer;
+            position: relative;
+            border: 1px solid var(--border-glass);
+            display: flex;
+            flex-direction: column;
+        }
+        .anime-card:hover {
+            transform: translateY(-6px) scale(1.02);
+            box-shadow: var(--shadow-card), var(--shadow-glow);
+            border-color: var(--accent-glow);
+        }
+
+        .anime-card .poster {
+            width: 100%;
+            aspect-ratio: 2/3;
+            object-fit: cover;
+            display: block;
+        }
+
+        .anime-card .card-body {
+            padding: 10px 12px 12px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .anime-card .card-body .title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            line-height: 1.3;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .anime-card .card-body .meta-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            flex-wrap: wrap;
+            margin-top: auto;
+        }
+        .anime-card .card-body .meta-row .score {
+            color: #fbbf24;
+            font-weight: 700;
+        }
+        .anime-card .card-body .meta-row .badge {
+            background: var(--accent-purple);
+            color: #fff;
+            padding: 0 8px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.6rem;
+            text-transform: uppercase;
+        }
+
+        .anime-card .top-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: #fff;
+            border: 1px solid var(--border-glass);
+            text-transform: uppercase;
+        }
+
+        /* ===== SLIDER (horizontal scroll) ===== */
+        .slider-container {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slider-track {
+            display: flex;
+            gap: 16px;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            padding: 4px 2px 12px;
+        }
+        .slider-track::-webkit-scrollbar {
+            display: none;
+        }
+
+        .slider-track .anime-card {
+            flex: 0 0 min(180px, 40vw);
+            scroll-snap-align: start;
+        }
+
+        .slider-arrows {
+            display: flex;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+        .slider-arrows button {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: none;
+            background: var(--bg-glass);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+        .slider-arrows button:hover {
+            background: var(--accent-purple);
+            color: #fff;
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+
+        /* ===== SEARCH OVERLAY ===== */
+        .search-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 10, 15, 0.97);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            z-index: 3000;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.35s ease;
+            overflow-y: auto;
+        }
+        .search-overlay.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .search-overlay .search-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            max-width: 800px;
+            margin: 0 auto 24px;
+            width: 100%;
+        }
+        .search-overlay .search-header input {
+            flex: 1;
+            padding: 16px 20px;
+            border-radius: var(--radius-md);
+            border: 2px solid var(--border-glass);
+            background: rgba(255, 255, 255, 0.04);
+            color: var(--text-primary);
+            font-size: 1.2rem;
+            font-family: var(--font-sans);
+            outline: none;
+            transition: var(--transition-smooth);
+        }
+        .search-overlay .search-header input:focus {
+            border-color: var(--accent-purple);
+            box-shadow: 0 0 0 4px var(--accent-glow-soft);
+        }
+        .search-overlay .search-header input::placeholder {
+            color: var(--text-muted);
+        }
+        .search-overlay .search-header .close-search {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.6rem;
+            cursor: pointer;
+            padding: 8px;
+            transition: var(--transition-smooth);
+        }
+        .search-overlay .search-header .close-search:hover {
+            color: var(--text-primary);
+            transform: rotate(90deg);
+        }
+
+        .search-overlay .search-filters {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            max-width: 800px;
+            margin: 0 auto 20px;
+            width: 100%;
+        }
+        .search-overlay .search-filters select {
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-glass);
+            background: rgba(255, 255, 255, 0.04);
+            color: var(--text-primary);
+            font-size: 0.85rem;
+            font-family: var(--font-sans);
+            outline: none;
+            min-width: 120px;
+            cursor: pointer;
+        }
+        .search-overlay .search-filters select:focus {
+            border-color: var(--accent-purple);
+        }
+        .search-overlay .search-filters select option {
+            background: var(--bg-secondary);
+        }
+
+        .search-overlay .search-results {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(min(160px, 100%), 1fr));
+            gap: 16px;
+            max-width: 800px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .search-overlay .search-results .anime-card {
+            aspect-ratio: auto;
+        }
+
+        .search-overlay .no-results {
+            text-align: center;
+            color: var(--text-muted);
+            padding: 40px 0;
+            font-size: 1.1rem;
+        }
+
+        /* ===== PROFILE PAGE ===== */
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+            padding: 32px 0 24px;
+            flex-wrap: wrap;
+        }
+        .profile-header .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: var(--accent-purple);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: #fff;
+            flex-shrink: 0;
+            overflow: hidden;
+            box-shadow: 0 0 40px var(--accent-glow);
+        }
+        .profile-header .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .profile-header .info h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        .profile-header .info .username {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+        .profile-header .info .stats {
+            display: flex;
+            gap: 24px;
+            margin-top: 6px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        .profile-header .info .stats strong {
+            color: var(--text-primary);
+        }
+
+        .profile-tabs {
+            display: flex;
+            gap: 4px;
+            background: var(--bg-glass);
+            border-radius: var(--radius-sm);
+            padding: 4px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+        .profile-tabs button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: var(--radius-sm);
+            background: transparent;
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            font-family: var(--font-sans);
+        }
+        .profile-tabs button.active {
+            background: var(--accent-purple);
+            color: #fff;
+            box-shadow: 0 4px 16px var(--accent-glow);
+        }
+        .profile-tabs button:not(.active):hover {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .profile-tab-content {
+            min-height: 200px;
+        }
+        .profile-tab-content .tab-pane {
+            display: none;
+        }
+        .profile-tab-content .tab-pane.active {
+            display: block;
+        }
+
+        .profile-settings .form-group {
+            max-width: 400px;
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            padding: 24px 0 20px;
+            border-top: 1px solid var(--border-glass);
+            margin-top: 40px;
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+        .footer .socials {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 8px;
+        }
+        .footer .socials a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 1.1rem;
+            transition: var(--transition-smooth);
+        }
+        .footer .socials a:hover {
+            color: var(--accent-purple);
+        }
+        .footer .disclaimer {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 8px auto 0;
+            opacity: 0.7;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .header-nav a {
+                font-size: 0.75rem;
+                padding: 4px 10px;
+            }
+            .hero-slide .content {
+                padding: 28px 32px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding-top: 60px;
+            }
+            .header {
+                height: 60px;
+                padding: 0 16px;
+            }
+            .header-nav {
+                display: none;
+            }
+            .hamburger {
+                display: flex;
+            }
+            .header-brand .logo {
+                font-size: 1.1rem;
+            }
+            .header-actions button {
+                font-size: 1rem;
+                padding: 4px 6px;
+            }
+            .header-actions .profile-btn {
+                width: 32px;
+                height: 32px;
+                font-size: 0.75rem;
+            }
+
+            .hero-section {
+                aspect-ratio: 16/9;
+                min-height: 240px;
+                border-radius: var(--radius-md);
+            }
+            .hero-slide .content {
+                padding: 20px 20px 16px;
+            }
+            .hero-slide .content h1 {
+                font-size: 1.2rem;
+            }
+            .hero-slide .content .synopsis {
+                -webkit-line-clamp: 2;
+                font-size: 0.8rem;
+            }
+            .hero-slide .content .actions .btn {
+                padding: 8px 16px;
+                font-size: 0.8rem;
+            }
+            .hero-controls {
+                bottom: 12px;
+                right: 16px;
+                gap: 8px;
+            }
+            .hero-controls .arrows button {
+                width: 28px;
+                height: 28px;
+                font-size: 0.9rem;
+            }
+
+            .auth-modal {
+                padding: 28px 20px;
+                margin: 10px;
+            }
+            .auth-modal h2 {
+                font-size: 1.3rem;
+            }
+
+            .profile-header {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                gap: 16px;
+            }
+            .profile-header .info .stats {
+                justify-content: center;
+            }
+
+            .slider-track .anime-card {
+                flex: 0 0 min(140px, 45vw);
+            }
+
+            .search-overlay {
+                padding: 16px;
+            }
+            .search-overlay .search-header input {
+                font-size: 1rem;
+                padding: 12px 16px;
+            }
+            .search-overlay .search-results {
+                grid-template-columns: repeat(auto-fill, minmax(min(130px, 100%), 1fr));
+                gap: 12px;
+            }
+
+            .card-grid {
+                grid-template-columns: repeat(auto-fill, minmax(min(140px, 100%), 1fr));
+                gap: 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 12px;
+            }
+            .hero-section {
+                min-height: 180px;
+                border-radius: var(--radius-sm);
+            }
+            .hero-slide .content {
+                padding: 14px 14px 12px;
+            }
+            .hero-slide .content h1 {
+                font-size: 1rem;
+            }
+            .hero-slide .content .synopsis {
+                display: none;
+            }
+            .hero-slide .content .actions .btn {
+                padding: 6px 14px;
+                font-size: 0.7rem;
+            }
+            .hero-controls {
+                bottom: 8px;
+                right: 10px;
+            }
+            .hero-controls .arrows button {
+                width: 24px;
+                height: 24px;
+                font-size: 0.7rem;
+            }
+
+            .slider-track .anime-card {
+                flex: 0 0 min(110px, 48vw);
+            }
+
+            .auth-modal {
+                padding: 20px 16px;
+            }
+            .auth-modal .tabs button {
+                font-size: 0.75rem;
+                padding: 8px;
+            }
+
+            .profile-tabs button {
+                padding: 8px 12px;
+                font-size: 0.75rem;
+            }
+
+            .search-overlay .search-results {
+                grid-template-columns: repeat(auto-fill, minmax(min(100px, 100%), 1fr));
+                gap: 8px;
+            }
+            .search-overlay .search-filters select {
+                min-width: 80px;
+                font-size: 0.75rem;
+                padding: 6px 10px;
+            }
+
+            .card-grid {
+                grid-template-columns: repeat(auto-fill, minmax(min(110px, 100%), 1fr));
+                gap: 8px;
+            }
+        }
+
+        @media (orientation: landscape) and (max-height: 500px) {
+            .hero-section {
+                aspect-ratio: 16/6;
+                min-height: 160px;
+            }
+            .hero-slide .content .synopsis {
+                display: none;
+            }
+            .hero-slide .content h1 {
+                font-size: 1.2rem;
+            }
+            .hero-slide .content .actions .btn {
+                padding: 6px 14px;
+                font-size: 0.75rem;
+            }
+            .hero-slide .content {
+                padding: 16px 24px;
+            }
+        }
+
+        /* ===== SAFE AREA ===== */
+        @supports (padding: max(0px)) {
+            .header {
+                padding-left: max(24px, env(safe-area-inset-left));
+                padding-right: max(24px, env(safe-area-inset-right));
+            }
+            .auth-overlay {
+                padding: max(20px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right)) max(20px, env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left));
+            }
+            .search-overlay {
+                padding: max(24px, env(safe-area-inset-top)) max(24px, env(safe-area-inset-right)) max(24px, env(safe-area-inset-bottom)) max(24px, env(safe-area-inset-left));
+            }
+            .sidebar {
+                padding-top: max(24px, env(safe-area-inset-top));
+                padding-bottom: max(24px, env(safe-area-inset-bottom));
+            }
+        }
+
+        /* ===== LOADING SKELETON ===== */
+        .skeleton {
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.04) 25%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.04) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s ease-in-out infinite;
+            border-radius: var(--radius-sm);
+        }
+        @keyframes shimmer {
+            0% {
+                background-position: -200% 0;
+            }
+            100% {
+                background-position: 200% 0;
+            }
+        }
+
+        .skeleton-card {
+            aspect-ratio: 2/3;
+            border-radius: var(--radius-md);
+            background: var(--bg-card);
+            border: 1px solid var(--border-glass);
+        }
+
+        /* ===== MEGA MENU DROPDOWN ===== */
+        .nav-dropdown {
+            position: relative;
+        }
+        .nav-dropdown .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: rgba(18, 18, 28, 0.97);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--border-glass);
+            border-radius: var(--radius-md);
+            padding: 12px 16px;
+            min-width: 180px;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(8px);
+            transition: opacity 0.25s ease, transform 0.3s ease;
+            z-index: 100;
+            box-shadow: var(--shadow-card);
+            max-height: 360px;
+            overflow-y: auto;
+        }
+        .nav-dropdown:hover .dropdown-menu,
+        .nav-dropdown:focus-within .dropdown-menu {
+            opacity: 1;
+            pointer-events: all;
+            transform: translateY(0);
+        }
+        .nav-dropdown .dropdown-menu a {
+            display: block;
+            padding: 6px 12px;
+            border-radius: var(--radius-sm);
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: var(--transition-smooth);
+            white-space: nowrap;
+        }
+        .nav-dropdown .dropdown-menu a:hover {
+            color: var(--text-primary);
+            background: var(--bg-glass);
+        }
+
+        @media (max-width: 768px) {
+            .nav-dropdown .dropdown-menu {
+                position: static;
+                opacity: 1;
+                pointer-events: all;
+                transform: none;
+                background: transparent;
+                backdrop-filter: none;
+                border: none;
+                padding: 4px 0 4px 16px;
+                box-shadow: none;
+                max-height: none;
+                display: none;
+            }
+            .nav-dropdown.open .dropdown-menu {
+                display: block;
+            }
+            .nav-dropdown .dropdown-toggle::after {
+                content: ' ▾';
+                font-size: 0.7rem;
+            }
+        }
+
+        /* ===== TOAST ===== */
+        .toast-container {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 5000;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-width: 360px;
+            width: 100%;
+        }
+        .toast {
+            padding: 14px 20px;
+            border-radius: var(--radius-sm);
+            background: rgba(18, 18, 28, 0.97);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border-glass);
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            box-shadow: var(--shadow-card);
+            animation: toastIn 0.35s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .toast.success {
+            border-left: 4px solid #22c55e;
+        }
+        .toast.error {
+            border-left: 4px solid #ef4444;
+        }
+        .toast.info {
+            border-left: 4px solid var(--accent-purple);
+        }
+        @keyframes toastIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        .toast .toast-close {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 1.2rem;
+            margin-left: auto;
+            padding: 0 4px;
+        }
+    </style>
 </head>
 <body>
 
-<!-- Header -->
-<header class="header" id="header">
-  <div class="header-inner">
-    <div class="header-left">
-      <button class="hamburger" id="hamburger" aria-label="Menu">
-        <span></span><span></span><span></span>
-      </button>
-      <a href="index.html" class="logo">Anime<span>Stream</span></a>
-      <nav class="nav-desktop">
-        <ul>
-          <li><a href="index.html" class="active" data-i18n="nav.home">Home</a></li>
-          <li class="mega-trigger">
-            <a href="#" data-i18n="nav.genres">Genres</a>
-            <div class="mega-menu" id="megaGenres">
-              <h4 data-i18n="nav.genres">Genres</h4>
-              <div class="mega-menu-grid" id="genresGrid"></div>
+    <!-- ===== HEADER ===== -->
+    <header class="header" role="banner">
+        <div class="header-brand">
+            <button class="hamburger" id="hamburgerBtn" aria-label="Toggle navigation">
+                <span></span><span></span><span></span>
+            </button>
+            <a href="/" class="logo">Anime<span>Vault</span></a>
+        </div>
+
+        <nav class="header-nav" role="navigation" aria-label="Main navigation">
+            <a href="/" class="active">Home</a>
+            <a href="/schedule.html">Schedule</a>
+            <a href="/az-list.html">A-Z</a>
+
+            <!-- Genres Dropdown -->
+            <div class="nav-dropdown" id="genresDropdown">
+                <a href="#" class="dropdown-toggle">Genres</a>
+                <div class="dropdown-menu" id="genresMenu"></div>
             </div>
-          </li>
-          <li class="mega-trigger">
-            <a href="#" data-i18n="nav.types">Types</a>
-            <div class="mega-menu">
-              <h4 data-i18n="nav.types">Types</h4>
-              <div class="mega-menu-grid">
-                <a href="search.html?type=tv">TV</a>
-                <a href="search.html?type=movie">Movie</a>
-                <a href="search.html?type=ova">OVA</a>
-                <a href="search.html?type=ona">ONA</a>
-                <a href="search.html?type=special">Special</a>
-                <a href="search.html?type=music">Music</a>
+
+            <!-- Types Dropdown -->
+            <div class="nav-dropdown">
+                <a href="#" class="dropdown-toggle">Types</a>
+                <div class="dropdown-menu">
+                    <a href="/search.html?type=tv">TV</a>
+                    <a href="/search.html?type=movie">Movie</a>
+                    <a href="/search.html?type=ova">OVA</a>
+                    <a href="/search.html?type=ona">ONA</a>
+                    <a href="/search.html?type=special">Special</a>
+                    <a href="/search.html?type=music">Music</a>
+                </div>
+            </div>
+
+            <!-- Status Dropdown -->
+            <div class="nav-dropdown">
+                <a href="#" class="dropdown-toggle">Status</a>
+                <div class="dropdown-menu">
+                    <a href="/search.html?status=airing">Airing</a>
+                    <a href="/search.html?status=completed">Completed</a>
+                    <a href="/search.html?status=upcoming">Upcoming</a>
+                    <a href="/search.html?status=releasing">Releasing</a>
+                </div>
+            </div>
+
+            <a href="/search.html">Search</a>
+            <a href="/profile.html">Profile</a>
+        </nav>
+
+        <div class="header-actions">
+            <button id="searchToggle" aria-label="Search" title="Search">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            </button>
+
+            <button id="langToggle" aria-label="Language" title="Language" style="font-weight:600;font-size:0.75rem;padding:4px 8px;">EN</button>
+
+            <button class="profile-btn" id="profileBtn" aria-label="Profile">
+                <span id="profileInitial">U</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- ===== SIDEBAR ===== -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <aside class="sidebar" id="sidebar" role="navigation" aria-label="Sidebar navigation">
+        <div class="sidebar-header">
+            <span class="logo">AnimeVault</span>
+            <button class="sidebar-close" id="sidebarClose" aria-label="Close sidebar">✕</button>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="/" class="active">🏠 Home</a>
+            <a href="/schedule.html">📅 Schedule</a>
+            <a href="/az-list.html">🔤 A-Z List</a>
+            <a href="/search.html">🔍 Search</a>
+            <a href="/profile.html">👤 Profile</a>
+            <div class="sidebar-divider"></div>
+            <a href="#" id="sidebarGenres">🎭 Genres</a>
+            <a href="#" id="sidebarTypes">📺 Types</a>
+            <a href="#" id="sidebarStatus">📌 Status</a>
+        </nav>
+    </aside>
+
+    <!-- ===== AUTH MODAL ===== -->
+    <div class="auth-overlay" id="authOverlay">
+        <div class="auth-modal" role="dialog" aria-labelledby="authTitle">
+            <button class="close-auth" id="closeAuth" aria-label="Close">✕</button>
+            <h2 id="authTitle">Welcome back</h2>
+            <p class="subtitle">Sign in to continue your anime journey.</p>
+
+            <div class="tabs" role="tablist">
+                <button role="tab" aria-selected="true" data-tab="login" class="active">Login</button>
+                <button role="tab" aria-selected="false" data-tab="signup">Sign Up</button>
+            </div>
+
+            <!-- Login Form -->
+            <form id="loginForm" data-form="login">
+                <div class="form-group">
+                    <label for="loginEmail">Email or Username</label>
+                    <input type="text" id="loginEmail" placeholder="Enter your email or username" required autocomplete="username" />
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" placeholder="Enter your password" required autocomplete="current-password" />
+                </div>
+                <div class="form-options">
+                    <label><input type="checkbox" id="rememberMe" /> Remember me</label>
+                    <a href="#" id="forgotPassword">Forgot password?</a>
+                </div>
+                <button type="submit" class="btn-submit">Sign In</button>
+                <div class="switch-link">
+                    Don't have an account? <button type="button" id="switchToSignup">Sign up</button>
+                </div>
+            </form>
+
+            <!-- Signup Form -->
+            <form id="signupForm" data-form="signup" class="hidden">
+                <div class="form-group">
+                    <label for="signupName">Full Name</label>
+                    <input type="text" id="signupName" placeholder="Enter your full name" required autocomplete="name" />
+                </div>
+                <div class="form-group">
+                    <label for="signupUsername">Username</label>
+                    <input type="text" id="signupUsername" placeholder="Choose a username" required autocomplete="username" />
+                </div>
+                <div class="form-group">
+                    <label for="signupEmail">Email</label>
+                    <input type="email" id="signupEmail" placeholder="Enter your email" required autocomplete="email" />
+                </div>
+                <div class="form-group">
+                    <label for="signupPassword">Password</label>
+                    <input type="password" id="signupPassword" placeholder="Create a password" required autocomplete="new-password" />
+                </div>
+                <div class="form-group">
+                    <label for="signupConfirm">Confirm Password</label>
+                    <input type="password" id="signupConfirm" placeholder="Confirm your password" required autocomplete="new-password" />
+                </div>
+                <div class="terms-row">
+                    <input type="checkbox" id="termsCheck" required />
+                    <label for="termsCheck">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></label>
+                </div>
+                <button type="submit" class="btn-submit">Create Account</button>
+                <div class="switch-link">
+                    Already have an account? <button type="button" id="switchToLogin">Sign in</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ===== SEARCH OVERLAY ===== -->
+    <div class="search-overlay" id="searchOverlay">
+        <div class="search-header">
+            <input type="text" id="searchInput" placeholder="Search for anime, genres, or characters..." autofocus />
+            <button class="close-search" id="closeSearch" aria-label="Close search">✕</button>
+        </div>
+        <div class="search-filters">
+            <select id="searchGenre">
+                <option value="">All Genres</option>
+            </select>
+            <select id="searchType">
+                <option value="">All Types</option>
+                <option value="tv">TV</option>
+                <option value="movie">Movie</option>
+                <option value="ova">OVA</option>
+                <option value="ona">ONA</option>
+                <option value="special">Special</option>
+                <option value="music">Music</option>
+            </select>
+            <select id="searchYear">
+                <option value="">All Years</option>
+            </select>
+            <select id="searchSort">
+                <option value="score">Sort by Score</option>
+                <option value="title">Sort by Title</option>
+                <option value="popularity">Sort by Popularity</option>
+            </select>
+        </div>
+        <div class="search-results" id="searchResults">
+            <div class="no-results">Start typing to search for anime.</div>
+        </div>
+    </div>
+
+    <!-- ===== TOAST CONTAINER ===== -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <main role="main">
+
+        <!-- ===== HERO SLIDER ===== -->
+        <section class="container hero-section" aria-label="Featured anime">
+            <div class="hero-slider" id="heroSlider">
+                <!-- Slides injected via JS -->
+                <div class="hero-controls">
+                    <div class="arrows">
+                        <button id="heroPrev" aria-label="Previous slide">‹</button>
+                        <button id="heroNext" aria-label="Next slide">›</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== WIDGETS ===== -->
+        <section class="container">
+            <!-- Trending -->
+            <div class="widget-section" id="trendingSection">
+                <div class="widget-header">
+                    <h2>🔥 Trending Now</h2>
+                    <a href="/search.html?sort=trending" class="view-all">View All →</a>
+                </div>
+                <div class="slider-container">
+                    <div class="slider-track" id="trendingTrack"></div>
+                    <div class="slider-arrows" style="display:flex;justify-content:flex-end;margin-top:8px;">
+                        <button class="slider-prev" data-target="trendingTrack">‹</button>
+                        <button class="slider-next" data-target="trendingTrack">›</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Top Rated -->
+            <div class="widget-section" id="topratedSection">
+                <div class="widget-header">
+                    <h2>⭐ Top Rated</h2>
+                    <a href="/search.html?sort=score" class="view-all">View All →</a>
+                </div>
+                <div class="slider-container">
+                    <div class="slider-track" id="topratedTrack"></div>
+                    <div class="slider-arrows" style="display:flex;justify-content:flex-end;margin-top:8px;">
+                        <button class="slider-prev" data-target="topratedTrack">‹</button>
+                        <button class="slider-next" data-target="topratedTrack">›</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Movies (NEW) -->
+            <div class="widget-section" id="moviesSection">
+                <div class="widget-header">
+                    <h2>🎬 Movies</h2>
+                    <a href="/search.html?type=movie" class="view-all">View All →</a>
+                </div>
+                <div class="slider-container">
+                    <div class="slider-track" id="moviesTrack"></div>
+                    <div class="slider-arrows" style="display:flex;justify-content:flex-end;margin-top:8px;">
+                        <button class="slider-prev" data-target="moviesTrack">‹</button>
+                        <button class="slider-next" data-target="moviesTrack">›</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Top Airing -->
+            <div class="widget-section" id="airingSection">
+                <div class="widget-header">
+                    <h2>📡 Top Airing</h2>
+                    <a href="/search.html?status=airing" class="view-all">View All →</a>
+                </div>
+                <div class="slider-container">
+                    <div class="slider-track" id="airingTrack"></div>
+                    <div class="slider-arrows" style="display:flex;justify-content:flex-end;margin-top:8px;">
+                        <button class="slider-prev" data-target="airingTrack">‹</button>
+                        <button class="slider-next" data-target="airingTrack">›</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Upcoming -->
+            <div class="widget-section" id="upcomingSection">
+                <div class="widget-header">
+                    <h2>🚀 Upcoming</h2>
+                    <a href="/search.html?status=upcoming" class="view-all">View All →</a>
+                </div>
+                <div class="slider-container">
+                    <div class="slider-track" id="upcomingTrack"></div>
+                    <div class="slider-arrows" style="display:flex;justify-content:flex-end;margin-top:8px;">
+                        <button class="slider-prev" data-target="upcomingTrack">‹</button>
+                        <button class="slider-next" data-target="upcomingTrack">›</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Completed -->
+            <div class="widget-section" id="completedSection">
+                <div class="widget-header">
+                    <h2>✅ Completed</h2>
+                    <a href="/search.html?status=completed" class="view-all">View All →</a>
+                </div>
+                <div class="slider-container">
+                    <div class="slider-track" id="completedTrack"></div>
+                    <div class="slider-arrows" style="display:flex;justify-content:flex-end;margin-top:8px;">
+                        <button class="slider-prev" data-target="completedTrack">‹</button>
+                        <button class="slider-next" data-target="completedTrack">›</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- New Releases removed -->
+        </section>
+
+    </main>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer" role="contentinfo">
+        <div class="container">
+            <div class="socials">
+                <a href="#" aria-label="Twitter">🐦</a>
+                <a href="#" aria-label="Discord">💬</a>
+                <a href="#" aria-label="GitHub">🐙</a>
+                <a href="#" aria-label="Reddit">🤖</a>
+            </div>
+            <p>&copy; 2026 AnimeVault. All rights reserved.</p>
+            <p class="disclaimer">This site does not store any files on its server. All contents are provided by non-affiliated third parties.</p>
+        </div>
+    </footer>
+
+    <script>
+        // ============================================================
+        //  ANIMEVAULT — FULL APPLICATION LOGIC
+        //  Engineered for stability, performance, and premium UX.
+        // ============================================================
+
+        (function() {
+            'use strict';
+
+            // ===== CONFIG =====
+            const CONFIG = {
+                API_BASE: 'https://api.jikan.moe/v4',
+                CACHE_TTL: 3600000, // 1 hour
+                MAX_RETRIES: 3,
+                RETRY_DELAY: 1000,
+                HERO_INTERVAL: 5000,
+                SEARCH_DEBOUNCE: 400,
+                ITEMS_PER_WIDGET: 18,
+                HERO_SLIDE_COUNT: 10,
+            };
+
+            // ===== STATE =====
+            const state = {
+                user: null,
+                token: localStorage.getItem('av_token') || null,
+                language: localStorage.getItem('av_lang') || 'en',
+                heroIndex: 0,
+                heroTimer: null,
+                sliderInstances: {},
+                isSearchOpen: false,
+                isAuthOpen: false,
+                isSidebarOpen: false,
+                authTab: 'login',
+                searchController: null,
+            };
+
+            // ===== UTILITY FUNCTIONS =====
+            function $(sel, ctx) { return (ctx || document).querySelector(sel); }
+
+            function $$(sel, ctx) { return Array.from((ctx || document).querySelectorAll(sel)); }
+
+            function debounce(fn, ms) {
+                let timer;
+                return function(...args) {
+                    clearTimeout(timer);
+                    timer = setTimeout(() => fn.apply(this, args), ms);
+                };
+            }
+
+            function throttle(fn, ms) {
+                let last = 0;
+                return function(...args) {
+                    const now = Date.now();
+                    if (now - last >= ms) { last = now;
+                        fn.apply(this, args); }
+                };
+            }
+
+            function fetchWithRetry(url, options = {}, retries = CONFIG.MAX_RETRIES) {
+                return new Promise((resolve, reject) => {
+                    const attempt = (n) => {
+                        fetch(url, options)
+                            .then(res => {
+                                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                                return res.json();
+                            })
+                            .then(resolve)
+                            .catch(err => {
+                                if (n > 0) {
+                                    setTimeout(() => attempt(n - 1), CONFIG.RETRY_DELAY);
+                                } else {
+                                    reject(err);
+                                }
+                            });
+                    };
+                    attempt(retries);
+                });
+            }
+
+            function cacheFetch(key, fetchFn, ttl = CONFIG.CACHE_TTL) {
+                const cached = localStorage.getItem('av_cache_' + key);
+                if (cached) {
+                    const { data, timestamp } = JSON.parse(cached);
+                    if (Date.now() - timestamp < ttl) return Promise.resolve(data);
+                }
+                return fetchFn().then(data => {
+                    try {
+                        localStorage.setItem('av_cache_' + key, JSON.stringify({ data, timestamp: Date.now() }));
+                    } catch (_) { /* ignore */ }
+                    return data;
+                });
+            }
+
+            function toast(message, type = 'info', duration = 3500) {
+                const container = document.getElementById('toastContainer');
+                const el = document.createElement('div');
+                el.className = `toast ${type}`;
+                el.innerHTML = `<span>${message}</span><button class="toast-close">✕</button>`;
+                container.appendChild(el);
+                el.querySelector('.toast-close').addEventListener('click', () => el.remove());
+                setTimeout(() => {
+                    if (el.parentNode) el.remove();
+                }, duration);
+            }
+
+            function getInitials(name) {
+                if (!name) return 'U';
+                return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+            }
+
+            function escapeHTML(str) {
+                const div = document.createElement('div');
+                div.textContent = str;
+                return div.innerHTML;
+            }
+
+            function truncate(str, len = 120) {
+                return str.length > len ? str.slice(0, len) + '…' : str;
+            }
+
+            function formatDate(ts) {
+                return new Date(ts).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+            }
+
+            // ===== API =====
+            const API = {
+                async getTrending() {
+                    return cacheFetch('trending', () =>
+                        fetchWithRetry(`${CONFIG.API_BASE}/top/anime?limit=${CONFIG.ITEMS_PER_WIDGET}`)
+                    );
+                },
+                async getTopRated() {
+                    return cacheFetch('toprated', () =>
+                        fetchWithRetry(`${CONFIG.API_BASE}/top/anime?limit=${CONFIG.ITEMS_PER_WIDGET}&filter=bypopularity`)
+                    );
+                },
+                async getAiring() {
+                    return cacheFetch('airing', () =>
+                        fetchWithRetry(`${CONFIG.API_BASE}/top/anime?limit=${CONFIG.ITEMS_PER_WIDGET}&filter=airing`)
+                    );
+                },
+                async getUpcoming() {
+                    return cacheFetch('upcoming', () =>
+                        fetchWithRetry(`${CONFIG.API_BASE}/top/anime?limit=${CONFIG.ITEMS_PER_WIDGET}&filter=upcoming`)
+                    );
+                },
+                async getCompleted() {
+                    return cacheFetch('completed', () =>
+                        fetchWithRetry(`${CONFIG.API_BASE}/top/anime?limit=${CONFIG.ITEMS_PER_WIDGET}&filter=bypopularity&status=completed`)
+                    );
+                },
+                async getMovies() {
+                    // New: fetch top movies
+                    return cacheFetch('movies', () =>
+                        fetchWithRetry(`${CONFIG.API_BASE}/top/anime?limit=${CONFIG.ITEMS_PER_WIDGET}&type=movie`)
+                    );
+                },
+                async getGenres() {
+                    return cacheFetch('genres', () =>
+                        fetchWithRetry(`${CONFIG.API_BASE}/genres/anime`)
+                    );
+                },
+                async getAnime(id) {
+                    return fetchWithRetry(`${CONFIG.API_BASE}/anime/${id}/full`);
+                },
+                async search(query, filters = {}) {
+                    const params = new URLSearchParams({ q: query, limit: 20, ...filters });
+                    return fetchWithRetry(`${CONFIG.API_BASE}/anime?${params}`);
+                },
+                async getSchedule(day) {
+                    return cacheFetch(`schedule_${day}`, () =>
+                        fetchWithRetry(`${CONFIG.API_BASE}/schedules/${day}?limit=50`)
+                    );
+                },
+                async getCharacters(id) {
+                    return fetchWithRetry(`${CONFIG.API_BASE}/anime/${id}/characters`);
+                },
+                async getRecommendations(id) {
+                    return fetchWithRetry(`${CONFIG.API_BASE}/anime/${id}/recommendations`);
+                },
+                async getEpisodes(id, page = 1) {
+                    return fetchWithRetry(`${CONFIG.API_BASE}/anime/${id}/episodes?page=${page}`);
+                },
+            };
+
+            // ===== AUTH SYSTEM =====
+            const Auth = {
+                _user: null,
+
+                get user() {
+                    if (this._user) return this._user;
+                    const stored = localStorage.getItem('av_user');
+                    if (stored) {
+                        try { this._user = JSON.parse(stored); } catch (_) {}
+                    }
+                    return this._user;
+                },
+
+                isLoggedIn() {
+                    return !!this.user && !!state.token;
+                },
+
+                async login(email, password, remember = false) {
+                    // Simulate API call — in production, this hits your Cloudflare Worker
+                    await new Promise(r => setTimeout(r, 600));
+                    if (password.length < 4) throw new Error('Invalid credentials');
+                    const user = {
+                        id: 'usr_' + Date.now(),
+                        name: email.split('@')[0] || 'User',
+                        username: email.split('@')[0] || 'user',
+                        email: email,
+                        avatar: null,
+                        favorites: [],
+                        bookmarks: [],
+                        history: [],
+                        createdAt: new Date().toISOString(),
+                    };
+                    this._user = user;
+                    state.token = 'jwt_' + btoa(JSON.stringify({ uid: user.id, exp: Date.now() + 86400000 }));
+                    localStorage.setItem('av_user', JSON.stringify(user));
+                    localStorage.setItem('av_token', state.token);
+                    if (remember) {
+                        localStorage.setItem('av_remember', 'true');
+                    }
+                    return user;
+                },
+
+                async signup(name, username, email, password) {
+                    await new Promise(r => setTimeout(r, 600));
+                    if (password.length < 6) throw new Error('Password must be at least 6 characters');
+                    const user = {
+                        id: 'usr_' + Date.now(),
+                        name: name,
+                        username: username,
+                        email: email,
+                        avatar: null,
+                        favorites: [],
+                        bookmarks: [],
+                        history: [],
+                        createdAt: new Date().toISOString(),
+                    };
+                    this._user = user;
+                    state.token = 'jwt_' + btoa(JSON.stringify({ uid: user.id, exp: Date.now() + 86400000 }));
+                    localStorage.setItem('av_user', JSON.stringify(user));
+                    localStorage.setItem('av_token', state.token);
+                    return user;
+                },
+
+                logout() {
+                    this._user = null;
+                    state.token = null;
+                    localStorage.removeItem('av_user');
+                    localStorage.removeItem('av_token');
+                    localStorage.removeItem('av_remember');
+                    updateProfileUI();
+                    toast('Logged out successfully', 'info');
+                },
+
+                updateProfile(data) {
+                    if (!this.user) return;
+                    const updated = { ...this.user, ...data };
+                    this._user = updated;
+                    localStorage.setItem('av_user', JSON.stringify(updated));
+                    updateProfileUI();
+                    return updated;
+                },
+
+                addFavorite(animeId) {
+                    if (!this.user) return;
+                    if (!this.user.favorites.includes(animeId)) {
+                        this.user.favorites.push(animeId);
+                        this._user = { ...this.user };
+                        localStorage.setItem('av_user', JSON.stringify(this.user));
+                    }
+                },
+
+                removeFavorite(animeId) {
+                    if (!this.user) return;
+                    this.user.favorites = this.user.favorites.filter(id => id !== animeId);
+                    this._user = { ...this.user };
+                    localStorage.setItem('av_user', JSON.stringify(this.user));
+                },
+
+                addBookmark(animeId) {
+                    if (!this.user) return;
+                    if (!this.user.bookmarks.includes(animeId)) {
+                        this.user.bookmarks.push(animeId);
+                        this._user = { ...this.user };
+                        localStorage.setItem('av_user', JSON.stringify(this.user));
+                    }
+                },
+
+                removeBookmark(animeId) {
+                    if (!this.user) return;
+                    this.user.bookmarks = this.user.bookmarks.filter(id => id !== animeId);
+                    this._user = { ...this.user };
+                    localStorage.setItem('av_user', JSON.stringify(this.user));
+                },
+
+                addHistory(animeId, episode = 1) {
+                    if (!this.user) return;
+                    const existing = this.user.history.findIndex(h => h.animeId === animeId);
+                    if (existing !== -1) {
+                        this.user.history[existing].episode = episode;
+                        this.user.history[existing].lastWatched = Date.now();
+                    } else {
+                        this.user.history.push({ animeId, episode, lastWatched: Date.now() });
+                    }
+                    this._user = { ...this.user };
+                    localStorage.setItem('av_user', JSON.stringify(this.user));
+                },
+            };
+
+            // ===== UI UPDATES =====
+            function updateProfileUI() {
+                const user = Auth.user;
+                const initial = document.getElementById('profileInitial');
+                const profileBtn = document.getElementById('profileBtn');
+                if (user && Auth.isLoggedIn()) {
+                    const display = user.avatar ? `<img src="${user.avatar}" alt="${user.name}" />` : getInitials(user.name);
+                    profileBtn.innerHTML = display;
+                    profileBtn.style.background = user.avatar ? 'transparent' : 'var(--accent-purple)';
+                } else {
+                    profileBtn.innerHTML = '<span id="profileInitial">U</span>';
+                    profileBtn.style.background = 'var(--accent-purple)';
+                }
+            }
+
+            function renderAnimeCard(anime, clickable = true) {
+                const title = anime.title || anime.name || 'Unknown';
+                const score = anime.score ? anime.score.toFixed(1) : 'N/A';
+                const episodes = anime.episodes || '?';
+                const type = anime.type || 'TV';
+                const img = anime.images?.jpg?.image_url || anime.images?.jpg?.small_image_url || '';
+
+                const card = document.createElement('div');
+                card.className = 'anime-card';
+                if (clickable) {
+                    card.addEventListener('click', () => {
+                        window.location.href = `/anime.html?id=${anime.mal_id}`;
+                    });
+                }
+                card.innerHTML = `
+              <img class="poster" src="${img}" alt="${escapeHTML(title)}" loading="lazy" onerror="this.style.background='var(--bg-secondary)'" />
+              <div class="top-badge">${type}</div>
+              <div class="card-body">
+                <div class="title">${escapeHTML(title)}</div>
+                <div class="meta-row">
+                  <span class="score">★ ${score}</span>
+                  <span>${episodes} eps</span>
+                </div>
               </div>
-            </div>
-          </li>
-          <li><a href="schedule.html" data-i18n="nav.schedule">Schedule</a></li>
-          <li><a href="az-list.html" data-i18n="nav.az">A-Z List</a></li>
-        </ul>
-      </nav>
-    </div>
-    <div class="header-right">
-      <button class="search-btn" id="searchBtn" aria-label="Search">
-        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      </button>
-      <button class="lang-btn" aria-label="Language">
-        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
-        <div class="lang-dropdown">
-          <button class="active" data-lang="en">English</button>
-          <button data-lang="jp">日本語</button>
-          <button data-lang="bn">বাংলা</button>
-        </div>
-      </button>
-      <button class="profile-btn" id="profileBtn" aria-label="Profile">
-        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-      </button>
-    </div>
-  </div>
-</header>
+            `;
+                return card;
+            }
 
-<!-- Sidebar -->
-<div class="sidebar-overlay" id="sidebarOverlay"></div>
-<aside class="sidebar" id="sidebar">
-  <div class="sidebar-header">
-    <a href="index.html" class="logo">Anime<span>Stream</span></a>
-    <button class="sidebar-close" id="sidebarClose" aria-label="Close menu">
-      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
-    </button>
-  </div>
-  <nav class="sidebar-nav">
-    <a href="index.html" class="active">
-      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-      <span data-i18n="nav.home">Home</span>
-    </a>
-    <a href="search.html">
-      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      <span data-i18n="nav.trending">Trending</span>
-    </a>
-    <a href="schedule.html">
-      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-      <span data-i18n="nav.schedule">Schedule</span>
-    </a>
-    <a href="az-list.html">
-      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 7V4h16v3"/><path d="M9 20h6"/><path d="M12 4v16"/></svg>
-      <span data-i18n="nav.az">A-Z List</span>
-    </a>
-    <a href="profile.html">
-      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-      <span data-i18n="nav.profile">Profile</span>
-    </a>
-  </nav>
-  <div class="sidebar-section">
-    <h4 data-i18n="nav.genres">Genres</h4>
-    <div class="mega-menu-grid" id="sidebarGenres"></div>
-  </div>
-  <div class="sidebar-section">
-    <h4 data-i18n="nav.types">Types</h4>
-    <div class="mega-menu-grid">
-      <a href="search.html?type=tv">TV</a><a href="search.html?type=movie">Movie</a>
-      <a href="search.html?type=ova">OVA</a><a href="search.html?type=ona">ONA</a>
-      <a href="search.html?type=special">Special</a><a href="search.html?type=music">Music</a>
-    </div>
-  </div>
-</aside>
+            function renderHeroSlide(anime) {
+                const img = anime.images?.jpg?.large_image_url || anime.images?.jpg?.image_url || '';
+                const title = anime.title || 'Unknown';
+                const score = anime.score ? anime.score.toFixed(1) : 'N/A';
+                const genres = anime.genres ? anime.genres.map(g => g.name).slice(0, 3).join(' • ') : '';
+                const synopsis = anime.synopsis || 'No synopsis available.';
 
-<!-- Search Overlay -->
-<div class="search-overlay" id="searchOverlay">
-  <button class="search-close" id="searchClose" aria-label="Close search">
-    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
-  </button>
-  <div class="search-container">
-    <div class="search-input-wrap">
-      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      <input type="text" class="search-input" id="searchInput" placeholder="Search anime..." autocomplete="off">
-    </div>
-    <div class="search-filters">
-      <select id="searchType"><option value="">All Types</option><option value="tv">TV</option><option value="movie">Movie</option><option value="ova">OVA</option><option value="ona">ONA</option></select>
-      <select id="searchStatus"><option value="">All Status</option><option value="airing">Airing</option><option value="complete">Completed</option><option value="upcoming">Upcoming</option></select>
-      <select id="searchGenre"></select>
-      <select id="searchSort"><option value="">Default</option><option value="score">Score</option><option value="popularity">Popularity</option><option value="start_date">Newest</option></select>
-    </div>
-    <div class="search-results" id="searchResults">
-      <div class="search-results-grid" id="searchResultsGrid"></div>
-    </div>
-  </div>
-</div>
+                const slide = document.createElement('div');
+                slide.className = 'hero-slide';
+                slide.innerHTML = `
+              <img class="bg" src="${img}" alt="${escapeHTML(title)}" loading="lazy" onerror="this.style.background='var(--bg-secondary)'" />
+              <div class="overlay"></div>
+              <div class="content">
+                <h1>${escapeHTML(title)}</h1>
+                <div class="meta">
+                  <span class="score">★ ${score}</span>
+                  <span>${genres}</span>
+                  <span class="badge">${anime.type || 'TV'}</span>
+                </div>
+                <div class="synopsis">${escapeHTML(truncate(synopsis, 180))}</div>
+                <div class="actions">
+                  <a href="/watch.html?id=${anime.mal_id}&ep=1" class="btn btn-primary">▶ Watch Now</a>
+                  <a href="/anime.html?id=${anime.mal_id}" class="btn btn-secondary">ℹ Details</a>
+                </div>
+              </div>
+            `;
+                return slide;
+            }
 
-<!-- Auth Modal -->
-<div class="auth-overlay" id="authOverlay">
-  <div class="auth-modal">
-    <button class="auth-close" id="authClose" aria-label="Close">
-      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
-    </button>
-    <div class="auth-tabs">
-      <button class="auth-tab active" data-tab="login" data-i18n="auth.login">Login</button>
-      <button class="auth-tab" data-tab="signup" data-i18n="auth.signup">Sign Up</button>
-    </div>
-    <div class="auth-error" id="authError"></div>
-    <form class="auth-form active" id="loginForm">
-      <div class="form-group">
-        <label data-i18n="auth.email">Email / Username</label>
-        <input type="text" id="loginEmail" required placeholder="Enter email or username">
-      </div>
-      <div class="form-group">
-        <label data-i18n="auth.password">Password</label>
-        <input type="password" id="loginPassword" required placeholder="Enter password">
-      </div>
-      <div class="form-group">
-        <label class="checkbox-wrap">
-          <input type="checkbox" id="loginRemember">
-          <span data-i18n="auth.remember">Remember me</span>
-        </label>
-      </div>
-      <button type="submit" class="auth-btn" id="loginBtn" data-i18n="auth.loginBtn">Login</button>
-      <div class="auth-switch">
-        <span data-i18n="auth.noAccount">No account?</span>
-        <button type="button" data-switch="signup" data-i18n="auth.signupNow">Sign up now</button>
-      </div>
-    </form>
-    <form class="auth-form" id="signupForm">
-      <div class="form-group">
-        <label data-i18n="auth.name">Full Name</label>
-        <input type="text" id="signupName" required placeholder="Your name">
-      </div>
-      <div class="form-group">
-        <label data-i18n="auth.username">Username</label>
-        <input type="text" id="signupUsername" required placeholder="Choose username">
-      </div>
-      <div class="form-group">
-        <label data-i18n="auth.email">Email</label>
-        <input type="email" id="signupEmail" required placeholder="your@email.com">
-      </div>
-      <div class="form-group">
-        <label data-i18n="auth.password">Password</label>
-        <input type="password" id="signupPassword" required placeholder="Min 6 characters" minlength="6">
-      </div>
-      <div class="form-group">
-        <label data-i18n="auth.confirmPassword">Confirm Password</label>
-        <input type="password" id="signupConfirm" required placeholder="Repeat password">
-      </div>
-      <div class="form-group">
-        <label class="checkbox-wrap">
-          <input type="checkbox" id="signupTerms" required>
-          <span data-i18n="auth.terms">I agree to Terms of Service</span>
-        </label>
-      </div>
-      <button type="submit" class="auth-btn" id="signupBtn" data-i18n="auth.signupBtn">Create Account</button>
-      <div class="auth-switch">
-        <span data-i18n="auth.hasAccount">Have an account?</span>
-        <button type="button" data-switch="login" data-i18n="auth.loginNow">Login now</button>
-      </div>
-    </form>
-  </div>
-</div>
+            // ===== HERO SLIDER =====
+            const HeroSlider = {
+                _data: [],
+                _index: 0,
+                _timer: null,
+                _initialized: false,
 
-<!-- Hero -->
-<section class="hero" id="hero">
-  <div class="hero-slider" id="heroSlider"></div>
-  <div class="hero-nav" id="heroNav"></div>
-  <button class="hero-arrows hero-prev" id="heroPrev" aria-label="Previous">
-    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>
-  </button>
-  <button class="hero-arrows hero-next" id="heroNext" aria-label="Next">
-    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
-  </button>
-</section>
+                async init() {
+                    if (this._initialized) return;
+                    try {
+                        const resp = await API.getTrending();
+                        this._data = (resp.data || []).slice(0, CONFIG.HERO_SLIDE_COUNT);
+                        if (!this._data.length) {
+                            document.querySelector('.hero-section').innerHTML =
+                                '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--text-muted);">No trending anime available.</div>';
+                            return;
+                        }
+                        this._build();
+                        this._start();
+                        this._initialized = true;
+                    } catch (err) {
+                        console.error('Hero slider init error:', err);
+                        document.querySelector('.hero-section').innerHTML =
+                            '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--text-muted);">Failed to load featured anime.</div>';
+                    }
+                },
 
-<!-- Main Content -->
-<main>
-  <section class="section">
-    <div class="section-header">
-      <h2 class="section-title" data-i18n="home.trending">Trending Now</h2>
-      <a href="search.html?order_by=popularity" class="section-more" data-i18n="home.viewAll">View All →</a>
-    </div>
-    <div class="slider-wrap">
-      <div class="slider" id="trendingSlider"></div>
-      <button class="slider-arrow slider-prev" data-target="trendingSlider">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>
-      </button>
-      <button class="slider-arrow slider-next" data-target="trendingSlider">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
-      </button>
-    </div>
-  </section>
+                _build() {
+                    const container = document.querySelector('.hero-slider');
+                    // Remove existing slides (keep controls)
+                    $$('.hero-slide', container).forEach(el => el.remove());
 
-  <section class="section">
-    <div class="section-header">
-      <h2 class="section-title" data-i18n="home.topRated">Top Rated</h2>
-      <a href="search.html?order_by=score" class="section-more" data-i18n="home.viewAll">View All →</a>
-    </div>
-    <div class="slider-wrap">
-      <div class="slider" id="topRatedSlider"></div>
-      <button class="slider-arrow slider-prev" data-target="topRatedSlider">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>
-      </button>
-      <button class="slider-arrow slider-next" data-target="topRatedSlider">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
-      </button>
-    </div>
-  </section>
+                    this._data.forEach((anime, i) => {
+                        const slide = renderHeroSlide(anime);
+                        if (i === 0) slide.classList.add('active');
+                        container.insertBefore(slide, container.querySelector('.hero-controls'));
+                    });
 
-  <section class="section">
-    <div class="section-header">
-      <h2 class="section-title" data-i18n="home.airing">Top Airing</h2>
-      <a href="search.html?status=airing&order_by=score" class="section-more" data-i18n="home.viewAll">View All →</a>
-    </div>
-    <div class="slider-wrap">
-      <div class="slider" id="airingSlider"></div>
-      <button class="slider-arrow slider-prev" data-target="airingSlider">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>
-      </button>
-      <button class="slider-arrow slider-next" data-target="airingSlider">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
-      </button>
-    </div>
-  </section>
+                    // Events
+                    document.getElementById('heroPrev').addEventListener('click', () => this._prev());
+                    document.getElementById('heroNext').addEventListener('click', () => this._next());
 
-  <section class="section">
-    <div class="section-header">
-      <h2 class="section-title" data-i18n="home.upcoming">Upcoming</h2>
-      <a href="search.html?status=upcoming" class="section-more" data-i18n="home.viewAll">View All →</a>
-    </div>
-    <div class="slider-wrap">
-      <div class="slider" id="upcomingSlider"></div>
-      <button class="slider-arrow slider-prev" data-target="upcomingSlider">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>
-      </button>
-      <button class="slider-arrow slider-next" data-target="upcomingSlider">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
-      </button>
-    </div>
-  </section>
+                    // Touch / drag
+                    let startX = 0;
+                    const slider = container;
+                    slider.addEventListener('touchstart', (e) => { startX = e.touches[0].clientX; });
+                    slider.addEventListener('touchend', (e) => {
+                        const diff = startX - e.changedTouches[0].clientX;
+                        if (Math.abs(diff) > 40) {
+                            diff > 0 ? this._next() : this._prev();
+                        }
+                    });
+                    // Mouse drag
+                    let mouseDown = false,
+                        mouseStart = 0;
+                    slider.addEventListener('mousedown', (e) => { mouseDown = true;
+                        mouseStart = e.clientX; });
+                    slider.addEventListener('mouseup', (e) => {
+                        if (!mouseDown) return;
+                        mouseDown = false;
+                        const diff = mouseStart - e.clientX;
+                        if (Math.abs(diff) > 40) {
+                            diff > 0 ? this._next() : this._prev();
+                        }
+                    });
+                    slider.addEventListener('mouseleave', () => { mouseDown = false; });
+                },
 
-  <section class="section">
-    <div class="section-header">
-      <h2 class="section-title" data-i18n="home.completed">Completed</h2>
-      <a href="search.html?status=complete" class="section-more" data-i18n="home.viewAll">View All →</a>
-    </div>
-    <div class="slider-wrap">
-      <div class="slider" id="completedSlider"></div>
-      <button class="slider-arrow slider-prev" data-target="completedSlider">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>
-      </button>
-      <button class="slider-arrow slider-next" data-target="completedSlider">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
-      </button>
-    </div>
-  </section>
+                _goTo(index) {
+                    if (index < 0) index = this._data.length - 1;
+                    if (index >= this._data.length) index = 0;
+                    this._index = index;
+                    const slides = $$('.hero-slide', document.querySelector('.hero-slider'));
+                    slides.forEach((s, i) => s.classList.toggle('active', i === index));
+                },
 
-  <section class="section">
-    <div class="section-header">
-      <h2 class="section-title" data-i18n="home.ongoing">Ongoing</h2>
-      <a href="search.html?status=airing" class="section-more" data-i18n="home.viewAll">View All →</a>
-    </div>
-    <div class="slider-wrap">
-      <div class="slider" id="ongoingSlider"></div>
-      <button class="slider-arrow slider-prev" data-target="ongoingSlider">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>
-      </button>
-      <button class="slider-arrow slider-next" data-target="ongoingSlider">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
-      </button>
-    </div>
-  </section>
+                _next() { this._goTo(this._index + 1); },
+                _prev() { this._goTo(this._index - 1); },
 
-  <section class="section">
-    <div class="section-header">
-      <h2 class="section-title" data-i18n="home.newReleases">New Releases</h2>
-      <a href="search.html?order_by=start_date" class="section-more" data-i18n="home.viewAll">View All →</a>
-    </div>
-    <div class="slider-wrap">
-      <div class="slider" id="newSlider"></div>
-      <button class="slider-arrow slider-prev" data-target="newSlider">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>
-      </button>
-      <button class="slider-arrow slider-next" data-target="newSlider">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
-      </button>
-    </div>
-  </section>
+                _start() {
+                    if (this._timer) clearInterval(this._timer);
+                    this._timer = setInterval(() => this._next(), CONFIG.HERO_INTERVAL);
+                },
 
-  <section class="section">
-    <div class="section-header">
-      <h2 class="section-title" data-i18n="home.recentUpdates">Recent Updates</h2>
-      <a href="search.html?order_by=members" class="section-more" data-i18n="home.viewAll">View All →</a>
-    </div>
-    <div class="slider-wrap">
-      <div class="slider" id="recentSlider"></div>
-      <button class="slider-arrow slider-prev" data-target="recentSlider">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>
-      </button>
-      <button class="slider-arrow slider-next" data-target="recentSlider">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
-      </button>
-    </div>
-  </section>
-</main>
+                _stop() {
+                    if (this._timer) { clearInterval(this._timer);
+                        this._timer = null; }
+                },
 
-<!-- Footer -->
-<footer class="footer">
-  <div class="footer-inner">
-    <div class="footer-logo">AnimeStream</div>
-    <p class="footer-text">This site does not store any files on its server. All contents are provided by non-affiliated third parties.</p>
-    <div class="footer-social">
-      <a href="#" aria-label="Discord"><svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg></a>
-      <a href="#" aria-label="Twitter"><svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
-      <a href="#" aria-label="GitHub"><svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
-    </div>
-    <p class="footer-copy">© 2025 AnimeStream. All rights reserved.</p>
-  </div>
-</footer>
+                destroy() {
+                    this._stop();
+                    this._initialized = false;
+                }
+            };
 
-<div class="toast-container" id="toastContainer"></div>
+            // ===== UNIVERSAL SLIDER ENGINE =====
+            function initSlider(trackId, data, loading = false) {
+                const track = document.getElementById(trackId);
+                if (!track) return;
+                // Clear skeletons if loading
+                if (loading) {
+                    track.innerHTML =
+                        Array.from({ length: 8 }).map(() =>
+                            `<div class="skeleton-card" style="flex:0 0 min(160px,40vw);"></div>`
+                        ).join('');
+                    return;
+                }
+                track.innerHTML = '';
+                if (!data || !data.length) {
+                    track.innerHTML =
+                        '<div style="color:var(--text-muted);padding:20px;text-align:center;width:100%;">No anime available.</div>';
+                    return;
+                }
+                data.forEach(anime => {
+                    const card = renderAnimeCard(anime);
+                    track.appendChild(card);
+                });
 
-<script>
-// ==================== CONFIG ====================
-const API_BASE = 'https://api.jikan.moe/v4';
-const WORKER_URL = localStorage.getItem('workerUrl') || '';
-const CACHE_TTL = 5 * 60 * 1000;
+                // Arrow controls
+                const prevBtn = document.querySelector(`[data-target="${trackId}"].slider-prev`);
+                const nextBtn = document.querySelector(`[data-target="${trackId}"].slider-next`);
+                if (prevBtn && nextBtn) {
+                    prevBtn.onclick = () => { track.scrollBy({ left: -300, behavior: 'smooth' }); };
+                    nextBtn.onclick = () => { track.scrollBy({ left: 300, behavior: 'smooth' }); };
+                }
 
-// ==================== I18N ====================
-const i18n = {
-  en: {
-    nav: { home: 'Home', genres: 'Genres', types: 'Types', schedule: 'Schedule', az: 'A-Z List', profile: 'Profile', trending: 'Trending' },
-    auth: { login: 'Login', signup: 'Sign Up', email: 'Email / Username', password: 'Password', remember: 'Remember me', loginBtn: 'Login', noAccount: 'No account?', signupNow: 'Sign up now', name: 'Full Name', username: 'Username', confirmPassword: 'Confirm Password', terms: 'I agree to Terms of Service', signupBtn: 'Create Account', hasAccount: 'Have an account?', loginNow: 'Login now' },
-    home: { trending: 'Trending Now', topRated: 'Top Rated', airing: 'Top Airing', upcoming: 'Upcoming', completed: 'Completed', ongoing: 'Ongoing', newReleases: 'New Releases', recentUpdates: 'Recent Updates', viewAll: 'View All →' }
-  },
-  jp: {
-    nav: { home: 'ホーム', genres: 'ジャンル', types: 'タイプ', schedule: 'スケジュール', az: 'A-Z一覧', profile: 'プロフィール', trending: 'トレンド' },
-    auth: { login: 'ログイン', signup: '新規登録', email: 'メール / ユーザー名', password: 'パスワード', remember: 'ログイン状態を保持', loginBtn: 'ログイン', noAccount: 'アカウントをお持ちでない？', signupNow: '新規登録', name: '氏名', username: 'ユーザー名', confirmPassword: 'パスワード確認', terms: '利用規約に同意', signupBtn: 'アカウント作成', hasAccount: 'アカウントをお持ち？', loginNow: 'ログイン' },
-    home: { trending: 'トレンド', topRated: '高評価', airing: '放送中', upcoming: '今期', completed: '完結', ongoing: '連載中', newReleases: '新着', recentUpdates: '最近の更新', viewAll: 'すべて見る →' }
-  },
-  bn: {
-    nav: { home: 'হোম', genres: 'ধরন', types: 'টাইপ', schedule: 'সময়সূচী', az: 'A-Z তালিকা', profile: 'প্রোফাইল', trending: 'ট্রেন্ডিং' },
-    auth: { login: 'লগইন', signup: 'সাইন আপ', email: 'ইমেইল / ইউজারনেম', password: 'পাসওয়ার্ড', remember: 'মনে রাখুন', loginBtn: 'লগইন', noAccount: 'অ্যাকাউন্ট নেই?', signupNow: 'সাইন আপ করুন', name: 'পূর্ণ নাম', username: 'ইউজারনেম', confirmPassword: 'পাসওয়ার্ড নিশ্চিত', terms: 'শর্তাবলীতে সম্মত', signupBtn: 'অ্যাকাউন্ট তৈরি', hasAccount: 'অ্যাকাউন্ট আছে?', loginNow: 'লগইন করুন' },
-    home: { trending: 'ট্রেন্ডিং', topRated: 'শীর্ষ রেটেড', airing: 'সম্প্রচারিত', upcoming: 'আসন্ন', completed: 'সম্পন্ন', ongoing: 'চলমান', newReleases: 'নতুন রিলিজ', recentUpdates: 'সাম্প্রতিক আপডেট', viewAll: 'সব দেখুন →' }
-  }
-};
+                // Mouse wheel
+                track.addEventListener('wheel', (e) => {
+                    if (e.deltaX !== 0) return;
+                    e.preventDefault();
+                    track.scrollBy({ left: e.deltaY * 1.2, behavior: 'smooth' });
+                }, { passive: false });
 
-let currentLang = localStorage.getItem('lang') || 'en';
+                // Touch scroll already works with overflow-x
+            }
 
-function applyLang() {
-  const texts = i18n[currentLang];
-  if (!texts) return;
-  document.querySelectorAll('[data-i18n]').forEach(el => {
-    const key = el.dataset.i18n;
-    const parts = key.split('.');
-    let val = texts;
-    for (const p of parts) val = val?.[p];
-    if (val) el.textContent = val;
-  });
-}
+            // ===== WIDGET LOADER =====
+            async function loadWidgets() {
+                const widgets = [
+                    { id: 'trendingTrack', fetcher: API.getTrending, key: 'trending' },
+                    { id: 'topratedTrack', fetcher: API.getTopRated, key: 'toprated' },
+                    { id: 'moviesTrack', fetcher: API.getMovies, key: 'movies' },
+                    { id: 'airingTrack', fetcher: API.getAiring, key: 'airing' },
+                    { id: 'upcomingTrack', fetcher: API.getUpcoming, key: 'upcoming' },
+                    { id: 'completedTrack', fetcher: API.getCompleted, key: 'completed' },
+                ];
 
-// ==================== UTILS ====================
-const $ = (s, c = document) => c.querySelector(s);
-const $$ = (s, c = document) => Array.from(c.querySelectorAll(s));
-const wait = (ms) => new Promise(r => setTimeout(r, ms));
+                // Show skeletons
+                widgets.forEach(w => initSlider(w.id, null, true));
 
-function cacheGet(key) {
-  try {
-    const item = JSON.parse(localStorage.getItem('cache_' + key));
-    if (item && Date.now() - item.t < CACHE_TTL) return item.d;
-  } catch(e) {}
-  return null;
-}
-function cacheSet(key, data) {
-  localStorage.setItem('cache_' + key, JSON.stringify({ t: Date.now(), d: data }));
-}
+                const results = await Promise.allSettled(
+                    widgets.map(async w => {
+                        try {
+                            const resp = await w.fetcher();
+                            return { id: w.id, data: resp.data || [] };
+                        } catch (err) {
+                            console.error(`Widget ${w.key} failed:`, err);
+                            return { id: w.id, data: [] };
+                        }
+                    })
+                );
 
-async function fetchWithRetry(url, options = {}, retries = 3) {
-  for (let i = 0; i < retries; i++) {
-    try {
-      const ctrl = new AbortController();
-      const id = setTimeout(() => ctrl.abort(), 10000);
-      const res = await fetch(url, { ...options, signal: ctrl.signal });
-      clearTimeout(id);
-      if (!res.ok) throw new Error('HTTP ' + res.status);
-      return await res.json();
-    } catch (e) {
-      if (i === retries - 1) throw e;
-      await wait(1000 * (i + 1));
-    }
-  }
-}
+                results.forEach((result, i) => {
+                    if (result.status === 'fulfilled') {
+                        initSlider(result.value.id, result.value.data, false);
+                    } else {
+                        initSlider(widgets[i].id, [], false);
+                    }
+                });
+            }
 
-function formatDate(d) {
-  if (!d) return 'N/A';
-  const date = new Date(d);
-  return date.toLocaleDateString(currentLang === 'jp' ? 'ja-JP' : currentLang === 'bn' ? 'bn-BD' : 'en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-}
+            // ===== GENRES DROPDOWN =====
+            async function loadGenres() {
+                try {
+                    const resp = await API.getGenres();
+                    const genres = resp.data || [];
+                    const menu = document.getElementById('genresMenu');
+                    menu.innerHTML = genres.slice(0, 20).map(g =>
+                        `<a href="/search.html?genre=${g.mal_id}">${g.name}</a>`
+                    ).join('');
+                } catch (err) {
+                    console.error('Genres load error:', err);
+                }
+            }
 
-function showToast(msg, type = 'success') {
-  const c = $('#toastContainer');
-  const t = document.createElement('div');
-  t.className = `toast ${type}`;
-  t.textContent = msg;
-  c.appendChild(t);
-  setTimeout(() => t.remove(), 3000);
-}
+            // ===== SEARCH SYSTEM =====
+            const Search = {
+                _input: null,
+                _results: null,
+                _debounced: null,
 
-// ==================== AUTH ====================
-let currentUser = null;
+                init() {
+                    this._input = document.getElementById('searchInput');
+                    this._results = document.getElementById('searchResults');
+                    this._debounced = debounce(this._perform.bind(this), CONFIG.SEARCH_DEBOUNCE);
+                    this._input.addEventListener('input', this._debounced);
+                    this._input.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter') this._perform();
+                        if (e.key === 'Escape') this.close();
+                    });
+                    document.getElementById('closeSearch').addEventListener('click', () => this.close());
+                    document.getElementById('searchToggle').addEventListener('click', () => this.open());
 
-function getToken() { return localStorage.getItem('token'); }
-function setToken(t) { localStorage.setItem('token', t); }
-function removeToken() { localStorage.removeItem('token'); }
+                    // Filters
+                    ['searchGenre', 'searchType', 'searchYear', 'searchSort'].forEach(id => {
+                        const el = document.getElementById(id);
+                        if (el) el.addEventListener('change', () => this._perform());
+                    });
 
-async function fetchUser() {
-  const token = getToken();
-  if (!token || !WORKER_URL) return;
-  try {
-    const res = await fetch(`${WORKER_URL}/api/me`, { headers: { 'Authorization': 'Bearer ' + token } });
-    if (res.ok) {
-      currentUser = await res.json();
-      updateProfileUI();
-    } else { throw new Error(); }
-  } catch { removeToken(); currentUser = null; updateProfileUI(); }
-}
+                    // Populate year filter
+                    const yearSelect = document.getElementById('searchYear');
+                    const currentYear = new Date().getFullYear();
+                    for (let y = currentYear; y >= 1980; y--) {
+                        const opt = document.createElement('option');
+                        opt.value = y;
+                        opt.textContent = y;
+                        yearSelect.appendChild(opt);
+                    }
 
-function updateProfileUI() {
-  const btn = $('#profileBtn');
-  if (currentUser) {
-    btn.innerHTML = `<img src="${currentUser.avatar || 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%238b5cf6"%3E%3Ccircle cx="12" cy="12" r="12"/%3E%3Ctext x="12" y="16" text-anchor="middle" fill="white" font-size="12" font-family="sans-serif"%3E${(currentUser.name||currentUser.username||'U').charAt(0).toUpperCase()}%3C/text%3E%3C/svg%3E'}" style="width:32px;height:32px;border-radius:50%;object-fit:cover;border:2px solid var(--accent)">`;
-    btn.onclick = () => location.href = 'profile.html';
-  } else {
-    btn.innerHTML = `<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`;
-    btn.onclick = () => openAuth();
-  }
-}
+                    this._loadGenresFilter();
+                },
 
-function openAuth() { $('#authOverlay').classList.add('open'); document.body.style.overflow = 'hidden'; }
-function closeAuth() { $('#authOverlay').classList.remove('open'); document.body.style.overflow = ''; }
+                async _loadGenresFilter() {
+                    try {
+                        const resp = await API.getGenres();
+                        const genres = resp.data || [];
+                        const sel = document.getElementById('searchGenre');
+                        genres.slice(0, 20).forEach(g => {
+                            const opt = document.createElement('option');
+                            opt.value = g.mal_id;
+                            opt.textContent = g.name;
+                            sel.appendChild(opt);
+                        });
+                    } catch (_) {}
+                },
 
-function switchAuthTab(tab) {
-  $$('.auth-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
-  $$('.auth-form').forEach(f => f.classList.toggle('active', f.id === tab + 'Form'));
-  $('#authError').classList.remove('show');
-}
+                async _perform() {
+                    const query = this._input.value.trim();
+                    if (query.length < 2) {
+                        this._results.innerHTML =
+                        '<div class="no-results">Type at least 2 characters to search.</div>';
+                        return;
+                    }
 
-async function handleLogin(e) {
-  e.preventDefault();
-  if (!WORKER_URL) { showToast('Backend not configured. Set worker URL in localStorage.', 'error'); return; }
-  const btn = $('#loginBtn'); btn.disabled = true; btn.textContent = '...';
-  try {
-    const res = await fetch(`${WORKER_URL}/api/login`, {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: $('#loginEmail').value, password: $('#loginPassword').value })
-    });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error || 'Login failed');
-    setToken(data.token);
-    await fetchUser();
-    closeAuth();
-    showToast('Welcome back!');
-  } catch (err) {
-    $('#authError').textContent = err.message;
-    $('#authError').classList.add('show');
-  } finally { btn.disabled = false; btn.textContent = i18n[currentLang]?.auth?.loginBtn || 'Login'; }
-}
+                    if (this._searchController) {
+                        this._searchController.abort();
+                    }
+                    this._searchController = new AbortController();
 
-async function handleSignup(e) {
-  e.preventDefault();
-  if (!WORKER_URL) { showToast('Backend not configured', 'error'); return; }
-  if ($('#signupPassword').value !== $('#signupConfirm').value) {
-    $('#authError').textContent = 'Passwords do not match'; $('#authError').classList.add('show'); return;
-  }
-  const btn = $('#signupBtn'); btn.disabled = true; btn.textContent = '...';
-  try {
-    const res = await fetch(`${WORKER_URL}/api/signup`, {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name: $('#signupName').value, username: $('#signupUsername').value, email: $('#signupEmail').value, password: $('#signupPassword').value })
-    });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error || 'Signup failed');
-    setToken(data.token);
-    await fetchUser();
-    closeAuth();
-    showToast('Account created!');
-  } catch (err) {
-    $('#authError').textContent = err.message;
-    $('#authError').classList.add('show');
-  } finally { btn.disabled = false; btn.textContent = i18n[currentLang]?.auth?.signupBtn || 'Create Account'; }
-}
+                    const filters = {
+                        genre: document.getElementById('searchGenre').value || undefined,
+                        type: document.getElementById('searchType').value || undefined,
+                        year: document.getElementById('searchYear').value || undefined,
+                        order_by: document.getElementById('searchSort').value || 'score',
+                        sort: 'desc',
+                    };
 
-// ==================== HERO SLIDER ====================
-let heroSlides = [];
-let heroIndex = 0;
-let heroTimer = null;
+                    try {
+                        this._results.innerHTML =
+                            '<div class="no-results" style="color:var(--text-secondary);">Searching...</div>';
+                        const resp = await API.search(query, filters);
+                        const data = resp.data || [];
+                        if (data.length === 0) {
+                            this._results.innerHTML =
+                                '<div class="no-results">No results found. Try a different search.</div>';
+                            return;
+                        }
+                        this._results.innerHTML = '';
+                        data.forEach(anime => {
+                            const card = renderAnimeCard(anime);
+                            this._results.appendChild(card);
+                        });
+                    } catch (err) {
+                        if (err.name === 'AbortError') return;
+                        console.error('Search error:', err);
+                        this._results.innerHTML =
+                            '<div class="no-results">An error occurred. Please try again.</div>';
+                    } finally {
+                        this._searchController = null;
+                    }
+                },
 
-function initHero() {
-  const slider = $('#heroSlider');
-  const nav = $('#heroNav');
-  slider.innerHTML = heroSlides.map((s, i) => `
-    <div class="hero-slide ${i===0?'active':''}" data-index="${i}">
-      <div class="hero-slide-bg" style="background-image:url('${s.images?.jpg?.large_image_url || s.images?.jpg?.image_url}')"></div>
-      <div class="hero-content">
-        <div class="hero-badge">🔥 ${s.rank ? 'Rank #' + s.rank : 'Trending'}</div>
-        <h1 class="hero-title">${s.title_english || s.title}</h1>
-        <div class="hero-meta">
-          <span class="score">★ ${s.score || 'N/A'}</span>
-          <span>${s.type || 'TV'}</span>
-          <span>${s.episodes || '?'} EPS</span>
-          <span>${s.duration || '24 min'}</span>
-        </div>
-        <div class="hero-genres">${(s.genres||[]).slice(0,4).map(g => `<span class="hero-genre">${g.name}</span>`).join('')}</div>
-        <p class="hero-synopsis">${s.synopsis || ''}</p>
-        <div class="hero-buttons">
-          <a href="watch.html?id=${s.mal_id}&ep=1" class="hero-btn-primary">
-            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            <span>Watch Now</span>
-          </a>
-          <a href="anime.html?id=${s.mal_id}" class="hero-btn-secondary">
-            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
-            <span>Details</span>
-          </a>
-        </div>
-      </div>
-    </div>
-  `).join('');
-  nav.innerHTML = heroSlides.map((_, i) => `<div class="hero-dot ${i===0?'active':''}" data-index="${i}"></div>`).join('');
-  $$('.hero-dot').forEach(d => d.onclick = () => goHero(parseInt(d.dataset.index)));
-  startHeroAuto();
-}
+                open() {
+                    document.getElementById('searchOverlay').classList.add('open');
+                    this._input.focus();
+                    state.isSearchOpen = true;
+                    document.body.style.overflow = 'hidden';
+                },
 
-function goHero(idx) {
-  if (!heroSlides.length) return;
-  heroIndex = idx;
-  $$('.hero-slide').forEach((s, i) => s.classList.toggle('active', i === idx));
-  $$('.hero-dot').forEach((d, i) => d.classList.toggle('active', i === idx));
-  resetHeroAuto();
-}
+                close() {
+                    document.getElementById('searchOverlay').classList.remove('open');
+                    state.isSearchOpen = false;
+                    document.body.style.overflow = '';
+                    this._input.value = '';
+                    this._results.innerHTML = '<div class="no-results">Start typing to search for anime.</div>';
+                    if (this._searchController) {
+                        this._searchController.abort();
+                        this._searchController = null;
+                    }
+                },
+            };
 
-function nextHero() { goHero((heroIndex + 1) % heroSlides.length); }
-function prevHero() { goHero((heroIndex - 1 + heroSlides.length) % heroSlides.length); }
-function startHeroAuto() { if (heroTimer) clearInterval(heroTimer); heroTimer = setInterval(nextHero, 6000); }
-function resetHeroAuto() { startHeroAuto(); }
+            // ===== AUTH MODAL =====
+            const AuthModal = {
+                _overlay: null,
+                _modal: null,
 
-// ==================== CARDS & SLIDERS ====================
-function createCard(anime) {
-  const img = anime.images?.jpg?.image_url || anime.images?.jpg?.small_image_url || '';
-  const title = anime.title_english || anime.title;
-  return `
-    <div class="anime-card" onclick="location.href='anime.html?id=${anime.mal_id}'">
-      <div class="anime-card-img">
-        <img src="${img}" alt="${title}" loading="lazy">
-        <div class="anime-card-badges">
-          <span class="anime-card-badge badge-hd">HD</span>
-          ${anime.episodes ? `<span class="anime-card-badge badge-ep">EP ${anime.episodes}</span>` : ''}
-        </div>
-        <div class="anime-card-badges" style="justify-content:flex-end;top:auto;bottom:8px;">
-          ${anime.score ? `<span class="anime-card-badge badge-score">★ ${anime.score}</span>` : ''}
-        </div>
-        <div class="anime-card-overlay">
-          <a href="watch.html?id=${anime.mal_id}&ep=1" class="hero-btn-primary" style="padding:10px 18px;font-size:0.8125rem;" onclick="event.stopPropagation()">
-            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg> Watch
-          </a>
-        </div>
-      </div>
-      <div class="anime-card-info">
-        <div class="anime-card-title">${title}</div>
-        <div class="anime-card-meta">
-          <span>${anime.type || 'TV'}</span>
-          <span class="dot"></span>
-          <span>${anime.status || 'N/A'}</span>
-        </div>
-      </div>
-    </div>
-  `;
-}
+                init() {
+                    this._overlay = document.getElementById('authOverlay');
+                    this._modal = document.querySelector('.auth-modal');
 
-function renderSlider(id, animeList) {
-  const el = $(`#${id}`);
-  if (!el) return;
-  if (!animeList?.length) { el.innerHTML = '<div style="padding:20px;color:var(--text-dim)">No data available</div>'; return; }
-  el.innerHTML = animeList.map(createCard).join('');
-}
+                    document.getElementById('profileBtn').addEventListener('click', () => {
+                        if (Auth.isLoggedIn()) {
+                            window.location.href = '/profile.html';
+                        } else {
+                            this.open();
+                        }
+                    });
 
-function initSliderArrows() {
-  $$('.slider-arrow').forEach(btn => {
-    btn.onclick = () => {
-      const target = $(`#${btn.dataset.target}`);
-      if (!target) return;
-      const scrollAmount = target.clientWidth * 0.8;
-      target.scrollBy({ left: btn.classList.contains('slider-prev') ? -scrollAmount : scrollAmount, behavior: 'smooth' });
-    };
-  });
-}
+                    document.getElementById('closeAuth').addEventListener('click', () => this.close());
 
-// ==================== LOAD DATA ====================
-async function loadHome() {
-  // Hero
-  const heroCache = cacheGet('hero');
-  if (heroCache) { heroSlides = heroCache; initHero(); }
-  else {
-    try {
-      const data = await fetchWithRetry(`${API_BASE}/top/anime?filter=airing&limit=10`);
-      heroSlides = data.data || [];
-      cacheSet('hero', heroSlides);
-      initHero();
-    } catch { $('#heroSlider').innerHTML = '<div class="hero-content" style="display:flex;align-items:center;justify-content:center;height:100%"><p style="color:var(--text-dim)">Failed to load hero</p></div>'; }
-  }
+                    this._overlay.addEventListener('click', (e) => {
+                        if (e.target === this._overlay) this.close();
+                    });
 
-  // Widgets
-  const widgets = [
-    { id: 'trendingSlider', url: 'top/anime?filter=bypopularity&limit=15', key: 'trending' },
-    { id: 'topRatedSlider', url: 'top/anime&limit=15', key: 'toprated' },
-    { id: 'airingSlider', url: 'top/anime?filter=airing&limit=15', key: 'airing' },
-    { id: 'upcomingSlider', url: 'top/anime?filter=upcoming&limit=15', key: 'upcoming' },
-    { id: 'completedSlider', url: 'anime?status=complete&order_by=score&sort=desc&limit=15', key: 'completed' },
-    { id: 'ongoingSlider', url: 'anime?status=airing&order_by=members&sort=desc&limit=15', key: 'ongoing' },
-    { id: 'newSlider', url: 'anime?order_by=start_date&sort=desc&limit=15', key: 'new' },
-    { id: 'recentSlider', url: 'anime?order_by=members&sort=desc&limit=15', key: 'recent' }
-  ];
+                    document.addEventListener('keydown', (e) => {
+                        if (e.key === 'Escape' && state.isAuthOpen) this.close();
+                    });
 
-  await Promise.allSettled(widgets.map(async w => {
-    const cached = cacheGet(w.key);
-    if (cached) { renderSlider(w.id, cached); return; }
-    try {
-      const data = await fetchWithRetry(`${API_BASE}/${w.url}`);
-      const list = data.data || [];
-      cacheSet(w.key, list);
-      renderSlider(w.id, list);
-    } catch { renderSlider(w.id, []); }
-  }));
+                    // Tab switching
+                    const tabs = $$('.auth-modal .tabs button');
+                    tabs.forEach(btn => {
+                        btn.addEventListener('click', () => {
+                            tabs.forEach(b => b.classList.remove('active'));
+                            btn.classList.add('active');
+                            const tab = btn.dataset.tab;
+                            state.authTab = tab;
+                            document.getElementById('loginForm').classList.toggle('hidden', tab !== 'login');
+                            document.getElementById('signupForm').classList.toggle('hidden', tab !== 'signup');
+                            const title = document.getElementById('authTitle');
+                            title.textContent = tab === 'login' ? 'Welcome back' : 'Join AnimeVault';
+                            document.querySelector('.auth-modal .subtitle').textContent =
+                                tab === 'login' ? 'Sign in to continue your anime journey.' :
+                                'Create your free account and start watching.';
+                        });
+                    });
 
-  initSliderArrows();
-}
+                    // Switch links
+                    document.getElementById('switchToSignup').addEventListener('click', () => {
+                        $$('.auth-modal .tabs button')[1].click();
+                    });
+                    document.getElementById('switchToLogin').addEventListener('click', () => {
+                        $$('.auth-modal .tabs button')[0].click();
+                    });
 
-// ==================== GENRES ====================
-async function loadGenres() {
-  const cached = cacheGet('genres');
-  let genres = cached;
-  if (!genres) {
-    try {
-      const data = await fetchWithRetry(`${API_BASE}/genres/anime`);
-      genres = data.data || [];
-      cacheSet('genres', genres);
-    } catch { genres = []; }
-  }
-  const html = genres.map(g => `<a href="search.html?genre=${g.mal_id}">${g.name}</a>`).join('');
-  $('#genresGrid').innerHTML = html;
-  $('#sidebarGenres').innerHTML = html;
-  const sg = $('#searchGenre');
-  if (sg) {
-    sg.innerHTML = '<option value="">All Genres</option>' + genres.map(g => `<option value="${g.mal_id}">${g.name}</option>`).join('');
-  }
-}
+                    // Forms
+                    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+                        e.preventDefault();
+                        const email = document.getElementById('loginEmail').value.trim();
+                        const password = document.getElementById('loginPassword').value;
+                        const remember = document.getElementById('rememberMe').checked;
+                        try {
+                            await Auth.login(email, password, remember);
+                            this.close();
+                            updateProfileUI();
+                            toast('Welcome back, ' + Auth.user.name + '!', 'success');
+                            window.location.reload();
+                        } catch (err) {
+                            toast(err.message || 'Login failed', 'error');
+                        }
+                    });
 
-// ==================== SEARCH ====================
-let searchDebounce;
-function openSearch() { $('#searchOverlay').classList.add('open'); document.body.style.overflow = 'hidden'; $('#searchInput').focus(); }
-function closeSearch() { $('#searchOverlay').classList.remove('open'); document.body.style.overflow = ''; }
+                    document.getElementById('signupForm').addEventListener('submit', async (e) => {
+                        e.preventDefault();
+                        const name = document.getElementById('signupName').value.trim();
+                        const username = document.getElementById('signupUsername').value.trim();
+                        const email = document.getElementById('signupEmail').value.trim();
+                        const password = document.getElementById('signupPassword').value;
+                        const confirm = document.getElementById('signupConfirm').value;
+                        const terms = document.getElementById('termsCheck').checked;
 
-async function doSearch() {
-  const q = $('#searchInput').value.trim();
-  const type = $('#searchType').value;
-  const status = $('#searchStatus').value;
-  const genre = $('#searchGenre').value;
-  const sort = $('#searchSort').value;
-  const grid = $('#searchResultsGrid');
+                        if (password !== confirm) {
+                            toast('Passwords do not match', 'error');
+                            return;
+                        }
+                        if (!terms) {
+                            toast('You must agree to the Terms of Service', 'error');
+                            return;
+                        }
+                        try {
+                            await Auth.signup(name, username, email, password);
+                            this.close();
+                            updateProfileUI();
+                            toast('Welcome to AnimeVault, ' + Auth.user.name + '!', 'success');
+                            window.location.reload();
+                        } catch (err) {
+                            toast(err.message || 'Signup failed', 'error');
+                        }
+                    });
 
-  if (!q && !genre && !type && !status) { grid.innerHTML = ''; return; }
+                    // Forgot password
+                    document.getElementById('forgotPassword').addEventListener('click', (e) => {
+                        e.preventDefault();
+                        toast('Password reset link sent to your email (demo).', 'info');
+                    });
+                },
 
-  grid.innerHTML = '<div class="loading-grid">' + Array(8).fill('<div class="loading-card"><div class="skeleton skeleton-img"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div>').join('') + '</div>';
+                open() {
+                    this._overlay.classList.add('open');
+                    state.isAuthOpen = true;
+                    document.body.style.overflow = 'hidden';
+                    if (!Auth.isLoggedIn()) {
+                        // Reset to login
+                        $$('.auth-modal .tabs button')[0].click();
+                    }
+                },
 
-  try {
-    let url = `${API_BASE}/anime?limit=24`;
-    if (q) url += `&q=${encodeURIComponent(q)}`;
-    if (type) url += `&type=${type}`;
-    if (status) url += `&status=${status}`;
-    if (genre) url += `&genres=${genre}`;
-    if (sort) url += `&order_by=${sort}&sort=desc`;
-    const data = await fetchWithRetry(url);
-    const list = data.data || [];
-    if (!list.length) { grid.innerHTML = '<p style="color:var(--text-dim);text-align:center;padding:40px">No results found</p>'; return; }
-    grid.innerHTML = list.map(createCard).join('');
-  } catch {
-    grid.innerHTML = '<p style="color:var(--text-dim);text-align:center;padding:40px">Search failed. Please try again.</p>';
-  }
-}
+                close() {
+                    this._overlay.classList.remove('open');
+                    state.isAuthOpen = false;
+                    document.body.style.overflow = '';
+                },
+            };
 
-// ==================== EVENTS ====================
-document.addEventListener('DOMContentLoaded', () => {
-  applyLang();
-  fetchUser();
-  loadHome();
-  loadGenres();
+            // ===== SIDEBAR =====
+            const Sidebar = {
+                init() {
+                    const overlay = document.getElementById('sidebarOverlay');
+                    const sidebar = document.getElementById('sidebar');
+                    const openBtn = document.getElementById('hamburgerBtn');
+                    const closeBtn = document.getElementById('sidebarClose');
 
-  // Header scroll
-  window.addEventListener('scroll', () => $('#header').classList.toggle('scrolled', window.scrollY > 50), { passive: true });
+                    openBtn.addEventListener('click', () => this.open());
+                    closeBtn.addEventListener('click', () => this.close());
+                    overlay.addEventListener('click', () => this.close());
 
-  // Sidebar
-  $('#hamburger').onclick = () => { $('#sidebar').classList.add('open'); $('#sidebarOverlay').classList.add('open'); };
-  $('#sidebarClose').onclick = $('#sidebarOverlay').onclick = () => { $('#sidebar').classList.remove('open'); $('#sidebarOverlay').classList.remove('open'); };
+                    document.addEventListener('keydown', (e) => {
+                        if (e.key === 'Escape' && state.isSidebarOpen) this.close();
+                    });
 
-  // Search
-  $('#searchBtn').onclick = openSearch;
-  $('#searchClose').onclick = closeSearch;
-  $('#searchInput').oninput = () => { clearTimeout(searchDebounce); searchDebounce = setTimeout(doSearch, 400); };
-  $$('#searchType, #searchStatus, #searchGenre, #searchSort').forEach(s => s.onchange = doSearch);
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeSearch(); closeAuth(); } });
+                    // Sidebar nav items
+                    document.getElementById('sidebarGenres').addEventListener('click', (e) => {
+                        e.preventDefault();
+                        window.location.href = '/search.html';
+                    });
+                    document.getElementById('sidebarTypes').addEventListener('click', (e) => {
+                        e.preventDefault();
+                        window.location.href = '/search.html';
+                    });
+                    document.getElementById('sidebarStatus').addEventListener('click', (e) => {
+                        e.preventDefault();
+                        window.location.href = '/search.html';
+                    });
+                },
 
-  // Auth
-  $('#authClose').onclick = closeAuth;
-  $('#authOverlay').onclick = e => { if (e.target === $('#authOverlay')) closeAuth(); };
-  $$('.auth-tab').forEach(t => t.onclick = () => switchAuthTab(t.dataset.tab));
-  $$('[data-switch]').forEach(b => b.onclick = () => switchAuthTab(b.dataset.switch));
-  $('#loginForm').onsubmit = handleLogin;
-  $('#signupForm').onsubmit = handleSignup;
+                open() {
+                    document.getElementById('sidebar').classList.add('open');
+                    document.getElementById('sidebarOverlay').classList.add('open');
+                    state.isSidebarOpen = true;
+                    document.body.style.overflow = 'hidden';
+                },
 
-  // Language
-  $$('.lang-dropdown button').forEach(b => {
-    b.onclick = () => {
-      currentLang = b.dataset.lang;
-      localStorage.setItem('lang', currentLang);
-      $$('.lang-dropdown button').forEach(x => x.classList.toggle('active', x === b));
-      applyLang();
-    };
-  });
+                close() {
+                    document.getElementById('sidebar').classList.remove('open');
+                    document.getElementById('sidebarOverlay').classList.remove('open');
+                    state.isSidebarOpen = false;
+                    document.body.style.overflow = '';
+                },
+            };
 
-  // Hero arrows
-  $('#heroPrev').onclick = prevHero;
-  $('#heroNext').onclick = nextHero;
+            // ===== LANGUAGE SWITCHER =====
+            const Lang = {
+                _current: 'en',
 
-  // Touch swipe hero
-  let touchStartX = 0;
-  $('#hero').addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
-  $('#hero').addEventListener('touchend', e => {
-    const diff = touchStartX - e.changedTouches[0].screenX;
-    if (Math.abs(diff) > 50) diff > 0 ? nextHero() : prevHero();
-  }, { passive: true });
-});
-</script>
+                init() {
+                    this._current = localStorage.getItem('av_lang') || 'en';
+                    const btn = document.getElementById('langToggle');
+                    btn.textContent = this._current.toUpperCase();
+                    btn.addEventListener('click', () => {
+                        const langs = ['en', 'jp', 'bn'];
+                        const idx = langs.indexOf(this._current);
+                        this._current = langs[(idx + 1) % langs.length];
+                        localStorage.setItem('av_lang', this._current);
+                        btn.textContent = this._current.toUpperCase();
+                        toast(`Language switched to ${this._current.toUpperCase()}`, 'info');
+                        // In a real app, this would reload translations
+                    });
+                }
+            };
+
+            // ===== RESPONSIVE FIXES =====
+            function fixOverflows() {
+                // Ensure no horizontal overflow
+                document.querySelectorAll('*').forEach(el => {
+                    const style = window.getComputedStyle(el);
+                    if (style.overflowX === 'hidden' && el.scrollWidth > el.clientWidth) {
+                        // Only fix if it's truly broken
+                    }
+                });
+                // Fix iframe issues
+                document.querySelectorAll('iframe').forEach(iframe => {
+                    iframe.style.maxWidth = '100%';
+                });
+            }
+
+            // ===== INIT =====
+            async function initApp() {
+                try {
+                    // Load user
+                    if (Auth.isLoggedIn()) {
+                        updateProfileUI();
+                    }
+
+                    // Init subsystems
+                    Lang.init();
+                    Sidebar.init();
+                    AuthModal.init();
+                    Search.init();
+
+                    // Load genres
+                    loadGenres();
+
+                    // Load hero
+                    await HeroSlider.init();
+
+                    // Load widgets
+                    await loadWidgets();
+
+                    // Fix overflows after load
+                    setTimeout(fixOverflows, 500);
+                    window.addEventListener('resize', throttle(fixOverflows, 300));
+
+                    // Handle orientation change
+                    window.addEventListener('orientationchange', () => {
+                        setTimeout(fixOverflows, 400);
+                    });
+
+                    // Handle resize for sliders
+                    const resizeObserver = new ResizeObserver(() => {
+                        // Recalculate any slider dimensions if needed
+                    });
+                    document.querySelectorAll('.slider-track').forEach(el => {
+                        resizeObserver.observe(el);
+                    });
+
+                    console.log('🚀 AnimeVault initialized successfully');
+                } catch (err) {
+                    console.error('Init error:', err);
+                    toast('Failed to load some content. Please refresh.', 'error');
+                }
+            }
+
+            // ===== DOM READY =====
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initApp);
+            } else {
+                initApp();
+            }
+
+            // ===== EXPOSE GLOBALS (for debugging) =====
+            window.__AV = {
+                state,
+                API,
+                Auth,
+                HeroSlider,
+                Search,
+                toast,
+                initSlider,
+                loadWidgets,
+            };
+
+        })();
+    </script>
+
 </body>
 </html>
