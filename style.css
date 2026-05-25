@@ -1,0 +1,287 @@
+<style>
+  :root {
+    --bg-primary: #06060a;
+    --bg-secondary: #0c0c14;
+    --bg-tertiary: #121220;
+    --accent: #8b5cf6;
+    --accent-glow: rgba(139, 92, 246, 0.4);
+    --accent-light: #a78bfa;
+    --text-primary: #f3f4f6;
+    --text-secondary: #9ca3af;
+    --text-muted: #6b7280;
+    --glass: rgba(12, 12, 20, 0.75);
+    --glass-border: rgba(255, 255, 255, 0.06);
+    --glass-accent: rgba(139, 92, 246, 0.15);
+    --radius-sm: 6px;
+    --radius-md: 12px;
+    --radius-lg: 20px;
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --font: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+
+  /* Reset & Layout Safeguards */
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html, body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: var(--font);
+    overflow-x: hidden;
+    max-width: 100%;
+    min-height: 100vh;
+    scroll-behavior: smooth;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    color: inherit;
+  }
+
+  /* Scrollbar Aesthetics */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--bg-primary);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-sm);
+    border: 2px solid var(--bg-primary);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--accent);
+  }
+
+  /* Typography Fluid scaling */
+  h1 { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 800; line-height: 1.1; }
+  h2 { font-size: clamp(1.5rem, 3vw, 2.2rem); font-weight: 700; }
+  h3 { font-size: clamp(1.1rem, 2vw, 1.4rem); font-weight: 600; }
+  p { color: var(--text-secondary); line-height: 1.6; }
+
+  /* Interactive Elements */
+  .btn-premium {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--accent);
+    color: #fff;
+    padding: 0.75rem 1.75rem;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    box-shadow: 0 4px 14px var(--accent-glow);
+    transition: var(--transition);
+  }
+  .btn-premium:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px var(--accent);
+    background: var(--accent-light);
+  }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--glass-border);
+    color: var(--text-primary);
+    padding: 0.75rem 1.75rem;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    transition: var(--transition);
+  }
+  .btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+
+  /* Skeleton Loading State styling */
+  .skeleton {
+    background: linear-gradient(90deg, var(--bg-secondary) 25%, var(--bg-tertiary) 50%, var(--bg-secondary) 75%);
+    background-size: 200% 100%;
+    animation: loadingPulse 1.5s infinite;
+    border-radius: var(--radius-md);
+  }
+  @keyframes loadingPulse {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  /* Modern Glassmorphic Header navigation */
+  header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 70px;
+    background: var(--glass);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--glass-border);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 4%;
+    transition: var(--transition);
+  }
+  header.scrolled {
+    background: var(--bg-primary);
+    height: 60px;
+  }
+
+  .logo-area {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-weight: 800;
+    font-size: 1.5rem;
+    color: #fff;
+    letter-spacing: -0.5px;
+  }
+  .logo-area span {
+    color: var(--accent);
+  }
+
+  .nav-menu {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+  .nav-item {
+    font-weight: 500;
+    color: var(--text-secondary);
+    transition: var(--transition);
+    position: relative;
+    padding: 0.5rem 0;
+  }
+  .nav-item:hover, .nav-item.active {
+    color: var(--accent-light);
+  }
+  .nav-item::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--accent);
+    transition: var(--transition);
+  }
+  .nav-item:hover::after, .nav-item.active::after {
+    width: 100%;
+  }
+
+  /* Global Container layout specifications */
+  main {
+    padding-top: 90px;
+    min-height: calc(100vh - 150px);
+  }
+
+  /* Dynamic Multi-column Grid */
+  .anime-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1.5rem;
+    padding: 2rem 4%;
+  }
+
+  @media(max-width: 768px) {
+    .anime-grid {
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 1rem;
+    }
+  }
+
+  /* Premium Card Design System */
+  .anime-card {
+    position: relative;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: var(--bg-secondary);
+    border: 1px solid var(--glass-border);
+    transition: var(--transition);
+    aspect-ratio: 2/3;
+    cursor: pointer;
+  }
+  .anime-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: var(--transition);
+  }
+  .anime-card:hover {
+    transform: translateY(-8px) scale(1.03);
+    border-color: var(--accent);
+    box-shadow: 0 10px 25px rgba(139, 92, 246, 0.25);
+  }
+  .anime-card:hover img {
+    filter: brightness(0.7);
+  }
+  .anime-card-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(6, 6, 10, 0.95) 20%, rgba(6, 6, 10, 0.2) 60%, transparent);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 1rem;
+    opacity: 0;
+    transition: var(--transition);
+  }
+  .anime-card:hover .anime-card-overlay {
+    opacity: 1;
+  }
+  .anime-card-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 0.4rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .anime-card-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+  }
+  .score-badge {
+    background: var(--accent);
+    color: #fff;
+    padding: 0.2rem 0.5rem;
+    border-radius: var(--radius-sm);
+    font-weight: 700;
+    font-size: 0.75rem;
+  }
+
+  /* Premium Footer styling */
+  footer {
+    border-top: 1px solid var(--glass-border);
+    padding: 2.5rem 4%;
+    background: var(--bg-secondary);
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+  .disclaimer {
+    margin-top: 1rem;
+    color: rgba(255, 255, 255, 0.25);
+    font-style: italic;
+  }
+</style>
