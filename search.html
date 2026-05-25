@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search — NexStream</title>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { overflow-x: hidden; max-width: 100%; min-height: 100dvh; }
+    body {
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      background: #0a0a0f; color: #e2e8f0;
+    }
+    a { text-decoration: none; color: inherit; }
+    button { border: none; background: none; cursor: pointer; font-family: inherit; color: inherit; }
+    img { max-width: 100%; display: block; }
+    
+    :root {
+      --primary: #8b5cf6; --primary-light: #a855f7;
+      --bg-deep: #0a0a0f; --bg-surface: #13131f; --bg-elevated: #1a1a2e;
+      --text-primary: #f1f5f9; --text-secondary: #94a3b8; --text-muted: #64748b;
+      --border: rgba(255,255,255,0.08);
+      --radius-md: 12px; --radius-lg: 16px;
+      --transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+    }
+    
+    .header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      background: rgba(10,10,15,0.95); backdrop-filter: blur(20px);
+      padding: 0 4vw; height: 70px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .logo { font-size: 1.4rem; font-weight: 800; background: linear-gradient(135deg, var(--primary), var(--primary-light)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .icon-btn { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: var(--bg-elevated); border: 1px solid var(--border); color: var(--text-secondary); transition: var(--transition); }
+    .icon-btn:hover { background: var(--primary); color: white; }
+    
+    .search-hero {
+      padding: 100px 4vw 2rem;
+      max-width: 1000px; margin: 0 auto;
+    }
+    .search-box {
+      position: relative;
+      margin-bottom: 1.5rem;
+    }
+    .search-input {
+      width: 100%;
+      background: var(--bg-elevated);
+      border: 2px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem 1.5rem 1.25rem 3.5rem;
+      font-size: 1.1rem;
+      color: var(--text-primary);
+      outline: none;
+      transition: var(--transition);
+    }
+    .search-input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(139,92,246,0.2); }
+    .search-icon { position: absolute; left: 1.25rem; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
+    
+    .filters {
+      display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 2rem;
+    }
+    .filter-chip {
+      padding: 0.5rem 1rem;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      transition: var(--transition);
+      cursor: pointer;
+    }
+    .filter-chip:hover, .filter-chip.active { background: var(--primary); color: white; border-color: var(--primary); }
+    
+    .results-grid {
+      padding: 0 4vw 4rem;
+      max-width: 1000px; margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 1.25rem;
+    }
+    .result-card {
+      background: var(--bg-surface);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      border: 1px solid var(--border);
+      transition: var(--transition);
+    }
+    .result-card:hover { transform: translateY(-4px); border-color: var(--primary); }
+    .result-card img { width: 100%; aspect-ratio: 3/4; object-fit: cover; }
+    .result-info { padding: 0.875rem; }
+    .result-title { font-size: 0.9rem; font-weight: 600; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .result-meta { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.35rem; }
+    
+    @media (max-width: 768px) {
+      .header { padding: 0 1rem; }
+      .search-hero { padding: 90px 1rem 1.5rem; }
+      .results-grid { padding: 0 1rem 3rem; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <div style="display:flex;align-items:center;gap:1rem;">
+      <button class="icon-btn" onclick="history.back()">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"/></svg>
+      </button>
+      <a href="index.html" class="logo">NexStream</a>
+    </div>
+  </header>
+
+  <div class="search-hero">
+    <div class="search-box">
+      <svg class="search-icon" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
+      <input type="text" class="search-input" id="searchInput" placeholder="Search anime..." autocomplete="off">
+    </div>
+    <div class="filters">
+      <button class="filter-chip active" data-type="">All</button>
+      <button class="filter-chip" data-type="tv">TV</button>
+      <button class="filter-chip" data-type="movie">Movie</button>
+      <button class="filter-chip" data-type="ova">OVA</button>
+      <button class="filter-chip" data-type="ona">ONA</button>
+      <button class="filter-chip" data-type="special">Special</button>
+    </div>
+  </div>
+
+  <div class="results-grid" id="resultsGrid"></div>
+
+  <script>
+    const CONFIG = { API_BASE: 'https://api.jikan.moe/v4' };
+    let currentType = '';
+    let debounceTimer;
+
+    function getQuery() {
+      return new URLSearchParams(window.location.search).get('q') || '';
+    }
+
+    function getGenre() {
+      return new URLSearchParams(window.location.search).get('genre') || '';
+    }
+
+    async function search(query, type = '') {
+      if (!query && !getGenre()) {
+        $('#resultsGrid').innerHTML = '<p style="color:var(--text-muted);padding:2rem;text-align:center;">Enter a search term or select a genre.</p>';
+        return;
+      }
+      
+      $('#resultsGrid').innerHTML = '<p style="color:var(--text-muted);padding:2rem;text-align:center;">Searching...</p>';
+      
+      try {
+        let url = `${CONFIG.API_BASE}/anime?limit=24`;
+        if (query) url += `&q=${encodeURIComponent(query)}`;
+        if (type) url += `&type=${type}`;
+        if (getGenre()) url += `&genres=${getGenre()}`;
+        
+        const res = await fetch(url);
+        const data = await res.json();
+        const items = data.data || [];
+        
+        if (!items.length) {
+          $('#resultsGrid').innerHTML = '<p style="color:var(--text-muted);padding:2rem;text-align:center;">No results found.</p>';
+          return;
+        }
+        
+        $('#resultsGrid').innerHTML = items.map(anime => `
+          <a href="anime.html?id=${anime.mal_id}" class="result-card">
+            <img src="${anime.images?.webp?.image_url || ''}" alt="${anime.title}" loading="lazy">
+            <div class="result-info">
+              <div class="result-title">${anime.title_english || anime.title}</div>
+              <div class="result-meta">${anime.type || 'TV'} · ${anime.score ? `★ ${anime.score}` : 'N/A'} · ${anime.episodes || '?'} eps</div>
+            </div>
+          </a>
+        `).join('');
+      } catch (err) {
+        $('#resultsGrid').innerHTML = '<p style="color:var(--text-muted);padding:2rem;text-align:center;">Search failed.</p>';
+      }
+    }
+
+    $('#searchInput').value = getQuery();
+    $('#searchInput').addEventListener('input', (e) => {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => search(e.target.value, currentType), 300);
+    });
+
+    $$('.filter-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        $$('.filter-chip').forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        currentType = chip.dataset.type;
+        search($('#searchInput').value, currentType);
+      });
+    });
+
+    function $(sel) { return document.querySelector(sel); }
+    function $$(sel) { return document.querySelectorAll(sel); }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      search(getQuery(), currentType);
+    });
+  </script>
+</body>
+</html>
