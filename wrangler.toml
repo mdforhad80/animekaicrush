@@ -1,15 +1,28 @@
-name = "animekai-backend"
+name = "animestream-platform"
 main = "worker.js"
-compatibility_date = "2024-03-01"
+compatibility_date = "2024-01-01"
 
-[vars]
-JWT_SECRET = "N6wY9cS8gV8m7P3kQ4xD0vR1sL2zB9fJt6nE5hM8aK1qW3yU7pC4dF2gH9jL0mN"
-
+# D1 Database Binding
 [[d1_databases]]
 binding = "DB"
 database_name = "alnuraraf_sql_d1"
 database_id = "be7e97d9-b7ee-449c-9de5-7468fd570d92"
 
-[assets]
-directory = "./public"
-binding = "ASSETS"
+# KV Namespace (optional, for caching)
+[[kv_namespaces]]
+binding = "CACHE"
+id = "48972b70ce694c159bee7476b58910f7"
+
+# Environment Variables
+[vars]
+JWT_SECRET = "your-super-secret-jwt-key-change-this-in-production"
+API_RATE_LIMIT = "100"
+
+# Production environment
+[env.production]
+name = "animestream-platform-prod"
+
+[[env.production.d1_databases]]
+binding = "DB"
+database_name = "animestream-db-prod"
+database_id = "your-production-database-id"
