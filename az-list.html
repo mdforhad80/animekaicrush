@@ -3,524 +3,581 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="description" content="Browse anime alphabetically from A to Z.">
+<meta name="description" content="Browse anime A-Z - Premium anime streaming">
 <title>A-Z List - AnimeStream</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-:root{
-  --bg-primary:#07070b;--bg-secondary:#0f0f1a;--bg-card:#16162a;--bg-glass:rgba(22,22,42,0.85);
-  --accent:#8b5cf6;--accent-glow:#a78bfa;--accent-dim:#6d28d9;
-  --text-primary:#f8fafc;--text-secondary:#94a3b8;--text-muted:#64748b;
-  --border:rgba(139,92,246,0.15);--border-glow:rgba(139,92,246,0.4);
-  --success:#22c55e;--error:#ef4444;
-  --radius-sm:8px;--radius-md:12px;--radius-lg:16px;
-  --shadow-sm:0 2px 8px rgba(0,0,0,0.3);--shadow-md:0 8px 24px rgba(0,0,0,0.4);
-  --transition-fast:0.15s ease;--transition-base:0.3s ease;
-  --header-height:64px;
+
+:root {
+  --bg-primary: #0a0a0f;
+  --bg-secondary: #12121a;
+  --bg-card: #1a1a2e;
+  --bg-glass: rgba(26, 26, 46, 0.7);
+  --accent: #8b5cf6;
+  --accent-light: #a78bfa;
+  --accent-dark: #6d28d9;
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --border: rgba(139, 92, 246, 0.15);
+  --border-hover: rgba(139, 92, 246, 0.3);
+  --shadow-glow: 0 0 40px rgba(139, 92, 246, 0.15);
+  --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.4);
+  --radius: 12px;
+  --radius-sm: 8px;
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --header-height: 70px;
 }
-html,body{overflow-x:hidden;max-width:100%;min-height:100dvh}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;background:var(--bg-primary);color:var(--text-primary);line-height:1.5;-webkit-font-smoothing:antialiased}
-a{color:inherit;text-decoration:none}
-button{border:none;background:none;cursor:pointer;font-family:inherit;color:inherit}
-img{max-width:100%;display:block}
-ul{list-style:none}
-::-webkit-scrollbar{width:6px;height:6px}
-::-webkit-scrollbar-track{background:var(--bg-primary)}
-::-webkit-scrollbar-thumb{background:var(--accent-dim);border-radius:3px}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { overflow-x: hidden; max-width: 100%; background: var(--bg-primary); color: var(--text-primary); font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+body { min-height: 100vh; position: relative; }
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--bg-primary); }
+::-webkit-scrollbar-thumb { background: var(--accent-dark); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+.header { position: fixed; top: 0; left: 0; right: 0; height: var(--header-height); background: rgba(10, 10, 15, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; transition: var(--transition); }
+.header.scrolled { background: rgba(10, 10, 15, 0.95); box-shadow: 0 4px 30px rgba(0,0,0,0.3); }
+.header-left, .header-right { display: flex; align-items: center; gap: 16px; }
+.logo { font-size: 1.5rem; font-weight: 800; background: linear-gradient(135deg, var(--accent-light), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; letter-spacing: -0.5px; }
+.logo span { color: var(--text-primary); -webkit-text-fill-color: var(--text-primary); }
+.hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 8px; background: none; border: none; }
+.hamburger span { display: block; width: 24px; height: 2px; background: var(--text-primary); border-radius: 2px; transition: var(--transition); }
+.nav { display: flex; align-items: center; gap: 4px; }
+.nav-item { position: relative; padding: 8px 14px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; font-weight: 500; border-radius: var(--radius-sm); transition: var(--transition); cursor: pointer; background: none; border: none; white-space: nowrap; }
+.nav-item:hover, .nav-item.active { color: var(--text-primary); background: rgba(139, 92, 246, 0.1); }
+.mega-menu { position: absolute; top: calc(100% + 8px); left: 50%; transform: translateX(-50%) translateY(-10px); background: var(--bg-glass); backdrop-filter: blur(24px); border: 1px solid var(--border-hover); border-radius: var(--radius); padding: 20px; min-width: 320px; max-width: 90vw; opacity: 0; visibility: hidden; transition: all 0.25s ease; z-index: 1001; box-shadow: var(--shadow-glow); }
+.nav-item:hover .mega-menu, .nav-item:focus-within .mega-menu { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
+.mega-menu-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.mega-menu-item { padding: 8px 12px; color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; border-radius: var(--radius-sm); transition: var(--transition); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mega-menu-item:hover { background: rgba(139, 92, 246, 0.15); color: var(--text-primary); }
+.mega-menu-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--accent-light); margin-bottom: 12px; font-weight: 600; }
+.header-btn { width: 40px; height: 40px; border-radius: 50%; background: rgba(139, 92, 246, 0.1); border: 1px solid var(--border); color: var(--text-primary); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: var(--transition); font-size: 1.1rem; }
+.header-btn:hover { background: rgba(139, 92, 246, 0.2); border-color: var(--accent); transform: scale(1.05); }
+.lang-dropdown { position: relative; }
+.lang-menu { position: absolute; top: calc(100% + 8px); right: 0; background: var(--bg-glass); backdrop-filter: blur(24px); border: 1px solid var(--border-hover); border-radius: var(--radius); padding: 8px; min-width: 120px; opacity: 0; visibility: hidden; transition: all 0.2s ease; z-index: 1001; }
+.lang-dropdown:hover .lang-menu, .lang-dropdown:focus-within .lang-menu { opacity: 1; visibility: visible; }
+.lang-option { display: block; width: 100%; padding: 8px 12px; color: var(--text-secondary); background: none; border: none; text-align: left; cursor: pointer; border-radius: var(--radius-sm); font-size: 0.9rem; transition: var(--transition); }
+.lang-option:hover, .lang-option.active { background: rgba(139, 92, 246, 0.15); color: var(--text-primary); }
+.sidebar-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); z-index: 2000; opacity: 0; visibility: hidden; transition: var(--transition); }
+.sidebar-overlay.active { opacity: 1; visibility: visible; }
+.sidebar { position: fixed; top: 0; left: 0; width: 280px; max-width: 85vw; height: 100vh; background: var(--bg-secondary); border-right: 1px solid var(--border); z-index: 2001; transform: translateX(-100%); transition: transform 0.3s ease; overflow-y: auto; padding: 24px; }
+.sidebar.active { transform: translateX(0); }
+.sidebar-close { position: absolute; top: 16px; right: 16px; width: 36px; height: 36px; border-radius: 50%; background: rgba(139, 92, 246, 0.1); border: 1px solid var(--border); color: var(--text-primary); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1.2rem; }
+.sidebar-nav { margin-top: 48px; display: flex; flex-direction: column; gap: 4px; }
+.sidebar-nav a { padding: 12px 16px; color: var(--text-secondary); text-decoration: none; border-radius: var(--radius-sm); font-weight: 500; transition: var(--transition); display: flex; align-items: center; gap: 12px; }
+.sidebar-nav a:hover, .sidebar-nav a.active { background: rgba(139, 92, 246, 0.1); color: var(--text-primary); }
+.sidebar-section { margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--border); }
+.sidebar-section-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--accent-light); margin-bottom: 12px; font-weight: 600; }
+.sidebar-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+.sidebar-grid a { padding: 8px 10px; color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; border-radius: var(--radius-sm); transition: var(--transition); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sidebar-grid a:hover { background: rgba(139, 92, 246, 0.15); color: var(--text-primary); }
+.search-overlay { position: fixed; inset: 0; background: rgba(10, 10, 15, 0.95); backdrop-filter: blur(20px); z-index: 1500; opacity: 0; visibility: hidden; transition: var(--transition); display: flex; flex-direction: column; padding: 80px 24px 24px; }
+.search-overlay.active { opacity: 1; visibility: visible; }
+.search-container { max-width: 800px; width: 100%; margin: 0 auto; }
+.search-input-wrap { position: relative; margin-bottom: 24px; }
+.search-input { width: 100%; padding: 16px 24px 16px 56px; background: var(--bg-card); border: 2px solid var(--border); border-radius: var(--radius); color: var(--text-primary); font-size: 1.1rem; outline: none; transition: var(--transition); }
+.search-input:focus { border-color: var(--accent); box-shadow: 0 0 20px rgba(139, 92, 246, 0.2); }
+.search-input::placeholder { color: var(--text-muted); }
+.search-icon { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 1.2rem; }
+.search-filters { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 24px; }
+.search-filter { padding: 8px 16px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px; color: var(--text-secondary); font-size: 0.85rem; cursor: pointer; transition: var(--transition); appearance: none; }
+.search-filter:hover, .search-filter:focus { border-color: var(--accent); color: var(--text-primary); }
+.search-results { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 16px; overflow-y: auto; max-height: calc(100vh - 280px); padding-right: 8px; }
+.search-suggestions { background: var(--bg-card); border-radius: var(--radius); border: 1px solid var(--border); overflow: hidden; }
+.suggestion-item { padding: 12px 20px; color: var(--text-secondary); cursor: pointer; transition: var(--transition); border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; }
+.suggestion-item:last-child { border-bottom: none; }
+.suggestion-item:hover { background: rgba(139, 92, 246, 0.1); color: var(--text-primary); }
+.auth-overlay { position: fixed; inset: 0; background: rgba(10, 10, 15, 0.85); backdrop-filter: blur(16px); z-index: 3000; opacity: 0; visibility: hidden; transition: var(--transition); display: flex; align-items: center; justify-content: center; padding: 24px; }
+.auth-overlay.active { opacity: 1; visibility: visible; }
+.auth-modal { background: var(--bg-glass); backdrop-filter: blur(24px); border: 1px solid var(--border-hover); border-radius: var(--radius); width: 100%; max-width: 420px; padding: 40px; position: relative; box-shadow: var(--shadow-glow); transform: scale(0.95); transition: transform 0.3s ease; }
+.auth-overlay.active .auth-modal { transform: scale(1); }
+.auth-close { position: absolute; top: 16px; right: 16px; width: 36px; height: 36px; border-radius: 50%; background: rgba(139, 92, 246, 0.1); border: 1px solid var(--border); color: var(--text-primary); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1.2rem; transition: var(--transition); }
+.auth-close:hover { background: rgba(139, 92, 246, 0.2); transform: rotate(90deg); }
+.auth-tabs { display: flex; gap: 8px; margin-bottom: 32px; border-bottom: 1px solid var(--border); }
+.auth-tab { padding: 12px 20px; background: none; border: none; color: var(--text-muted); font-size: 1rem; font-weight: 600; cursor: pointer; transition: var(--transition); position: relative; }
+.auth-tab.active { color: var(--accent-light); }
+.auth-tab.active::after { content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 2px; background: var(--accent); border-radius: 2px; }
+.auth-form { display: none; flex-direction: column; gap: 16px; }
+.auth-form.active { display: flex; }
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-label { font-size: 0.85rem; color: var(--text-secondary); font-weight: 500; }
+.form-input { padding: 12px 16px; background: rgba(139, 92, 246, 0.05); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text-primary); font-size: 0.95rem; outline: none; transition: var(--transition); width: 100%; }
+.form-input:focus { border-color: var(--accent); background: rgba(139, 92, 246, 0.1); box-shadow: 0 0 12px rgba(139, 92, 246, 0.1); }
+.form-input::placeholder { color: var(--text-muted); }
+.form-check { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: var(--text-secondary); cursor: pointer; }
+.form-check input { width: 18px; height: 18px; accent-color: var(--accent); cursor: pointer; }
+.auth-btn { padding: 14px; background: linear-gradient(135deg, var(--accent), var(--accent-dark)); border: none; border-radius: var(--radius-sm); color: white; font-size: 1rem; font-weight: 600; cursor: pointer; transition: var(--transition); margin-top: 8px; }
+.auth-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(139, 92, 246, 0.3); }
+.auth-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+.auth-link { text-align: center; color: var(--text-muted); font-size: 0.9rem; }
+.auth-link a { color: var(--accent-light); text-decoration: none; font-weight: 500; cursor: pointer; }
+.auth-link a:hover { text-decoration: underline; }
+.auth-divider { display: flex; align-items: center; gap: 16px; color: var(--text-muted); font-size: 0.85rem; margin: 8px 0; }
+.auth-divider::before, .auth-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.social-btns { display: flex; gap: 12px; }
+.social-btn { flex: 1; padding: 10px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text-secondary); font-size: 1.2rem; cursor: pointer; transition: var(--transition); display: flex; align-items: center; justify-content: center; }
+.social-btn:hover { border-color: var(--accent); color: var(--text-primary); background: rgba(139, 92, 246, 0.1); }
+.anime-card { position: relative; border-radius: var(--radius-sm); overflow: hidden; background: var(--bg-card); cursor: pointer; transition: var(--transition); aspect-ratio: 2/3; display: block; text-decoration: none; }
+.anime-card:hover { transform: translateY(-8px) scale(1.02); box-shadow: var(--shadow-glow); z-index: 10; }
+.anime-card-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+.anime-card:hover .anime-card-img { transform: scale(1.1); }
+.anime-card-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(10,10,15,0.95) 0%, rgba(10,10,15,0.3) 50%, transparent 100%); display: flex; flex-direction: column; justify-content: flex-end; padding: 12px; opacity: 0; transition: opacity 0.3s ease; }
+.anime-card:hover .anime-card-overlay { opacity: 1; }
+.anime-card-badges { position: absolute; top: 8px; left: 8px; display: flex; flex-wrap: wrap; gap: 4px; z-index: 2; }
+.badge { padding: 4px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+.badge-score { background: rgba(234, 179, 8, 0.9); color: #000; }
+.badge-ep { background: rgba(139, 92, 246, 0.9); color: white; }
+.badge-hd { background: rgba(34, 197, 94, 0.9); color: white; }
+.badge-type { background: rgba(59, 130, 246, 0.9); color: white; }
+.anime-card-title { font-size: 0.85rem; font-weight: 600; color: var(--text-primary); line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.anime-card-meta { font-size: 0.75rem; color: var(--text-muted); margin-top: 4px; }
+.section { padding: 40px 24px; max-width: 1400px; margin: 0 auto; }
+.section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+.section-title { font-size: clamp(1.2rem, 2vw, 1.5rem); font-weight: 700; display: flex; align-items: center; gap: 12px; }
+.section-title::before { content: ''; width: 4px; height: 24px; background: linear-gradient(to bottom, var(--accent), var(--accent-dark)); border-radius: 2px; }
+.section-nav { display: flex; gap: 8px; }
+.section-nav-btn { width: 36px; height: 36px; border-radius: 50%; background: var(--bg-card); border: 1px solid var(--border); color: var(--text-secondary); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: var(--transition); font-size: 1rem; }
+.section-nav-btn:hover { background: var(--accent); color: white; border-color: var(--accent); }
+.slider-container { position: relative; overflow: hidden; }
+.slider-track { display: flex; gap: 16px; transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); will-change: transform; }
+.slider-item { flex: 0 0 auto; width: clamp(140px, 18vw, 200px); }
+.skeleton { background: linear-gradient(90deg, var(--bg-card) 25%, var(--bg-secondary) 50%, var(--bg-card) 75%); background-size: 200% 100%; animation: skeleton 1.5s infinite; border-radius: var(--radius-sm); }
+@keyframes skeleton { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+.skeleton-card { aspect-ratio: 2/3; width: 100%; }
+.footer { padding: 40px 24px; border-top: 1px solid var(--border); text-align: center; max-width: 1400px; margin: 0 auto; }
+.footer-text { color: var(--text-muted); font-size: 0.85rem; line-height: 1.8; }
+.footer-disclaimer { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); font-size: 0.75rem; color: var(--text-muted); opacity: 0.7; }
+.loading-spinner { width: 40px; height: 40px; border: 3px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 1s linear infinite; margin: 40px auto; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 5000; display: flex; flex-direction: column; gap: 8px; }
+.toast { padding: 12px 20px; background: var(--bg-glass); backdrop-filter: blur(16px); border: 1px solid var(--border-hover); border-radius: var(--radius-sm); color: var(--text-primary); font-size: 0.9rem; box-shadow: var(--shadow-card); animation: toastIn 0.3s ease; max-width: 320px; }
+.toast.error { border-color: rgba(239, 68, 68, 0.5); }
+.toast.success { border-color: rgba(34, 197, 94, 0.5); }
+@keyframes toastIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+@media (max-width: 1024px) { .nav { display: none; } .hamburger { display: flex; } .slider-item { width: clamp(130px, 22vw, 180px); } }
+@media (max-width: 768px) { .header { padding: 0 16px; } .section { padding: 24px 16px; } .slider-item { width: clamp(120px, 28vw, 160px); gap: 12px; } .search-overlay { padding: 70px 16px 16px; } .auth-modal { padding: 24px; } .mega-menu-grid { grid-template-columns: repeat(2, 1fr); } .search-results { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); } }
+@media (max-width: 480px) { .slider-item { width: 130px; } .section-title { font-size: 1.1rem; } .search-results { grid-template-columns: repeat(2, 1fr); } }
+@supports (padding: max(0px)) { .header { padding-left: max(24px, env(safe-area-inset-left)); padding-right: max(24px, env(safe-area-inset-right)); } }
 
-/* Header */
-.header{position:fixed;top:0;left:0;right:0;height:var(--header-height);background:rgba(7,7,11,0.85);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border-bottom:1px solid var(--border);z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:0 4vw;transition:background var(--transition-base),box-shadow var(--transition-base)}
-.header.scrolled{background:rgba(7,7,11,0.95);box-shadow:var(--shadow-md)}
-.header-left,.header-right{display:flex;align-items:center;gap:16px}
-.logo{font-size:clamp(1.2rem,2vw,1.6rem);font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent-glow));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:-0.5px;display:flex;align-items:center;gap:8px}
-.logo-icon{width:32px;height:32px;fill:var(--accent)}
-.menu-toggle{width:40px;height:40px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:5px;border-radius:var(--radius-sm);transition:background var(--transition-fast)}
-.menu-toggle:hover{background:rgba(139,92,246,0.1)}
-.menu-toggle span{display:block;width:20px;height:2px;background:var(--text-primary);border-radius:1px;transition:transform var(--transition-fast),opacity var(--transition-fast)}
-.menu-toggle.active span:nth-child(1){transform:translateY(7px) rotate(45deg)}
-.menu-toggle.active span:nth-child(2){opacity:0}
-.menu-toggle.active span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
-.header-btn{width:40px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:50%;transition:background var(--transition-fast),transform var(--transition-fast);position:relative}
-.header-btn:hover{background:rgba(139,92,246,0.15);transform:scale(1.05)}
-.header-btn svg{width:20px;height:20px;stroke:var(--text-secondary);fill:none;stroke-width:2}
-.header-btn:hover svg{stroke:var(--accent-glow)}
-.profile-btn img,.profile-btn .avatar-placeholder{width:36px;height:36px;border-radius:50%;object-fit:cover;border:2px solid var(--border);transition:border-color var(--transition-fast)}
-.profile-btn:hover img,.profile-btn:hover .avatar-placeholder{border-color:var(--accent)}
-.avatar-placeholder{background:linear-gradient(135deg,var(--accent-dim),var(--accent));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:#fff}
-.desktop-nav{display:none;align-items:center;gap:4px}
-.nav-item{padding:8px 14px;font-size:0.875rem;font-weight:500;color:var(--text-secondary);border-radius:var(--radius-sm);transition:all var(--transition-fast);position:relative;white-space:nowrap}
-.nav-item:hover{color:var(--text-primary);background:rgba(139,92,246,0.1)}
-.nav-item.active{color:var(--accent-glow);background:rgba(139,92,246,0.15)}
-
-/* Sidebar */
-.sidebar-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);z-index:999;opacity:0;visibility:hidden;transition:opacity var(--transition-base),visibility var(--transition-base)}
-.sidebar-overlay.active{opacity:1;visibility:visible}
-.sidebar{position:fixed;top:0;left:0;bottom:0;width:280px;max-width:85vw;background:var(--bg-secondary);border-right:1px solid var(--border);z-index:1000;transform:translateX(-100%);transition:transform var(--transition-slow) cubic-bezier(0.4,0,0.2,1);overflow-y:auto;display:flex;flex-direction:column}
-.sidebar.active{transform:translateX(0)}
-.sidebar-header{padding:20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-.sidebar-nav{flex:1;padding:16px 0}
-.sidebar-item{display:flex;align-items:center;gap:14px;padding:12px 20px;font-size:0.9375rem;color:var(--text-secondary);transition:all var(--transition-fast);cursor:pointer}
-.sidebar-item:hover,.sidebar-item.active{background:rgba(139,92,246,0.1);color:var(--text-primary)}
-.sidebar-item svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;flex-shrink:0}
-.sidebar-divider{height:1px;background:var(--border);margin:12px 20px}
-.sidebar-footer{padding:20px;border-top:1px solid var(--border);font-size:0.75rem;color:var(--text-muted)}
-
-/* Auth Modal */
-.auth-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(20px);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;visibility:hidden;transition:opacity var(--transition-base),visibility var(--transition-base)}
-.auth-overlay.active{opacity:1;visibility:visible}
-.auth-modal{background:linear-gradient(145deg,rgba(22,22,42,0.95),rgba(15,15,26,0.98));border:1px solid var(--border-glow);border-radius:var(--radius-xl);width:100%;max-width:460px;max-height:90vh;overflow-y:auto;padding:36px 32px;position:relative;transform:scale(0.92) translateY(20px);transition:transform var(--transition-slow) cubic-bezier(0.34,1.56,0.64,1);box-shadow:var(--shadow-lg),0 0 60px rgba(139,92,246,0.1)}
-.auth-overlay.active .auth-modal{transform:scale(1) translateY(0)}
-.auth-close{position:absolute;top:16px;right:16px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:50%;transition:background var(--transition-fast)}
-.auth-close:hover{background:rgba(255,255,255,0.1)}
-.auth-close svg{width:20px;height:20px;stroke:var(--text-muted);stroke-width:2}
-.auth-logo{text-align:center;margin-bottom:28px;font-size:1.5rem;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent-glow));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.auth-tabs{display:flex;gap:8px;margin-bottom:28px;background:rgba(139,92,246,0.1);border-radius:var(--radius-md);padding:4px}
-.auth-tab{flex:1;padding:10px;font-size:0.875rem;font-weight:600;text-align:center;border-radius:var(--radius-sm);color:var(--text-secondary);transition:all var(--transition-fast)}
-.auth-tab.active{background:var(--accent);color:#fff;box-shadow:0 4px 12px rgba(139,92,246,0.3)}
-.auth-form{display:none}
-.auth-form.active{display:block;animation:fadeIn 0.3s ease}
-@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-.form-group{margin-bottom:18px}
-.form-label{display:block;font-size:0.8125rem;font-weight:500;color:var(--text-secondary);margin-bottom:6px}
-.form-input{width:100%;padding:12px 16px;background:rgba(139,92,246,0.05);border:1px solid var(--border);border-radius:var(--radius-md);font-size:0.9375rem;color:var(--text-primary);transition:border-color var(--transition-fast),box-shadow var(--transition-fast)}
-.form-input:focus{border-color:var(--accent-glow);box-shadow:0 0 0 3px rgba(139,92,246,0.15)}
-.form-input::placeholder{color:var(--text-muted)}
-.form-checkbox{display:flex;align-items:center;gap:8px;font-size:0.8125rem;color:var(--text-secondary);cursor:pointer}
-.form-checkbox input{width:16px;height:16px;accent-color:var(--accent);cursor:pointer}
-.auth-btn{width:100%;padding:14px;background:linear-gradient(135deg,var(--accent),var(--accent-dim));color:#fff;font-size:0.9375rem;font-weight:600;border-radius:var(--radius-md);transition:transform var(--transition-fast),box-shadow var(--transition-fast);margin-top:8px}
-.auth-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(139,92,246,0.3)}
-.auth-btn:active{transform:translateY(0)}
-.auth-btn:disabled{opacity:0.6;cursor:not-allowed;transform:none}
-.auth-footer{text-align:center;margin-top:20px;font-size:0.8125rem;color:var(--text-muted)}
-.auth-footer a{color:var(--accent-glow);font-weight:500}
-.auth-footer a:hover{text-decoration:underline}
-.auth-error{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);color:var(--error);padding:10px 14px;border-radius:var(--radius-md);font-size:0.8125rem;margin-bottom:16px;display:none}
-.auth-error.active{display:block}
-
-/* A-Z Page */
-.az-page{margin-top:var(--header-height);padding:clamp(24px,3vw,48px) clamp(16px,4vw,80px);max-width:1400px;margin-left:auto;margin-right:auto}
-.az-title{font-size:clamp(1.5rem,3vw,2rem);font-weight:700;margin-bottom:24px}
-
-/* Alphabet Bar */
-.alphabet-bar{display:flex;gap:6px;margin-bottom:32px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px}
-.alphabet-bar::-webkit-scrollbar{display:none}
-.letter-btn{padding:10px 14px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);font-size:0.875rem;font-weight:600;color:var(--text-secondary);white-space:nowrap;cursor:pointer;transition:all var(--transition-fast);flex-shrink:0;min-width:40px;text-align:center}
-.letter-btn:hover{background:rgba(139,92,246,0.15);border-color:var(--accent-glow);color:var(--text-primary)}
-.letter-btn.active{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 4px 12px rgba(139,92,246,0.3)}
-
-/* Results Grid */
-.results-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:20px}
-.anime-card{cursor:pointer;transition:transform var(--transition-base)}
-.anime-card:hover{transform:translateY(-8px)}
-.anime-card-poster{position:relative;aspect-ratio:2/3;border-radius:var(--radius-md);overflow:hidden;background:var(--bg-card);margin-bottom:10px}
-.anime-card-poster img{width:100%;height:100%;object-fit:cover;transition:transform var(--transition-slow)}
-.anime-card:hover .anime-card-poster img{transform:scale(1.08)}
-.anime-card-badges{position:absolute;top:8px;left:8px;right:8px;display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-start}
-.anime-card-badge{padding:3px 8px;border-radius:4px;font-size:0.6875rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px}
-.badge-score{background:rgba(251,191,36,0.9);color:#000}
-.badge-eps{background:rgba(15,23,42,0.85);color:#fff;border:1px solid rgba(255,255,255,0.2)}
-.badge-hd{background:rgba(34,197,94,0.9);color:#fff}
-.anime-card-title{font-size:0.8125rem;font-weight:600;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;color:var(--text-primary)}
-.anime-card-meta{font-size:0.75rem;color:var(--text-muted);margin-top:4px}
-
-/* Pagination */
-.pagination{display:flex;justify-content:center;align-items:center;gap:8px;margin-top:40px;flex-wrap:wrap}
-.page-btn{padding:10px 16px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);font-size:0.875rem;font-weight:600;color:var(--text-secondary);transition:all var(--transition-fast);cursor:pointer;min-width:44px;text-align:center}
-.page-btn:hover{background:rgba(139,92,246,0.15);border-color:var(--accent-glow);color:var(--text-primary)}
-.page-btn.active{background:var(--accent);border-color:var(--accent);color:#fff}
-.page-btn:disabled{opacity:0.4;cursor:not-allowed}
-.page-info{font-size:0.875rem;color:var(--text-muted)}
-
-/* Loading */
-.skeleton{background:linear-gradient(90deg,var(--bg-card) 25%,rgba(139,92,246,0.1) 50%,var(--bg-card) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:var(--radius-sm)}
-@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
-
-/* Empty State */
-.empty-state{text-align:center;padding:60px 20px}
-.empty-state h3{font-size:1.25rem;color:var(--text-secondary);margin-bottom:8px}
-.empty-state p{font-size:0.875rem;color:var(--text-muted)}
-
-/* Footer */
-.footer{padding:clamp(24px,3vw,48px) clamp(16px,4vw,80px);border-top:1px solid var(--border);text-align:center}
-.footer-text{font-size:0.8125rem;color:var(--text-muted);line-height:1.8;max-width:600px;margin:0 auto}
-.footer-disclaimer{margin-top:12px;font-size:0.75rem;opacity:0.7}
-
-/* Toast */
-.toast-container{position:fixed;bottom:24px;right:24px;z-index:10000;display:flex;flex-direction:column;gap:8px}
-.toast{padding:12px 20px;background:var(--bg-glass);backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:var(--radius-md);font-size:0.875rem;display:flex;align-items:center;gap:10px;transform:translateX(120%);transition:transform var(--transition-base);box-shadow:var(--shadow-md);max-width:320px}
-.toast.show{transform:translateX(0)}
-.toast-success{border-color:rgba(34,197,94,0.3);color:var(--success)}
-.toast-error{border-color:rgba(239,68,68,0.3);color:var(--error)}
-
-/* Responsive */
-@media(min-width:768px){.desktop-nav{display:flex}.menu-toggle{display:none}.results-grid{grid-template-columns:repeat(auto-fill,minmax(180px,1fr))}}
-@media(min-width:1024px){.az-page{padding-left:80px;padding-right:80px}.results-grid{grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}}
-@media(max-width:767px){.alphabet-bar{padding-bottom:8px}.results-grid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px}}
-@media(max-width:480px){.results-grid{grid-template-columns:repeat(2,1fr);gap:12px}}
+.az-page { margin-top: var(--header-height); padding: 40px 24px; max-width: 1400px; margin-left: auto; margin-right: auto; }
+.az-title { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 800; margin-bottom: 24px; }
+.az-bar { display: flex; gap: 4px; margin-bottom: 32px; overflow-x: auto; padding-bottom: 4px; position: sticky; top: var(--header-height); background: var(--bg-primary); z-index: 100; padding-top: 16px; }
+.az-letter { padding: 8px 14px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text-secondary); font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: var(--transition); white-space: nowrap; min-width: 36px; text-align: center; text-decoration: none; }
+.az-letter:hover, .az-letter.active { background: var(--accent); border-color: var(--accent); color: white; }
+.az-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 20px; }
+.az-loading { text-align: center; padding: 60px 24px; }
+@media (max-width: 768px) { .az-page { padding: 24px 16px; } .az-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; } .az-letter { padding: 6px 10px; font-size: 0.8rem; } }
+@media (max-width: 480px) { .az-grid { grid-template-columns: repeat(2, 1fr); } }
 </style>
 <base target="_blank">
 </head>
 <body>
-
-<!-- Header -->
+<div class="toast-container" id="toastContainer"></div>
 <header class="header" id="header">
   <div class="header-left">
-    <button class="menu-toggle" id="menuToggle" aria-label="Menu"><span></span><span></span><span></span></button>
-    <a href="index.html" class="logo">
-      <svg class="logo-icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-      AnimeStream
-    </a>
+    <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+    <a href="index.html" class="logo">Anime<span>Stream</span></a>
+    <nav class="nav" id="mainNav">
+      <a href="index.html" class="nav-item" data-i18n="nav.home">Home</a>
+      <a href="search.html?sort=trending" class="nav-item" data-i18n="nav.trending">Trending</a>
+      <a href="schedule.html" class="nav-item" data-i18n="nav.schedule">Schedule</a>
+      <a href="az-list.html" class="nav-item active" data-i18n="nav.az">A-Z List</a>
+      <div class="nav-item" style="position:relative;"><span data-i18n="nav.genres">Genres</span><div class="mega-menu"><div class="mega-menu-title" data-i18n="menu.genres">Genres</div><div class="mega-menu-grid" id="genresGrid"></div></div></div>
+      <a href="search.html?sort=new" class="nav-item" data-i18n="nav.new">New Releases</a>
+    </nav>
   </div>
-  <nav class="header-center desktop-nav">
-    <a href="index.html" class="nav-item">Home</a>
-    <a href="search.html?filter=trending" class="nav-item">Trending</a>
-    <a href="schedule.html" class="nav-item">Schedule</a>
-    <a href="az-list.html" class="nav-item active">A-Z List</a>
-  </nav>
   <div class="header-right">
-    <button class="header-btn" id="searchBtn" aria-label="Search">
-      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-    </button>
-    <button class="header-btn profile-btn" id="profileBtn" aria-label="Profile">
-      <div class="avatar-placeholder" id="headerAvatar">?</div>
-    </button>
+    <button class="header-btn" id="searchBtn" aria-label="Search">&#128269;</button>
+    <div class="lang-dropdown">
+      <button class="header-btn" id="langBtn" aria-label="Language">&#127760;</button>
+      <div class="lang-menu">
+        <button class="lang-option active" data-lang="en">English</button>
+        <button class="lang-option" data-lang="jp">Japanese</button>
+        <button class="lang-option" data-lang="bn">Bengali</button>
+      </div>
+    </div>
+    <button class="header-btn" id="profileBtn" aria-label="Profile">&#128100;</button>
   </div>
 </header>
-
-<!-- Sidebar -->
 <div class="sidebar-overlay" id="sidebarOverlay"></div>
 <aside class="sidebar" id="sidebar">
-  <div class="sidebar-header">
-    <a href="index.html" class="logo">
-      <svg class="logo-icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-      AnimeStream
-    </a>
-    <button class="auth-close" id="sidebarClose"><svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
-  </div>
+  <button class="sidebar-close" id="sidebarClose">&times;</button>
+  <a href="index.html" class="logo" style="font-size:1.3rem;">Anime<span>Stream</span></a>
   <nav class="sidebar-nav">
-    <a href="index.html" class="sidebar-item"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Home</span></a>
-    <a href="search.html?filter=trending" class="sidebar-item"><svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg><span>Trending</span></a>
-    <a href="schedule.html" class="sidebar-item"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span>Schedule</span></a>
-    <a href="az-list.html" class="sidebar-item active"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg><span>A-Z List</span></a>
-    <div class="sidebar-divider"></div>
-    <a href="profile.html" class="sidebar-item" id="sidebarProfile"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Profile</span></a>
+    <a href="index.html"><span>&#127968;</span> <span data-i18n="nav.home">Home</span></a>
+    <a href="search.html?sort=trending"><span>&#128293;</span> <span data-i18n="nav.trending">Trending</span></a>
+    <a href="schedule.html"><span>&#128197;</span> <span data-i18n="nav.schedule">Schedule</span></a>
+    <a href="az-list.html" class="active"><span>&#128218;</span> <span data-i18n="nav.az">A-Z List</span></a>
+    <a href="profile.html"><span>&#128100;</span> <span data-i18n="nav.profile">Profile</span></a>
   </nav>
-  <div class="sidebar-footer">
-    <p>This site does not store any files on its server. All contents are provided by non-affiliated third parties.</p>
-  </div>
+  <div class="sidebar-section"><div class="sidebar-section-title" data-i18n="menu.genres">Genres</div><div class="sidebar-grid" id="sidebarGenres"></div></div>
 </aside>
-
-<!-- Auth Modal -->
+<div class="search-overlay" id="searchOverlay">
+  <div class="search-container">
+    <div class="search-input-wrap"><span class="search-icon">&#128269;</span><input type="text" class="search-input" id="searchInput" placeholder="Search anime..." data-i18n-placeholder="search.placeholder"></div>
+    <div class="search-filters">
+      <select class="search-filter" id="searchGenre"><option value="">All Genres</option></select>
+      <select class="search-filter" id="searchType"><option value="">All Types</option><option value="tv">TV</option><option value="movie">Movie</option><option value="ova">OVA</option><option value="ona">ONA</option><option value="special">Special</option></select>
+    </div>
+    <div class="search-results" id="searchResults"></div>
+  </div>
+</div>
 <div class="auth-overlay" id="authOverlay">
   <div class="auth-modal">
-    <button class="auth-close" id="authClose"><svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
-    <div class="auth-logo">AnimeStream</div>
+    <button class="auth-close" id="authClose">&times;</button>
     <div class="auth-tabs">
-      <button class="auth-tab active" data-tab="login">Login</button>
-      <button class="auth-tab" data-tab="signup">Sign Up</button>
+      <button class="auth-tab active" data-tab="login" data-i18n="auth.login">Login</button>
+      <button class="auth-tab" data-tab="signup" data-i18n="auth.signup">Sign Up</button>
     </div>
-    <div class="auth-error" id="authError"></div>
     <form class="auth-form active" id="loginForm">
-      <div class="form-group"><label class="form-label">Email or Username</label><input type="text" class="form-input" id="loginEmail" placeholder="Enter email or username" required></div>
-      <div class="form-group"><label class="form-label">Password</label><input type="password" class="form-input" id="loginPassword" placeholder="Enter password" required minlength="6"></div>
-      <div class="form-group"><label class="form-checkbox"><input type="checkbox" id="loginRemember"><span>Remember me</span></label></div>
-      <button type="submit" class="auth-btn" id="loginBtn">Login</button>
-      <div class="auth-footer"><span>Don't have an account?</span> <a href="#" id="switchToSignup">Sign up</a></div>
+      <div class="form-group"><label class="form-label" data-i18n="auth.email">Email / Username</label><input type="text" class="form-input" id="loginEmail" required></div>
+      <div class="form-group"><label class="form-label" data-i18n="auth.password">Password</label><input type="password" class="form-input" id="loginPassword" required></div>
+      <button type="submit" class="auth-btn" id="loginBtn" data-i18n="auth.loginBtn">Login</button>
     </form>
     <form class="auth-form" id="signupForm">
-      <div class="form-group"><label class="form-label">Full Name</label><input type="text" class="form-input" id="signupName" placeholder="Enter your name" required></div>
-      <div class="form-group"><label class="form-label">Username</label><input type="text" class="form-input" id="signupUsername" placeholder="Choose a username" required></div>
-      <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-input" id="signupEmail" placeholder="Enter your email" required></div>
-      <div class="form-group"><label class="form-label">Password</label><input type="password" class="form-input" id="signupPassword" placeholder="Create password" required minlength="6"></div>
-      <div class="form-group"><label class="form-label">Confirm Password</label><input type="password" class="form-input" id="signupConfirm" placeholder="Confirm password" required minlength="6"></div>
-      <div class="form-group"><label class="form-checkbox"><input type="checkbox" id="signupTerms" required><span>I agree to the Terms of Service</span></label></div>
-      <button type="submit" class="auth-btn" id="signupBtn">Create Account</button>
-      <div class="auth-footer"><span>Already have an account?</span> <a href="#" id="switchToLogin">Login</a></div>
+      <div class="form-group"><label class="form-label" data-i18n="auth.name">Full Name</label><input type="text" class="form-input" id="signupName" required></div>
+      <div class="form-group"><label class="form-label" data-i18n="auth.username">Username</label><input type="text" class="form-input" id="signupUsername" required></div>
+      <div class="form-group"><label class="form-label" data-i18n="auth.email">Email</label><input type="email" class="form-input" id="signupEmail" required></div>
+      <div class="form-group"><label class="form-label" data-i18n="auth.password">Password</label><input type="password" class="form-input" id="signupPassword" required minlength="6"></div>
+      <button type="submit" class="auth-btn" id="signupBtn" data-i18n="auth.signupBtn">Sign Up</button>
+      <div class="auth-link" data-i18n="auth.haveAccount">Already have an account? <a href="#" id="switchToLogin">Login</a></div>
     </form>
   </div>
 </div>
 
-<!-- A-Z Page -->
 <div class="az-page">
   <h1 class="az-title">A-Z Anime List</h1>
-  <div class="alphabet-bar" id="alphabetBar">
-    <button class="letter-btn active" data-letter="all">All</button>
-    <button class="letter-btn" data-letter="0-9">0-9</button>
-    <button class="letter-btn" data-letter="A">A</button>
-    <button class="letter-btn" data-letter="B">B</button>
-    <button class="letter-btn" data-letter="C">C</button>
-    <button class="letter-btn" data-letter="D">D</button>
-    <button class="letter-btn" data-letter="E">E</button>
-    <button class="letter-btn" data-letter="F">F</button>
-    <button class="letter-btn" data-letter="G">G</button>
-    <button class="letter-btn" data-letter="H">H</button>
-    <button class="letter-btn" data-letter="I">I</button>
-    <button class="letter-btn" data-letter="J">J</button>
-    <button class="letter-btn" data-letter="K">K</button>
-    <button class="letter-btn" data-letter="L">L</button>
-    <button class="letter-btn" data-letter="M">M</button>
-    <button class="letter-btn" data-letter="N">N</button>
-    <button class="letter-btn" data-letter="O">O</button>
-    <button class="letter-btn" data-letter="P">P</button>
-    <button class="letter-btn" data-letter="Q">Q</button>
-    <button class="letter-btn" data-letter="R">R</button>
-    <button class="letter-btn" data-letter="S">S</button>
-    <button class="letter-btn" data-letter="T">T</button>
-    <button class="letter-btn" data-letter="U">U</button>
-    <button class="letter-btn" data-letter="V">V</button>
-    <button class="letter-btn" data-letter="W">W</button>
-    <button class="letter-btn" data-letter="X">X</button>
-    <button class="letter-btn" data-letter="Y">Y</button>
-    <button class="letter-btn" data-letter="Z">Z</button>
+  <div class="az-bar" id="azBar">
+    <button class="az-letter active" data-letter="all">All</button>
+    <button class="az-letter" data-letter="0-9">0-9</button>
+    <button class="az-letter" data-letter="a">A</button>
+    <button class="az-letter" data-letter="b">B</button>
+    <button class="az-letter" data-letter="c">C</button>
+    <button class="az-letter" data-letter="d">D</button>
+    <button class="az-letter" data-letter="e">E</button>
+    <button class="az-letter" data-letter="f">F</button>
+    <button class="az-letter" data-letter="g">G</button>
+    <button class="az-letter" data-letter="h">H</button>
+    <button class="az-letter" data-letter="i">I</button>
+    <button class="az-letter" data-letter="j">J</button>
+    <button class="az-letter" data-letter="k">K</button>
+    <button class="az-letter" data-letter="l">L</button>
+    <button class="az-letter" data-letter="m">M</button>
+    <button class="az-letter" data-letter="n">N</button>
+    <button class="az-letter" data-letter="o">O</button>
+    <button class="az-letter" data-letter="p">P</button>
+    <button class="az-letter" data-letter="q">Q</button>
+    <button class="az-letter" data-letter="r">R</button>
+    <button class="az-letter" data-letter="s">S</button>
+    <button class="az-letter" data-letter="t">T</button>
+    <button class="az-letter" data-letter="u">U</button>
+    <button class="az-letter" data-letter="v">V</button>
+    <button class="az-letter" data-letter="w">W</button>
+    <button class="az-letter" data-letter="x">X</button>
+    <button class="az-letter" data-letter="y">Y</button>
+    <button class="az-letter" data-letter="z">Z</button>
   </div>
-  <div class="results-grid" id="azGrid"></div>
-  <div class="pagination" id="pagination"></div>
+  <div class="az-grid" id="azGrid">
+    <div class="loading-spinner"></div>
+  </div>
 </div>
 
-<!-- Footer -->
 <footer class="footer">
-  <p class="footer-text">&copy; 2024 AnimeStream. All rights reserved.</p>
-  <p class="footer-text footer-disclaimer">This site does not store any files on its server. All contents are provided by non-affiliated third parties.</p>
+  <div class="footer-text"><p>&copy; 2026 AnimeStream. All rights reserved.</p></div>
+  <div class="footer-disclaimer">This site does not store any files on its server. All contents are provided by non-affiliated third parties.</div>
 </footer>
 
-<!-- Toast -->
-<div class="toast-container" id="toastContainer"></div>
-
 <script>
-const CONFIG = {
-  API_BASE: 'https://api.jikan.moe/v4',
-  BACKEND_URL: localStorage.getItem('backendUrl') || '',
-  CACHE_DURATION: 5 * 60 * 1000,
-  MAX_RETRIES: 3,
-  RETRY_DELAY: 1000,
-  ITEMS_PER_PAGE: 24
-};
 
-function $(sel){return document.querySelector(sel)}
-function $$(sel){return document.querySelectorAll(sel)}
+(function() {
+  'use strict';
+  const API_BASE = 'https://api.jikan.moe/v4';
+  const CACHE_TTL = 5 * 60 * 1000;
+  let currentLang = localStorage.getItem('lang') || 'en';
+  let currentUser = JSON.parse(localStorage.getItem('user') || 'null');
+  let abortControllers = new Map();
 
-function showToast(msg,type='success'){
-  const container=$('#toastContainer');
-  const toast=document.createElement('div');
-  toast.className=`toast toast-${type}`;
-  toast.textContent=msg;
-  container.appendChild(toast);
-  requestAnimationFrame(()=>toast.classList.add('show'));
-  setTimeout(()=>{toast.classList.remove('show');setTimeout(()=>toast.remove(),300)},3000);
-}
+  const i18n = {
+    en: {
+      'nav.home':'Home','nav.trending':'Trending','nav.schedule':'Schedule','nav.az':'A-Z List','nav.genres':'Genres','nav.types':'Types','nav.status':'Status','nav.new':'New Releases','nav.profile':'Profile','menu.genres':'Genres','menu.types':'Types','menu.status':'Status','status.airing':'Airing','status.completed':'Completed','status.upcoming':'Upcoming','auth.login':'Login','auth.signup':'Sign Up','auth.email':'Email / Username','auth.password':'Password','auth.remember':'Remember me','auth.forgot':'Forgot password?','auth.loginBtn':'Login','auth.or':'or','auth.name':'Full Name','auth.username':'Username','auth.confirm':'Confirm Password','auth.terms':'I agree to Terms & Conditions','auth.signupBtn':'Sign Up','auth.haveAccount':'Already have an account?','search.placeholder':'Search anime...','toast.welcome':'Welcome back!','toast.error':'Something went wrong','toast.searching':'Searching...'
+    },
+    jp: {
+      'nav.home':'ホーム','nav.trending':'トレンド','nav.schedule':'スケジュール','nav.az':'A-Z一覧','nav.genres':'ジャンル','nav.types':'タイプ','nav.status':'状態','nav.new':'新リリース','nav.profile':'プロフィール','menu.genres':'ジャンル','menu.types':'タイプ','menu.status':'状態','status.airing':'放送中','status.completed':'完了','status.upcoming':'近日公開','auth.login':'ログイン','auth.signup':'新規登録','auth.email':'メール/ユーザー名','auth.password':'パスワード','auth.remember':'remember me','auth.forgot':'パスワードを忘れた?','auth.loginBtn':'ログイン','auth.or':'または','auth.name':'氏名','auth.username':'ユーザー名','auth.confirm':'パスワード確認','auth.terms':'利用規約に同意する','auth.signupBtn':'登録','auth.haveAccount':'アカウントをお持ちですか?','search.placeholder':'アニメを検索...','toast.welcome':'お帰りなさい!','toast.error':'エラーが発生しました','toast.searching':'検索中...'
+    },
+    bn: {
+      'nav.home':'হোম','nav.trending':'ট্রেন্ডিং','nav.schedule':'সchedule','nav.az':'A-Z তালিকা','nav.genres':'জেনার','nav.types':'টাইপ','nav.status':'স্ট্যাটাস','nav.new':'নতুন রিলিজ','nav.profile':'প্রোফাইল','menu.genres':'জেনার','menu.types':'টাইপ','menu.status':'স্ট্যাটাস','status.airing':'প্রচারিত','status.completed':'সম্পন্ন','status.upcoming':'আসন্ন','auth.login':'লগইন','auth.signup':'সাইন আপ','auth.email':'ইমেইল / ইউজারনেম','auth.password':'পাসওয়ার্ড','auth.remember':'মনে রাখুন','auth.forgot':'পাসওয়ার্ড ভুলে গেছেন?','auth.loginBtn':'লগইন','auth.or':'অথবা','auth.name':'পুরো নাম','auth.username':'ইউজারনেম','auth.confirm':'পাসওয়ার্ড নিশ্চিত করুন','auth.terms':'আমি শর্তাবলীতে সম্মত','auth.signupBtn':'সাইন আপ','auth.haveAccount':'ইতিমধ্যে অ্যাকাউন্ট আছে?','search.placeholder':'অ্যানিমে অনুসন্ধান করুন...','toast.welcome':'স্বাগতম!','toast.error':'কিছু ভুল হয়েছে','toast.searching':'অনুসন্ধান করা হচ্ছে...'
+    }
+  };
 
-function getCache(key){
-  try{const item=localStorage.getItem(`cache_${key}`);if(!item)return null;const{data,ts}=JSON.parse(item);if(Date.now()-ts>CONFIG.CACHE_DURATION)return null;return data;}catch(e){return null}
-}
-function setCache(key,data){
-  try{localStorage.setItem(`cache_${key}`,JSON.stringify({data,ts:Date.now()}));}catch(e){}
-}
-
-async function fetchWithRetry(url,opts={},retries=CONFIG.MAX_RETRIES){
-  for(let i=0;i<=retries;i++){
-    try{
-      const ctrl=new AbortController();
-      const to=setTimeout(()=>ctrl.abort(),10000);
-      const res=await fetch(url,{...opts,signal:ctrl.signal});
-      clearTimeout(to);
-      if(!res.ok)throw new Error(`HTTP ${res.status}`);
-      return await res.json();
-    }catch(e){if(i===retries)throw e;await new Promise(r=>setTimeout(r,CONFIG.RETRY_DELAY*(i+1)));}
-  }
-}
-
-function getImageUrl(anime,size='large'){
-  const img=anime?.images?.jpg||anime?.images?.webp;
-  if(!img)return'';
-  return img[size==='large'?'large_image_url':size==='medium'?'image_url':'small_image_url']||img.image_url||'';
-}
-
-async function fetchJikan(endpoint){
-  const cacheKey=endpoint.replace(/[^a-zA-Z0-9]/g,'_');
-  const cached=getCache(cacheKey);
-  if(cached)return cached;
-  const data=await fetchWithRetry(`${CONFIG.API_BASE}${endpoint}`);
-  if(data?.data)setCache(cacheKey,data);
-  return data;
-}
-
-let currentUser = null;
-let currentLetter = 'all';
-let currentPage = 1;
-let totalPages = 1;
-
-function getToken(){return localStorage.getItem('authToken');}
-
-async function apiCall(path,opts={}){
-  if(!CONFIG.BACKEND_URL)return null;
-  try{
-    const token=getToken();
-    const headers={'Content-Type':'application/json'};
-    if(token)headers['Authorization']=`Bearer ${token}`;
-    const res=await fetch(`${CONFIG.BACKEND_URL}${path}`,{...opts,headers:{...headers,...opts.headers}});
-    return await res.json();
-  }catch(e){return null;}
-}
-
-async function checkAuth(){
-  const token=getToken();
-  if(!token){updateAuthUI(null);return;}
-  const data=await apiCall('/api/auth/me');
-  if(data?.success){currentUser=data.user;updateAuthUI(currentUser);}
-  else{localStorage.removeItem('authToken');updateAuthUI(null);}
-}
-
-function updateAuthUI(user){
-  const avatar=$('#headerAvatar');
-  const profileBtn=$('#profileBtn');
-  if(user){
-    avatar.textContent=user.name?.[0]?.toUpperCase()||user.username?.[0]?.toUpperCase()||'U';
-    if(user.avatar){avatar.outerHTML=`<img src="${user.avatar}" alt="${user.username}" class="avatar-placeholder" style="object-fit:cover">`;}
-    profileBtn.onclick=()=>location.href='profile.html';
-  }else{avatar.textContent='?';profileBtn.onclick=()=>openAuth();}
-}
-
-function openAuth(){$('#authOverlay').classList.add('active');document.body.style.overflow='hidden';}
-function closeAuth(){$('#authOverlay').classList.remove('active');document.body.style.overflow='';$('#authError').classList.remove('active');}
-
-$('#authClose')?.addEventListener('click',closeAuth);
-$('#authOverlay')?.addEventListener('click',e=>{if(e.target===$('#authOverlay'))closeAuth();});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeAuth();closeSidebar();}});
-
-$$('.auth-tab').forEach(tab=>{
-  tab.addEventListener('click',()=>{
-    $$('.auth-tab').forEach(t=>t.classList.remove('active'));
-    tab.classList.add('active');
-    $$('.auth-form').forEach(f=>f.classList.remove('active'));
-    $(`#${tab.dataset.tab}Form`)?.classList.add('active');
-    $('#authError').classList.remove('active');
-  });
-});
-
-$('#switchToSignup')?.addEventListener('click',e=>{e.preventDefault();$$('.auth-tab')[1].click();});
-$('#switchToLogin')?.addEventListener('click',e=>{e.preventDefault();$$('.auth-tab')[0].click();});
-
-$('#loginForm')?.addEventListener('submit',async e=>{
-  e.preventDefault();
-  const btn=$('#loginBtn');btn.disabled=true;
-  const data=await apiCall('/api/auth/login',{method:'POST',body:JSON.stringify({email:$('#loginEmail').value,password:$('#loginPassword').value,remember:$('#loginRemember').checked})});
-  btn.disabled=false;
-  if(data?.success){localStorage.setItem('authToken',data.token);currentUser=data.user;updateAuthUI(data.user);closeAuth();showToast('Welcome back!');}
-  else{$('#authError').textContent=data?.error||'Login failed';$('#authError').classList.add('active');}
-});
-
-$('#signupForm')?.addEventListener('submit',async e=>{
-  e.preventDefault();
-  const btn=$('#signupBtn');btn.disabled=true;
-  if($('#signupPassword').value!==$('#signupConfirm').value){$('#authError').textContent='Passwords do not match';$('#authError').classList.add('active');btn.disabled=false;return;}
-  const data=await apiCall('/api/auth/register',{method:'POST',body:JSON.stringify({name:$('#signupName').value,username:$('#signupUsername').value,email:$('#signupEmail').value,password:$('#signupPassword').value})});
-  btn.disabled=false;
-  if(data?.success){localStorage.setItem('authToken',data.token);currentUser=data.user;updateAuthUI(data.user);closeAuth();showToast('Account created!');}
-  else{$('#authError').textContent=data?.error||'Registration failed';$('#authError').classList.add('active');}
-});
-
-function openSidebar(){$('#sidebar').classList.add('active');$('#sidebarOverlay').classList.add('active');document.body.style.overflow='hidden';}
-function closeSidebar(){$('#sidebar').classList.remove('active');$('#sidebarOverlay').classList.remove('active');document.body.style.overflow='';}
-
-$('#menuToggle')?.addEventListener('click',()=>{if($('#sidebar').classList.contains('active'))closeSidebar();else openSidebar();});
-$('#sidebarClose')?.addEventListener('click',closeSidebar);
-$('#sidebarOverlay')?.addEventListener('click',closeSidebar);
-
-window.addEventListener('scroll',()=>{$('#header').classList.toggle('scrolled',window.scrollY>50);},{passive:true});
-$('#searchBtn')?.addEventListener('click',()=>location.href='search.html');
-
-// ========== A-Z LIST ==========
-async function loadAZList(page=1){
-  currentPage = page;
-  const grid = $('#azGrid');
-  grid.innerHTML = Array.from({length:12},()=>`
-    <div class="anime-card"><div class="anime-card-poster skeleton"></div><div class="anime-card-title skeleton"></div><div class="anime-card-meta skeleton"></div></div>
-  `).join('');
-
-  try{
-    let endpoint = `/anime?page=${page}&limit=${CONFIG.ITEMS_PER_PAGE}&order_by=title&sort=asc`;
-
-    if(currentLetter !== 'all'){
-      if(currentLetter === '0-9'){
-        endpoint += '&letter=0';
-      }else{
-        endpoint += `&letter=${currentLetter}`;
+  window.App = {
+    t(key) { return (i18n[currentLang] && i18n[currentLang][key]) || i18n.en[key] || key; },
+    updateI18n() {
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (i18n[currentLang] && i18n[currentLang][key]) el.textContent = i18n[currentLang][key];
+      });
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        if (i18n[currentLang] && i18n[currentLang][key]) el.placeholder = i18n[currentLang][key];
+      });
+    },
+    showToast(msg, type='info') {
+      const container = document.getElementById('toastContainer');
+      if (!container) return;
+      const toast = document.createElement('div');
+      toast.className = 'toast ' + type;
+      toast.textContent = msg;
+      container.appendChild(toast);
+      setTimeout(() => toast.remove(), 4000);
+    },
+    debounce(fn, ms) {
+      let timer;
+      return (...args) => { clearTimeout(timer); timer = setTimeout(() => fn(...args), ms); };
+    },
+    async fetchWithRetry(url, options={}, retries=3, timeout=10000) {
+      const controller = new AbortController();
+      const id = Math.random().toString(36);
+      abortControllers.set(id, controller);
+      const timer = setTimeout(() => controller.abort(), timeout);
+      try {
+        const res = await fetch(url, { ...options, signal: controller.signal });
+        clearTimeout(timer);
+        abortControllers.delete(id);
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        return await res.json();
+      } catch (err) {
+        clearTimeout(timer);
+        abortControllers.delete(id);
+        if (retries > 0 && err.name !== 'AbortError') {
+          await new Promise(r => setTimeout(r, 1000));
+          return this.fetchWithRetry(url, options, retries - 1, timeout);
+        }
+        throw err;
       }
+    },
+    getCache(key) {
+      try { const item = JSON.parse(localStorage.getItem('cache_' + key)); if (item && Date.now() - item.ts < CACHE_TTL) return item.data; } catch(e) {}
+      return null;
+    },
+    setCache(key, data) {
+      try { localStorage.setItem('cache_' + key, JSON.stringify({ ts: Date.now(), data })); } catch(e) {}
+    },
+    escapeHtml(str) {
+      if (!str) return '';
+      return str.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;,"''':"&#39;"})[m]);
+    },
+    async fetchAnime(endpoint, cacheKey) {
+      const cached = this.getCache(cacheKey);
+      if (cached) return cached;
+      try {
+        const data = await this.fetchWithRetry(API_BASE + endpoint);
+        if (data && data.data) { this.setCache(cacheKey, data.data); return data.data; }
+        return [];
+      } catch (err) { console.error('API Error:', err); return []; }
+    },
+    createAnimeCard(anime) {
+      const img = anime.images?.jpg?.image_url || '';
+      const title = this.escapeHtml(anime.title_english || anime.title);
+      const score = anime.score ? anime.score.toFixed(1) : '';
+      const episodes = anime.episodes || '?';
+      const type = anime.type || 'TV';
+      return '<div class="widget-card"><a href="anime.html?id=' + anime.mal_id + '" class="anime-card" title="' + title + '"><div class="anime-card-badges">' + (score?'<span class="badge badge-score">★ ' + score + '</span>':'') + '<span class="badge badge-ep">' + episodes + ' EPS</span><span class="badge badge-hd">HD</span><span class="badge badge-type">' + type + '</span></div><img class="anime-card-img" src="' + this.escapeHtml(img) + '" alt="' + title + '" loading="lazy"><div class="anime-card-overlay"><div class="anime-card-title">' + title + '</div><div class="anime-card-meta">' + type + ' • ' + (anime.status || 'Unknown') + '</div></div></a></div>';
+    },
+    createSkeletons(count) {
+      return Array(count).fill(0).map(() => '<div class="widget-card"><div class="anime-card"><div class="skeleton skeleton-card"></div></div></div>').join('');
+    },
+    initSlider(id, track) {
+      const cards = track.querySelectorAll('.widget-card');
+      if (!cards.length) return;
+      let currentIndex = 0;
+      const cardWidth = cards[0].offsetWidth + 16;
+      const visibleCount = Math.max(1, Math.floor(track.parentElement.offsetWidth / cardWidth));
+      const maxIndex = Math.max(0, cards.length - visibleCount);
+      const slider = { track, currentIndex, cardWidth, visibleCount, maxIndex, cards };
+      function update() { slider.track.style.transform = 'translateX(-' + (slider.currentIndex * slider.cardWidth) + 'px)'; }
+      function next() { slider.currentIndex = Math.min(slider.currentIndex + slider.visibleCount, slider.maxIndex); update(); }
+      function prev() { slider.currentIndex = Math.max(slider.currentIndex - slider.visibleCount, 0); update(); }
+      const widgetEl = document.getElementById('widget-' + id);
+      if (widgetEl) {
+        widgetEl.querySelector('.widget-next')?.addEventListener('click', next);
+        widgetEl.querySelector('.widget-prev')?.addEventListener('click', prev);
+      }
+      let isDown = false, startX, scrollLeft;
+      track.parentElement.addEventListener('mousedown', e => { isDown = true; startX = e.pageX - track.parentElement.offsetLeft; scrollLeft = track.parentElement.scrollLeft; });
+      track.parentElement.addEventListener('mouseleave', () => isDown = false);
+      track.parentElement.addEventListener('mouseup', () => isDown = false);
+      track.parentElement.addEventListener('mousemove', e => { if (!isDown) return; e.preventDefault(); const x = e.pageX - track.parentElement.offsetLeft; const walk = (x - startX) * 2; track.parentElement.scrollLeft = scrollLeft - walk; });
+      let touchStartX = 0;
+      track.parentElement.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
+      track.parentElement.addEventListener('touchend', e => { const diff = touchStartX - e.changedTouches[0].screenX; if (Math.abs(diff) > 50) diff > 0 ? next() : prev(); }, { passive: true });
+      track.parentElement.addEventListener('wheel', e => { if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) return; e.preventDefault(); if (e.deltaY > 0) next(); else prev(); }, { passive: false });
+      return slider;
+    },
+    async loadGenres() {
+      let genres = this.getCache('genres');
+      if (!genres) { try { const data = await this.fetchWithRetry(API_BASE + '/genres/anime'); genres = data.data || []; this.setCache('genres', genres); } catch (err) { genres = []; } }
+      const grid = document.getElementById('genresGrid');
+      const sidebarGrid = document.getElementById('sidebarGenres');
+      const searchGenre = document.getElementById('searchGenre');
+      if (grid) grid.innerHTML = genres.map(g => '<a href="search.html?genre=' + g.mal_id + '" class="mega-menu-item">' + this.escapeHtml(g.name) + '</a>').join('');
+      if (sidebarGrid) sidebarGrid.innerHTML = genres.slice(0, 20).map(g => '<a href="search.html?genre=' + g.mal_id + '">' + this.escapeHtml(g.name) + '</a>').join('');
+      if (searchGenre) genres.forEach(g => { const opt = document.createElement('option'); opt.value = g.mal_id; opt.textContent = g.name; searchGenre.appendChild(opt); });
+    },
+    openSearch() { document.getElementById('searchOverlay').classList.add('active'); document.getElementById('searchInput').focus(); document.body.style.overflow = 'hidden'; },
+    closeSearch() { document.getElementById('searchOverlay').classList.remove('active'); document.body.style.overflow = ''; },
+    openAuth() {
+      if (currentUser) { window.location.href = 'profile.html'; return; }
+      document.getElementById('authOverlay').classList.add('active'); document.body.style.overflow = 'hidden';
+    },
+    closeAuth() { document.getElementById('authOverlay').classList.remove('active'); document.body.style.overflow = ''; },
+    switchAuthTab(tab) {
+      document.querySelectorAll('.auth-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+      document.querySelectorAll('.auth-form').forEach(f => f.classList.toggle('active', f.id === tab + 'Form'));
+    },
+    updateProfileBtn() {
+      const btn = document.getElementById('profileBtn');
+      if (btn) btn.innerHTML = currentUser && currentUser.avatar ? '<img src="' + currentUser.avatar + '" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">' : '&#128100;';
+    },
+    initCommon() {
+      this.updateI18n();
+      this.updateProfileBtn();
+      this.loadGenres();
+      document.getElementById('hamburger')?.addEventListener('click', () => { document.getElementById('sidebar').classList.add('active'); document.getElementById('sidebarOverlay').classList.add('active'); });
+      document.getElementById('sidebarClose')?.addEventListener('click', () => { document.getElementById('sidebar').classList.remove('active'); document.getElementById('sidebarOverlay').classList.remove('active'); });
+      document.getElementById('sidebarOverlay')?.addEventListener('click', () => { document.getElementById('sidebar').classList.remove('active'); document.getElementById('sidebarOverlay').classList.remove('active'); });
+      document.getElementById('searchBtn')?.addEventListener('click', () => this.openSearch());
+      document.getElementById('searchOverlay')?.addEventListener('click', e => { if (e.target === e.currentTarget) this.closeSearch(); });
+      document.getElementById('profileBtn')?.addEventListener('click', () => this.openAuth());
+      document.getElementById('authClose')?.addEventListener('click', () => this.closeAuth());
+      document.getElementById('authOverlay')?.addEventListener('click', e => { if (e.target === e.currentTarget) this.closeAuth(); });
+      document.querySelectorAll('.auth-tab').forEach(tab => tab.addEventListener('click', () => this.switchAuthTab(tab.dataset.tab)));
+      document.getElementById('switchToLogin')?.addEventListener('click', e => { e.preventDefault(); this.switchAuthTab('login'); });
+      document.querySelectorAll('.lang-option').forEach(btn => btn.addEventListener('click', () => {
+        currentLang = btn.dataset.lang; localStorage.setItem('lang', currentLang);
+        document.querySelectorAll('.lang-option').forEach(b => b.classList.toggle('active', b === btn));
+        this.updateI18n(); this.showToast('Language: ' + currentLang.toUpperCase(), 'success');
+      }));
+      window.addEventListener('scroll', () => document.getElementById('header')?.classList.toggle('scrolled', window.scrollY > 50));
+      document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') { this.closeSearch(); this.closeAuth(); document.getElementById('sidebar')?.classList.remove('active'); document.getElementById('sidebarOverlay')?.classList.remove('active'); }
+        if (e.key === '/' && !e.ctrlKey && !e.metaKey) { e.preventDefault(); this.openSearch(); }
+      });
+      document.getElementById('loginForm')?.addEventListener('submit', e => {
+        e.preventDefault(); const btn = document.getElementById('loginBtn'); btn.disabled = true;
+        const email = document.getElementById('loginEmail').value;
+        const user = { id: 'demo', name: 'Demo User', email: email, username: email.split('@')[0], avatar: '' };
+        currentUser = user; localStorage.setItem('user', JSON.stringify(user));
+        this.showToast(this.t('toast.welcome'), 'success'); this.closeAuth(); this.updateProfileBtn();
+        btn.disabled = false;
+      });
+      document.getElementById('signupForm')?.addEventListener('submit', e => {
+        e.preventDefault(); const btn = document.getElementById('signupBtn'); btn.disabled = true;
+        const name = document.getElementById('signupName').value;
+        const username = document.getElementById('signupUsername').value;
+        const email = document.getElementById('signupEmail').value;
+        if (document.getElementById('signupPassword').value !== document.getElementById('signupConfirm').value) {
+          this.showToast('Passwords do not match', 'error'); btn.disabled = false; return;
+        }
+        const user = { id: 'demo', name, username, email, avatar: '' };
+        currentUser = user; localStorage.setItem('user', JSON.stringify(user));
+        this.showToast('Account created!', 'success'); this.closeAuth(); this.updateProfileBtn();
+        btn.disabled = false;
+      });
     }
+  };
+})();
 
-    const data = await fetchJikan(endpoint);
-    const anime = data?.data || [];
-    const pagination = data?.pagination || {};
-    totalPages = pagination.last_visible_page || 1;
-    const hasNext = pagination.has_next_page || false;
+(function() {
+  const App = window.App;
+  let currentLetter = 'all';
+  let currentPage = 1;
+  let isLoading = false;
 
-    if(!anime.length){
-      grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><h3>No anime found</h3><p>Try a different letter</p></div>`;
-      $('#pagination').innerHTML = '';
-      return;
+  async function loadAZ(letter, page) {
+    if (isLoading) return;
+    isLoading = true;
+    currentLetter = letter;
+    currentPage = page;
+    const grid = document.getElementById('azGrid');
+    if (page === 1) grid.innerHTML = '<div class="loading-spinner"></div>';
+
+    document.querySelectorAll('.az-letter').forEach(l => l.classList.toggle('active', l.dataset.letter === letter));
+
+    try {
+      let url = 'https://api.jikan.moe/v4/anime?limit=24&page=' + page + '&order_by=title&sort=asc&sfw=true';
+      if (letter !== 'all') {
+        if (letter === '0-9') url += '&letter=0';
+        else url += '&letter=' + letter;
+      }
+      const data = await App.fetchWithRetry(url);
+      const list = data.data || [];
+      if (!list.length && page === 1) {
+        grid.innerHTML = '<div class="az-loading" style="grid-column:1/-1;"><div style="font-size:3rem;margin-bottom:16px;">&#128218;</div><div style="font-size:1.2rem;font-weight:700;margin-bottom:8px;">No anime found</div><div>Try a different letter</div></div>';
+        isLoading = false;
+        return;
+      }
+      const html = list.map(a => App.createAnimeCard(a)).join('');
+      if (page === 1) grid.innerHTML = html;
+      else grid.insertAdjacentHTML('beforeend', html);
+
+      // Infinite scroll
+      if (data.pagination?.has_next_page) {
+        setupInfiniteScroll();
+      }
+    } catch (err) {
+      if (page === 1) grid.innerHTML = '<div class="az-loading" style="grid-column:1/-1;">Failed to load. Please try again.</div>';
     }
-
-    grid.innerHTML = anime.map(a=>{
-      const img = getImageUrl(a,'medium');
-      return `
-        <div class="anime-card" onclick="location.href='anime.html?id=${a.mal_id}'">
-          <div class="anime-card-poster">
-            <img src="${img}" alt="${a.title}" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22300%22%3E%3Crect fill=%22%2316162a%22 width=%22200%22 height=%22300%22/%3E%3Ctext fill=%22%2364748b%22 x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 font-size=%2214%22%3ENo Image%3C/text%3E%3C/svg%3E'">
-            <div class="anime-card-badges">
-              <span class="anime-card-badge badge-score">&#9733; ${a.score||'N/A'}</span>
-              <span class="anime-card-badge badge-eps">${a.episodes||'?'} EP</span>
-              <span class="anime-card-badge badge-hd">HD</span>
-            </div>
-          </div>
-          <div class="anime-card-title">${a.title_english||a.title}</div>
-          <div class="anime-card-meta">${a.type||'TV'} &bull; ${a.status||'Unknown'}</div>
-        </div>
-      `;
-    }).join('');
-
-    renderPagination(page, totalPages, hasNext);
-
-  }catch(e){
-    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><h3>Error loading results</h3><p>Please try again later</p></div>`;
-  }
-}
-
-function renderPagination(current, total, hasNext){
-  const container = $('#pagination');
-  if(total <= 1){container.innerHTML='';return;}
-
-  let html = `<button class="page-btn" ${current===1?'disabled':''} onclick="loadAZList(${current-1})">Prev</button>`;
-
-  const start = Math.max(1, current - 2);
-  const end = Math.min(total, current + 2);
-
-  if(start > 1) html += `<button class="page-btn" onclick="loadAZList(1)">1</button>${start>2?'<span class="page-info">...</span>':''}`;
-
-  for(let i=start;i<=end;i++){
-    html += `<button class="page-btn ${i===current?'active':''}" onclick="loadAZList(${i})">${i}</button>`;
+    isLoading = false;
   }
 
-  if(end < total) html += `${end<total-1?'<span class="page-info">...</span>':''}<button class="page-btn" onclick="loadAZList(${total})">${total}</button>`;
-
-  html += `<button class="page-btn" ${!hasNext&&current>=total?'disabled':''} onclick="loadAZList(${current+1})">Next</button>`;
-
-  container.innerHTML = html;
-}
-
-// Alphabet bar
-$('#alphabetBar')?.addEventListener('click', e => {
-  if(e.target.classList.contains('letter-btn')){
-    currentLetter = e.target.dataset.letter;
-    $$('.letter-btn').forEach(b => b.classList.remove('active'));
-    e.target.classList.add('active');
-    loadAZList(1);
+  let scrollObserver;
+  function setupInfiniteScroll() {
+    if (scrollObserver) scrollObserver.disconnect();
+    const sentinel = document.createElement('div');
+    sentinel.style.height = '20px';
+    sentinel.id = 'scrollSentinel';
+    document.getElementById('azGrid').appendChild(sentinel);
+    scrollObserver = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting && !isLoading) {
+        loadAZ(currentLetter, currentPage + 1);
+      }
+    }, { rootMargin: '200px' });
+    scrollObserver.observe(sentinel);
   }
-});
 
-document.addEventListener('DOMContentLoaded', () => {
-  checkAuth();
-  loadAZList(1);
-});
+  document.querySelectorAll('.az-letter').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (scrollObserver) scrollObserver.disconnect();
+      loadAZ(btn.dataset.letter, 1);
+    });
+  });
+
+  async function performLiveSearch() {
+    const query = document.getElementById('searchInput').value.trim();
+    const genre = document.getElementById('searchGenre').value;
+    const type = document.getElementById('searchType').value;
+    const results = document.getElementById('searchResults');
+    if (!query && !genre && !type) { results.innerHTML = ''; return; }
+    let url = 'https://api.jikan.moe/v4/anime?limit=24&sfw=true';
+    if (query) url += '&q=' + encodeURIComponent(query);
+    if (genre) url += '&genres=' + genre;
+    if (type) url += '&type=' + type;
+    try {
+      const data = await App.fetchWithRetry(url);
+      const list = data.data || [];
+      if (!list.length) { results.innerHTML = '<div style="color:var(--text-muted);text-align:center;padding:40px;">No results</div>'; return; }
+      results.innerHTML = list.map(a => App.createAnimeCard(a)).join('');
+    } catch (err) { results.innerHTML = '<div style="color:var(--text-muted);text-align:center;padding:40px;">Search failed</div>'; }
+  }
+
+  document.getElementById('searchInput').addEventListener('input', App.debounce(performLiveSearch, 400));
+  document.getElementById('searchGenre').addEventListener('change', performLiveSearch);
+  document.getElementById('searchType').addEventListener('change', performLiveSearch);
+
+  function init() { App.initCommon(); loadAZ('all', 1); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
+})();
 </script>
 </body>
 </html>
