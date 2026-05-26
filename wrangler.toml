@@ -1,28 +1,16 @@
-name = "animestream-platform"
+name = "animestream-api"
 main = "worker.js"
-compatibility_date = "2024-01-01"
+compatibility_date = "2025-01-01"
 
-# D1 Database Binding
+[vars]
+JWT_SECRET = "your-super-secret-jwt-key-change-this-in-production"
+
 [[d1_databases]]
 binding = "DB"
 database_name = "alnuraraf_sql_d1"
 database_id = "be7e97d9-b7ee-449c-9de5-7468fd570d92"
 
-# KV Namespace (optional, for caching)
-[[kv_namespaces]]
-binding = "CACHE"
-id = "48972b70ce694c159bee7476b58910f7"
-
-# Environment Variables
-[vars]
-JWT_SECRET = "your-super-secret-jwt-key-change-this-in-production"
-API_RATE_LIMIT = "100"
-
-# Production environment
-[env.production]
-name = "animestream-platform-prod"
-
-[[env.production.d1_databases]]
-binding = "DB"
-database_name = "animestream-db-prod"
-database_id = "your-production-database-id"
+# Rate limiting (optional, requires KV)
+# [[kv_namespaces]]
+# binding = "RATE_LIMIT"
+# id = "48972b70ce694c159bee7476b58910f7"
