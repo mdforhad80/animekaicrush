@@ -1,504 +1,270 @@
-// AnimeStream Platform - Cloudflare Worker Backend
-// Production-ready API with JWT auth, D1 database, rate limiting
+// Cloudflare Worker Backend for AnimeStream Platform
+// Features: JWT Auth, D1 Database, Comments API, CORS
 
-const CORS_HEADERS = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Requested-With',
-  'Access-Control-Max-Age': '86400',
-};
+const encoder = new TextEncoder();
 
-// ==================== CRYPTO UTILITIES ====================
-
-async function hashPassword(password) {
-  const encoder = new TextEncoder();
-  const salt = crypto.getRandomValues(new Uint8Array(16));
-  const keyMaterial = await crypto.subtle.importKey(
-    'raw', encoder.encode(password), { name: 'PBKDF2' }, false, ['deriveBits']
-  );
-  const hash = await crypto.subtle.deriveBits(
-    { name: 'PBKDF2', salt, iterations: 100000, hash: 'SHA-256' },
-    keyMaterial, 256
-  );
-  const saltStr = btoa(String.fromCharCode(...salt));
-  const hashStr = btoa(String.fromCharCode(...new Uint8Array(hash)));
-  return `${saltStr}.${hashStr}`;
+async function importKey(secret) {
+  return crypto.subtle.importKey('raw', encoder.encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign', 'verify']);
 }
 
-async function verifyPassword(password, stored) {
-  const [saltStr, hashStr] = stored.split('.');
-  const salt = Uint8Array.from(atob(saltStr), c => c.charCodeAt(0));
-  const encoder = new TextEncoder();
-  const keyMaterial = await crypto.subtle.importKey(
-    'raw', encoder.encode(password), { name: 'PBKDF2' }, false, ['deriveBits']
-  );
-  const hash = await crypto.subtle.deriveBits(
-    { name: 'PBKDF2', salt, iterations: 100000, hash: 'SHA-256' },
-    keyMaterial, 256
-  );
-  const newHash = btoa(String.fromCharCode(...new Uint8Array(hash)));
-  return newHash === hashStr;
+function base64UrlEncode(buf) {
+  return btoa(String.fromCharCode(...new Uint8Array(buf))).replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
 }
 
-async function signJWT(payload, secret) {
-  const encoder = new TextEncoder();
-  const key = await crypto.subtle.importKey(
-    'raw', encoder.encode(secret),
-    { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']
-  );
+function base64UrlDecode(str) {
+  const padding = '='.repeat((4 - (str.length % 4)) % 4);
+  const base64 = str.replace(/-/g, '+').replace(/_/g, '/') + padding;
+  const raw = atob(base64);
+  const buf = new Uint8Array(raw.length);
+  for (let i = 0; i < raw.length; i++) buf[i] = raw.charCodeAt(i);
+  return buf.buffer;
+}
+
+async function signJWT(payload, secret, expiresIn = '7d') {
   const header = { alg: 'HS256', typ: 'JWT' };
-  const headerB64 = btoa(JSON.stringify(header)).replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
-  const payloadB64 = btoa(JSON.stringify(payload)).replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
-  const data = encoder.encode(`${headerB64}.${payloadB64}`);
-  const signature = await crypto.subtle.sign('HMAC', key, data);
-  const sigB64 = btoa(String.fromCharCode(...new Uint8Array(signature))).replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
-  return `${headerB64}.${payloadB64}.${sigB64}`;
+  const now = Math.floor(Date.now() / 1000);
+  let exp = now + 604800;
+  if (typeof expiresIn === 'string') {
+    const m = expiresIn.match(/^(\d+)([smhd])$/);
+    if (m) {
+      const v = parseInt(m[1]);
+      const mult = { s: 1, m: 60, h: 3600, d: 86400 }[m[2]];
+      exp = now + v * mult;
+    }
+  }
+  const fullPayload = { ...payload, iat: now, exp };
+  const h = base64UrlEncode(encoder.encode(JSON.stringify(header)));
+  const p = base64UrlEncode(encoder.encode(JSON.stringify(fullPayload)));
+  const sig = await crypto.subtle.sign('HMAC', await importKey(secret), encoder.encode(h + '.' + p));
+  return h + '.' + p + '.' + base64UrlEncode(sig);
 }
 
 async function verifyJWT(token, secret) {
-  const parts = token.split('.');
-  if (parts.length !== 3) throw new Error('Invalid token format');
-  const [headerB64, payloadB64, signatureB64] = parts;
-  const encoder = new TextEncoder();
-  const key = await crypto.subtle.importKey(
-    'raw', encoder.encode(secret),
-    { name: 'HMAC', hash: 'SHA-256' }, false, ['verify']
-  );
-  const sig = Uint8Array.from(atob(signatureB64.replace(/-/g, '+').replace(/_/g, '/')), c => c.charCodeAt(0));
-  const data = encoder.encode(`${headerB64}.${payloadB64}`);
-  const valid = await crypto.subtle.verify('HMAC', key, sig, data);
-  if (!valid) throw new Error('Invalid signature');
-  const payload = JSON.parse(atob(payloadB64.replace(/-/g, '+').replace(/_/g, '/')));
-  if (payload.exp && payload.exp < Math.floor(Date.now() / 1000)) {
-    throw new Error('Token expired');
-  }
-  return payload;
+  try {
+    const [h, p, s] = token.split('.');
+    if (!h || !p || !s) return null;
+    const valid = await crypto.subtle.verify('HMAC', await importKey(secret), base64UrlDecode(s), encoder.encode(h + '.' + p));
+    if (!valid) return null;
+    const payload = JSON.parse(new TextDecoder().decode(base64UrlDecode(p)));
+    if (payload.exp && payload.exp < Math.floor(Date.now() / 1000)) return null;
+    return payload;
+  } catch (e) { return null; }
 }
 
-// ==================== RESPONSE HELPERS ====================
-
-function jsonResponse(data, status = 200) {
-  return new Response(JSON.stringify(data), {
-    status,
-    headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' }
-  });
+async function hashPassword(password, salt) {
+  const data = encoder.encode(password + salt);
+  const hash = await crypto.subtle.digest('SHA-256', data);
+  return base64UrlEncode(hash);
 }
 
-function errorResponse(message, status = 400) {
-  return jsonResponse({ success: false, error: message }, status);
+function corsHeaders(origin) {
+  return {
+    'Access-Control-Allow-Origin': origin || '*',
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    'Access-Control-Max-Age': '86400',
+  };
 }
 
-// ==================== RATE LIMITING ====================
-
-const rateLimitMap = new Map();
-
-function checkRateLimit(clientIP, limit = 100, windowMs = 60000) {
-  const now = Date.now();
-  const key = `${clientIP}`;
-  const record = rateLimitMap.get(key) || { count: 0, resetTime: now + windowMs };
-
-  if (now > record.resetTime) {
-    record.count = 0;
-    record.resetTime = now + windowMs;
-  }
-
-  record.count++;
-  rateLimitMap.set(key, record);
-
-  if (record.count > limit) {
-    return false;
-  }
-  return true;
+function jsonResponse(data, status, headers) {
+  return new Response(JSON.stringify(data), { status, headers: { 'Content-Type': 'application/json', ...headers } });
 }
 
-// ==================== AUTH MIDDLEWARE ====================
-
-async function authenticate(request, env) {
+async function authMiddleware(request, env) {
   const authHeader = request.headers.get('Authorization');
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return null;
+    return { error: 'Missing token', status: 401 };
   }
-  const token = authHeader.substring(7);
-  try {
-    const payload = await verifyJWT(token, env.JWT_SECRET);
-    const user = await env.DB.prepare('SELECT id, username, email, name, avatar FROM users WHERE id = ?')
-      .bind(payload.userId).first();
-    return user;
-  } catch (e) {
-    return null;
-  }
+  const token = authHeader.slice(7);
+  const payload = await verifyJWT(token, env.JWT_SECRET);
+  if (!payload) return { error: 'Invalid or expired token', status: 401 };
+  return { user: payload };
 }
 
-// ==================== REQUEST HANDLER ====================
+async function dbQuery(db, sql, params) {
+  const stmt = db.prepare(sql);
+  return stmt.bind(...params).all();
+}
+
+async function dbRun(db, sql, params) {
+  const stmt = db.prepare(sql);
+  return stmt.bind(...params).run();
+}
 
 export default {
   async fetch(request, env, ctx) {
-    if (request.method === 'OPTIONS') {
-      return new Response(null, { status: 204, headers: CORS_HEADERS });
-    }
-
     const url = new URL(request.url);
     const path = url.pathname;
-    const clientIP = request.headers.get('CF-Connecting-IP') || 'unknown';
+    const method = request.method;
+    const origin = request.headers.get('Origin') || '*';
 
-    // Rate limiting
-    if (!checkRateLimit(clientIP, parseInt(env.API_RATE_LIMIT || '100'))) {
-      return errorResponse('Rate limit exceeded. Please try again later.', 429);
+    if (method === 'OPTIONS') {
+      return new Response(null, { status: 204, headers: corsHeaders(origin) });
     }
 
+    const headers = corsHeaders(origin);
+
     try {
-      // ==================== AUTH ROUTES ====================
+      if (path === '/api/health' && method === 'GET') {
+        return jsonResponse({ status: 'ok', timestamp: new Date().toISOString() }, 200, headers);
+      }
 
-      if (path === '/api/auth/register' && request.method === 'POST') {
-        const body = await request.json();
-        const { username, email, password, name } = body;
-
-        if (!username || !email || !password) {
-          return errorResponse('Username, email, and password are required');
+      if (path === '/api/auth/register' && method === 'POST') {
+        const { name, username, email, password } = await request.json();
+        if (!name || !username || !email || !password) {
+          return jsonResponse({ error: 'All fields are required' }, 400, headers);
         }
         if (password.length < 6) {
-          return errorResponse('Password must be at least 6 characters');
+          return jsonResponse({ error: 'Password must be at least 6 characters' }, 400, headers);
         }
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-          return errorResponse('Invalid email format');
+        const existing = await dbQuery(env.DB, 'SELECT id FROM users WHERE email = ? OR username = ?', [email, username]);
+        if (existing.results.length > 0) {
+          return jsonResponse({ error: 'User already exists' }, 409, headers);
         }
-
-        const existing = await env.DB.prepare(
-          'SELECT id FROM users WHERE username = ? OR email = ?'
-        ).bind(username, email).first();
-
-        if (existing) {
-          return errorResponse('Username or email already exists', 409);
-        }
-
-        const passwordHash = await hashPassword(password);
-        const result = await env.DB.prepare(
-          'INSERT INTO users (username, email, password_hash, name) VALUES (?, ?, ?, ?)'
-        ).bind(username, email, passwordHash, name || username).run();
-
-        const userId = result.meta.last_row_id;
-        const token = await signJWT({ userId, username, exp: Math.floor(Date.now() / 1000) + 604800 }, env.JWT_SECRET);
-
-        return jsonResponse({
-          success: true,
-          token,
-          user: { id: userId, username, email, name: name || username }
-        });
+        const hashed = await hashPassword(password, env.JWT_SECRET);
+        await dbRun(env.DB, 'INSERT INTO users (name, username, email, password_hash, avatar, created_at) VALUES (?, ?, ?, ?, ?, ?)',
+          [name, username, email, hashed, '', Date.now()]);
+        return jsonResponse({ success: true, message: 'User registered' }, 201, headers);
       }
 
-      if (path === '/api/auth/login' && request.method === 'POST') {
-        const body = await request.json();
-        const { email, password, remember } = body;
-
+      if (path === '/api/auth/login' && method === 'POST') {
+        const { email, password } = await request.json();
         if (!email || !password) {
-          return errorResponse('Email and password are required');
+          return jsonResponse({ error: 'Email and password required' }, 400, headers);
         }
-
-        const user = await env.DB.prepare(
-          'SELECT id, username, email, password_hash, name, avatar FROM users WHERE email = ? OR username = ?'
-        ).bind(email, email).first();
-
-        if (!user) {
-          return errorResponse('Invalid credentials', 401);
+        const users = await dbQuery(env.DB, 'SELECT * FROM users WHERE email = ?', [email]);
+        if (users.results.length === 0) {
+          return jsonResponse({ error: 'Invalid credentials' }, 401, headers);
         }
-
-        const valid = await verifyPassword(password, user.password_hash);
-        if (!valid) {
-          return errorResponse('Invalid credentials', 401);
+        const user = users.results[0];
+        const hashed = await hashPassword(password, env.JWT_SECRET);
+        if (hashed !== user.password_hash) {
+          return jsonResponse({ error: 'Invalid credentials' }, 401, headers);
         }
-
-        const exp = remember ? Math.floor(Date.now() / 1000) + 2592000 : Math.floor(Date.now() / 1000) + 604800;
-        const token = await signJWT({ userId: user.id, username: user.username, exp }, env.JWT_SECRET);
-
-        return jsonResponse({
-          success: true,
-          token,
-          user: { id: user.id, username: user.username, email: user.email, name: user.name, avatar: user.avatar }
-        });
+        const token = await signJWT({ sub: user.id, email: user.email, username: user.username, name: user.name }, env.JWT_SECRET, '7d');
+        return jsonResponse({ success: true, token, user: { id: user.id, name: user.name, username: user.username, email: user.email, avatar: user.avatar } }, 200, headers);
       }
 
-      if (path === '/api/auth/me' && request.method === 'GET') {
-        const user = await authenticate(request, env);
-        if (!user) {
-          return errorResponse('Unauthorized', 401);
-        }
-        return jsonResponse({ success: true, user });
+      if (path === '/api/auth/me' && method === 'GET') {
+        const auth = await authMiddleware(request, env);
+        if (auth.error) return jsonResponse({ error: auth.error }, auth.status, headers);
+        const users = await dbQuery(env.DB, 'SELECT id, name, username, email, avatar, created_at FROM users WHERE id = ?', [auth.user.sub]);
+        if (users.results.length === 0) return jsonResponse({ error: 'User not found' }, 404, headers);
+        return jsonResponse({ user: users.results[0] }, 200, headers);
       }
 
-      // ==================== FAVORITES ROUTES ====================
-
-      if (path === '/api/favorites' && request.method === 'GET') {
-        const user = await authenticate(request, env);
-        if (!user) return errorResponse('Unauthorized', 401);
-
-        const favorites = await env.DB.prepare(
-          'SELECT * FROM favorites WHERE user_id = ? ORDER BY created_at DESC'
-        ).bind(user.id).all();
-
-        return jsonResponse({ success: true, favorites: favorites.results || [] });
+      if (path === '/api/auth/profile' && method === 'PUT') {
+        const auth = await authMiddleware(request, env);
+        if (auth.error) return jsonResponse({ error: auth.error }, auth.status, headers);
+        const { name, avatar } = await request.json();
+        await dbRun(env.DB, 'UPDATE users SET name = ?, avatar = ? WHERE id = ?', [name || '', avatar || '', auth.user.sub]);
+        return jsonResponse({ success: true, message: 'Profile updated' }, 200, headers);
       }
 
-      if (path === '/api/favorites' && request.method === 'POST') {
-        const user = await authenticate(request, env);
-        if (!user) return errorResponse('Unauthorized', 401);
-
-        const body = await request.json();
-        const { anime_id, anime_title, anime_image, anime_type } = body;
-
-        if (!anime_id || !anime_title) {
-          return errorResponse('Anime ID and title are required');
-        }
-
-        try {
-          await env.DB.prepare(
-            'INSERT INTO favorites (user_id, anime_id, anime_title, anime_image, anime_type) VALUES (?, ?, ?, ?, ?)'
-          ).bind(user.id, anime_id, anime_title, anime_image || '', anime_type || '').run();
-
-          return jsonResponse({ success: true, message: 'Added to favorites' });
-        } catch (e) {
-          if (e.message && e.message.includes('UNIQUE constraint failed')) {
-            return errorResponse('Already in favorites', 409);
-          }
-          throw e;
-        }
-      }
-
-      if (path.startsWith('/api/favorites/') && request.method === 'DELETE') {
-        const user = await authenticate(request, env);
-        if (!user) return errorResponse('Unauthorized', 401);
-
-        const animeId = path.split('/')[3];
-        await env.DB.prepare('DELETE FROM favorites WHERE user_id = ? AND anime_id = ?')
-          .bind(user.id, animeId).run();
-
-        return jsonResponse({ success: true, message: 'Removed from favorites' });
-      }
-
-      // ==================== BOOKMARKS ROUTES ====================
-
-      if (path === '/api/bookmarks' && request.method === 'GET') {
-        const user = await authenticate(request, env);
-        if (!user) return errorResponse('Unauthorized', 401);
-
-        const bookmarks = await env.DB.prepare(
-          'SELECT * FROM bookmarks WHERE user_id = ? ORDER BY updated_at DESC'
-        ).bind(user.id).all();
-
-        return jsonResponse({ success: true, bookmarks: bookmarks.results || [] });
-      }
-
-      if (path === '/api/bookmarks' && request.method === 'POST') {
-        const user = await authenticate(request, env);
-        if (!user) return errorResponse('Unauthorized', 401);
-
-        const body = await request.json();
-        const { anime_id, anime_title, anime_image, episode_number } = body;
-
-        if (!anime_id || !anime_title) {
-          return errorResponse('Anime ID and title are required');
-        }
-
-        try {
-          await env.DB.prepare(
-            'INSERT INTO bookmarks (user_id, anime_id, anime_title, anime_image, episode_number) VALUES (?, ?, ?, ?, ?)'
-          ).bind(user.id, anime_id, anime_title, anime_image || '', episode_number || 1).run();
-
-          return jsonResponse({ success: true, message: 'Bookmarked' });
-        } catch (e) {
-          if (e.message && e.message.includes('UNIQUE constraint failed')) {
-            await env.DB.prepare(
-              'UPDATE bookmarks SET episode_number = ?, updated_at = CURRENT_TIMESTAMP WHERE user_id = ? AND anime_id = ?'
-            ).bind(episode_number || 1, user.id, anime_id).run();
-            return jsonResponse({ success: true, message: 'Bookmark updated' });
-          }
-          throw e;
-        }
-      }
-
-      if (path.startsWith('/api/bookmarks/') && request.method === 'DELETE') {
-        const user = await authenticate(request, env);
-        if (!user) return errorResponse('Unauthorized', 401);
-
-        const animeId = path.split('/')[3];
-        await env.DB.prepare('DELETE FROM bookmarks WHERE user_id = ? AND anime_id = ?')
-          .bind(user.id, animeId).run();
-
-        return jsonResponse({ success: true, message: 'Bookmark removed' });
-      }
-
-      // ==================== WATCH HISTORY ROUTES ====================
-
-      if (path === '/api/history' && request.method === 'GET') {
-        const user = await authenticate(request, env);
-        if (!user) return errorResponse('Unauthorized', 401);
-
-        const history = await env.DB.prepare(
-          'SELECT * FROM watch_history WHERE user_id = ? ORDER BY updated_at DESC'
-        ).bind(user.id).all();
-
-        return jsonResponse({ success: true, history: history.results || [] });
-      }
-
-      if (path === '/api/history' && request.method === 'POST') {
-        const user = await authenticate(request, env);
-        if (!user) return errorResponse('Unauthorized', 401);
-
-        const body = await request.json();
-        const { anime_id, anime_title, anime_image, episode_number, progress_seconds, total_seconds } = body;
-
-        if (!anime_id || !anime_title) {
-          return errorResponse('Anime ID and title are required');
-        }
-
-        try {
-          await env.DB.prepare(
-            'INSERT INTO watch_history (user_id, anime_id, anime_title, anime_image, episode_number, progress_seconds, total_seconds) VALUES (?, ?, ?, ?, ?, ?, ?)'
-          ).bind(user.id, anime_id, anime_title, anime_image || '', episode_number || 1, progress_seconds || 0, total_seconds || 0).run();
-
-          return jsonResponse({ success: true, message: 'History recorded' });
-        } catch (e) {
-          if (e.message && e.message.includes('UNIQUE constraint failed')) {
-            await env.DB.prepare(
-              'UPDATE watch_history SET episode_number = ?, progress_seconds = ?, total_seconds = ?, updated_at = CURRENT_TIMESTAMP WHERE user_id = ? AND anime_id = ?'
-            ).bind(episode_number || 1, progress_seconds || 0, total_seconds || 0, user.id, anime_id).run();
-            return jsonResponse({ success: true, message: 'History updated' });
-          }
-          throw e;
-        }
-      }
-
-      if (path.startsWith('/api/history/') && request.method === 'DELETE') {
-        const user = await authenticate(request, env);
-        if (!user) return errorResponse('Unauthorized', 401);
-
-        const animeId = path.split('/')[3];
-        await env.DB.prepare('DELETE FROM watch_history WHERE user_id = ? AND anime_id = ?')
-          .bind(user.id, animeId).run();
-
-        return jsonResponse({ success: true, message: 'History removed' });
-      }
-
-      // ==================== COMMENTS ROUTES ====================
-
-      if (path === '/api/comments' && request.method === 'GET') {
+      if (path === '/api/comments' && method === 'GET') {
         const animeId = url.searchParams.get('anime_id');
-        if (!animeId) return errorResponse('Anime ID is required');
-
-        const comments = await env.DB.prepare(
-          `SELECT c.*, u.username, u.avatar, u.name 
-           FROM comments c 
-           JOIN users u ON c.user_id = u.id 
-           WHERE c.anime_id = ? AND c.parent_id IS NULL 
-           ORDER BY c.created_at DESC`
-        ).bind(animeId).all();
-
-        return jsonResponse({ success: true, comments: comments.results || [] });
+        if (!animeId) return jsonResponse({ error: 'anime_id required' }, 400, headers);
+        const comments = await dbQuery(env.DB, 'SELECT c.*, u.name as user_name, u.avatar as user_avatar FROM comments c JOIN users u ON c.user_id = u.id WHERE c.anime_id = ? ORDER BY c.created_at DESC LIMIT 50', [animeId]);
+        return jsonResponse({ comments: comments.results }, 200, headers);
       }
 
-      if (path === '/api/comments' && request.method === 'POST') {
-        const user = await authenticate(request, env);
-        if (!user) return errorResponse('Unauthorized', 401);
+      if (path === '/api/comments' && method === 'POST') {
+        const auth = await authMiddleware(request, env);
+        if (auth.error) return jsonResponse({ error: auth.error }, auth.status, headers);
+        const { anime_id, text, parent_id } = await request.json();
+        if (!anime_id || !text) return jsonResponse({ error: 'anime_id and text required' }, 400, headers);
+        await dbRun(env.DB, 'INSERT INTO comments (anime_id, user_id, text, parent_id, created_at) VALUES (?, ?, ?, ?, ?)',
+          [anime_id, auth.user.sub, text, parent_id || null, Date.now()]);
+        return jsonResponse({ success: true, message: 'Comment posted' }, 201, headers);
+      }
 
-        const body = await request.json();
-        const { anime_id, content, parent_id } = body;
-
-        if (!anime_id || !content || content.trim().length === 0) {
-          return errorResponse('Anime ID and content are required');
+      if (path === '/api/comments/like' && method === 'POST') {
+        const auth = await authMiddleware(request, env);
+        if (auth.error) return jsonResponse({ error: auth.error }, auth.status, headers);
+        const { comment_id } = await request.json();
+        if (!comment_id) return jsonResponse({ error: 'comment_id required' }, 400, headers);
+        const existing = await dbQuery(env.DB, 'SELECT id FROM comment_likes WHERE comment_id = ? AND user_id = ?', [comment_id, auth.user.sub]);
+        if (existing.results.length > 0) {
+          await dbRun(env.DB, 'DELETE FROM comment_likes WHERE comment_id = ? AND user_id = ?', [comment_id, auth.user.sub]);
+          await dbRun(env.DB, 'UPDATE comments SET likes = likes - 1 WHERE id = ?', [comment_id]);
+          return jsonResponse({ success: true, liked: false }, 200, headers);
         }
-        if (content.length > 2000) {
-          return errorResponse('Comment too long (max 2000 characters)');
+        await dbRun(env.DB, 'INSERT INTO comment_likes (comment_id, user_id, created_at) VALUES (?, ?, ?)', [comment_id, auth.user.sub, Date.now()]);
+        await dbRun(env.DB, 'UPDATE comments SET likes = likes + 1 WHERE id = ?', [comment_id]);
+        return jsonResponse({ success: true, liked: true }, 200, headers);
+      }
+
+      if (path === '/api/favorites' && method === 'GET') {
+        const auth = await authMiddleware(request, env);
+        if (auth.error) return jsonResponse({ error: auth.error }, auth.status, headers);
+        const favs = await dbQuery(env.DB, 'SELECT * FROM favorites WHERE user_id = ? ORDER BY created_at DESC', [auth.user.sub]);
+        return jsonResponse({ favorites: favs.results }, 200, headers);
+      }
+
+      if (path === '/api/favorites' && method === 'POST') {
+        const auth = await authMiddleware(request, env);
+        if (auth.error) return jsonResponse({ error: auth.error }, auth.status, headers);
+        const { anime_id, title, image } = await request.json();
+        if (!anime_id) return jsonResponse({ error: 'anime_id required' }, 400, headers);
+        const existing = await dbQuery(env.DB, 'SELECT id FROM favorites WHERE user_id = ? AND anime_id = ?', [auth.user.sub, anime_id]);
+        if (existing.results.length > 0) {
+          await dbRun(env.DB, 'DELETE FROM favorites WHERE user_id = ? AND anime_id = ?', [auth.user.sub, anime_id]);
+          return jsonResponse({ success: true, favorited: false }, 200, headers);
         }
-
-        const result = await env.DB.prepare(
-          'INSERT INTO comments (user_id, anime_id, content, parent_id) VALUES (?, ?, ?, ?)'
-        ).bind(user.id, anime_id, content.trim(), parent_id || null).run();
-
-        return jsonResponse({
-          success: true,
-          comment: {
-            id: result.meta.last_row_id,
-            user_id: user.id,
-            username: user.username,
-            name: user.name,
-            avatar: user.avatar,
-            anime_id,
-            content: content.trim(),
-            parent_id: parent_id || null,
-            likes: 0,
-            created_at: new Date().toISOString()
-          }
-        });
+        await dbRun(env.DB, 'INSERT INTO favorites (user_id, anime_id, title, image, created_at) VALUES (?, ?, ?, ?, ?)',
+          [auth.user.sub, anime_id, title || '', image || '', Date.now()]);
+        return jsonResponse({ success: true, favorited: true }, 201, headers);
       }
 
-      if (path.startsWith('/api/comments/') && path.endsWith('/like') && request.method === 'POST') {
-        const user = await authenticate(request, env);
-        if (!user) return errorResponse('Unauthorized', 401);
+      if (path === '/api/bookmarks' && method === 'GET') {
+        const auth = await authMiddleware(request, env);
+        if (auth.error) return jsonResponse({ error: auth.error }, auth.status, headers);
+        const marks = await dbQuery(env.DB, 'SELECT * FROM bookmarks WHERE user_id = ? ORDER BY created_at DESC', [auth.user.sub]);
+        return jsonResponse({ bookmarks: marks.results }, 200, headers);
+      }
 
-        const commentId = path.split('/')[3];
-
-        try {
-          await env.DB.prepare(
-            'INSERT INTO comment_likes (user_id, comment_id) VALUES (?, ?)'
-          ).bind(user.id, commentId).run();
-
-          await env.DB.prepare(
-            'UPDATE comments SET likes = likes + 1 WHERE id = ?'
-          ).bind(commentId).run();
-
-          return jsonResponse({ success: true, message: 'Liked' });
-        } catch (e) {
-          if (e.message && e.message.includes('UNIQUE constraint failed')) {
-            return errorResponse('Already liked', 409);
-          }
-          throw e;
+      if (path === '/api/bookmarks' && method === 'POST') {
+        const auth = await authMiddleware(request, env);
+        if (auth.error) return jsonResponse({ error: auth.error }, auth.status, headers);
+        const { anime_id, title, image } = await request.json();
+        if (!anime_id) return jsonResponse({ error: 'anime_id required' }, 400, headers);
+        const existing = await dbQuery(env.DB, 'SELECT id FROM bookmarks WHERE user_id = ? AND anime_id = ?', [auth.user.sub, anime_id]);
+        if (existing.results.length > 0) {
+          await dbRun(env.DB, 'DELETE FROM bookmarks WHERE user_id = ? AND anime_id = ?', [auth.user.sub, anime_id]);
+          return jsonResponse({ success: true, bookmarked: false }, 200, headers);
         }
+        await dbRun(env.DB, 'INSERT INTO bookmarks (user_id, anime_id, title, image, created_at) VALUES (?, ?, ?, ?, ?)',
+          [auth.user.sub, anime_id, title || '', image || '', Date.now()]);
+        return jsonResponse({ success: true, bookmarked: true }, 201, headers);
       }
 
-      // ==================== PROFILE ROUTES ====================
-
-      if (path === '/api/profile' && request.method === 'PUT') {
-        const user = await authenticate(request, env);
-        if (!user) return errorResponse('Unauthorized', 401);
-
-        const body = await request.json();
-        const { name, avatar } = body;
-
-        await env.DB.prepare(
-          'UPDATE users SET name = ?, avatar = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?'
-        ).bind(name || user.name, avatar || user.avatar, user.id).run();
-
-        return jsonResponse({ success: true, message: 'Profile updated' });
+      if (path === '/api/history' && method === 'GET') {
+        const auth = await authMiddleware(request, env);
+        if (auth.error) return jsonResponse({ error: auth.error }, auth.status, headers);
+        const hist = await dbQuery(env.DB, 'SELECT * FROM watch_history WHERE user_id = ? ORDER BY updated_at DESC LIMIT 50', [auth.user.sub]);
+        return jsonResponse({ history: hist.results }, 200, headers);
       }
 
-      if (path === '/api/stats' && request.method === 'GET') {
-        const user = await authenticate(request, env);
-        if (!user) return errorResponse('Unauthorized', 401);
-
-        const favCount = await env.DB.prepare('SELECT COUNT(*) as count FROM favorites WHERE user_id = ?').bind(user.id).first();
-        const bmCount = await env.DB.prepare('SELECT COUNT(*) as count FROM bookmarks WHERE user_id = ?').bind(user.id).first();
-        const histCount = await env.DB.prepare('SELECT COUNT(*) as count FROM watch_history WHERE user_id = ?').bind(user.id).first();
-
-        return jsonResponse({
-          success: true,
-          stats: {
-            favorites: favCount?.count || 0,
-            bookmarks: bmCount?.count || 0,
-            history: histCount?.count || 0
-          }
-        });
+      if (path === '/api/history' && method === 'POST') {
+        const auth = await authMiddleware(request, env);
+        if (auth.error) return jsonResponse({ error: auth.error }, auth.status, headers);
+        const { anime_id, title, image, episode } = await request.json();
+        if (!anime_id) return jsonResponse({ error: 'anime_id required' }, 400, headers);
+        const existing = await dbQuery(env.DB, 'SELECT id FROM watch_history WHERE user_id = ? AND anime_id = ?', [auth.user.sub, anime_id]);
+        if (existing.results.length > 0) {
+          await dbRun(env.DB, 'UPDATE watch_history SET episode = ?, updated_at = ? WHERE user_id = ? AND anime_id = ?',
+            [episode || 1, Date.now(), auth.user.sub, anime_id]);
+        } else {
+          await dbRun(env.DB, 'INSERT INTO watch_history (user_id, anime_id, title, image, episode, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?)',
+            [auth.user.sub, anime_id, title || '', image || '', episode || 1, Date.now(), Date.now()]);
+        }
+        return jsonResponse({ success: true }, 200, headers);
       }
 
-      // ==================== HEALTH CHECK ====================
-
-      if (path === '/api/health') {
-        return jsonResponse({ success: true, status: 'ok', timestamp: new Date().toISOString() });
-      }
-
-      return errorResponse('Not found', 404);
-
-    } catch (error) {
-      console.error('Worker error:', error);
-      return errorResponse(error.message || 'Internal server error', 500);
+      return jsonResponse({ error: 'Not found' }, 404, headers);
+    } catch (err) {
+      console.error('Worker error:', err);
+      return jsonResponse({ error: 'Internal server error' }, 500, headers);
     }
   }
 };
