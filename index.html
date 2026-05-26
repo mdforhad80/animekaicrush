@@ -1,1030 +1,2028 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="AnimeVault - Watch anime online in HD. Stream the latest anime episodes for free.">
-<meta property="og:title" content="AnimeVault - Premium Anime Streaming">
-<meta property="og:description" content="Watch thousands of anime episodes in HD quality.">
-<meta property="og:type" content="website">
-<title>AnimeVault - Premium Anime Streaming</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Noto+Sans+JP:wght@400;700&family=Noto+Sans+Bengali:wght@400;700&display=swap" rel="stylesheet">
-<style>
-:root {
-  --bg-primary: #080810;
-  --bg-secondary: #0d0d1a;
-  --bg-card: #111122;
-  --bg-glass: rgba(255,255,255,0.04);
-  --accent: #7c3aed;
-  --accent-bright: #a855f7;
-  --accent-glow: rgba(124,58,237,0.4);
-  --accent-soft: rgba(168,85,247,0.15);
-  --text-primary: #f0f0ff;
-  --text-secondary: #8888aa;
-  --text-muted: #55556a;
-  --border: rgba(255,255,255,0.07);
-  --border-accent: rgba(124,58,237,0.3);
-  --header-h: 64px;
-  --radius: 10px;
-  --radius-lg: 16px;
-  --transition: 0.25s cubic-bezier(0.4,0,0.2,1);
-}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html,body{overflow-x:hidden;max-width:100%;background:var(--bg-primary);color:var(--text-primary);font-family:'Outfit',sans-serif;scroll-behavior:smooth}
-img{max-width:100%;display:block}
-a{text-decoration:none;color:inherit}
-button{cursor:pointer;border:none;background:none;font-family:inherit;color:inherit}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AnimeStream - Premium Anime Streaming Platform. Watch trending anime, top-rated series, and latest releases in HD quality.">
+    <meta name="keywords" content="anime, streaming, watch anime, anime online, HD anime, sub, dub">
+    <meta property="og:title" content="AnimeStream - Premium Anime Streaming">
+    <meta property="og:description" content="Watch trending anime, top-rated series, and latest releases in HD quality.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://anime-stream.pages.dev/og-image.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="theme-color" content="#0a0a0f">
+    <title>AnimeStream - Watch Anime Online in HD</title>
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #111118;
+            --bg-tertiary: #1a1a24;
+            --bg-card: #16161f;
+            --purple-400: #a78bfa;
+            --purple-500: #8b5cf6;
+            --purple-600: #7c3aed;
+            --purple-700: #6d28d9;
+            --purple-glow: rgba(139, 92, 246, 0.3);
+            --purple-glow-strong: rgba(139, 92, 246, 0.6);
+            --text-primary: #f1f1f6;
+            --text-secondary: #b0b0c0;
+            --text-muted: #777790;
+            --border-subtle: rgba(255, 255, 255, 0.06);
+            --border-medium: rgba(255, 255, 255, 0.1);
+            --glass-bg: rgba(22, 22, 31, 0.75);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-blur: blur(20px);
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 20px;
+            --radius-2xl: 24px;
+            --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.4);
+            --shadow-glow: 0 0 40px var(--purple-glow);
+            --shadow-glow-strong: 0 0 60px var(--purple-glow-strong);
+            --font-display: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            --font-body: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-smooth: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+            --header-height: 64px;
+            --safe-top: env(safe-area-inset-top, 0px);
+            --safe-bottom: env(safe-area-inset-bottom, 0px);
+            --safe-left: env(safe-area-inset-left, 0px);
+            --safe-right: env(safe-area-inset-right, 0px);
+        }
 
-/* ── SCROLLBAR ── */
-::-webkit-scrollbar{width:5px;height:5px}
-::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:var(--accent);border-radius:99px}
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-/* ══════════════════════════════════════════
-   HEADER
-══════════════════════════════════════════ */
-#header{position:fixed;top:0;left:0;right:0;height:var(--header-h);z-index:1000;transition:background var(--transition),backdrop-filter var(--transition),box-shadow var(--transition)}
-#header.scrolled{background:rgba(8,8,16,0.92);backdrop-filter:blur(20px);box-shadow:0 1px 0 var(--border)}
-.header-inner{display:flex;align-items:center;height:100%;padding:0 20px;gap:12px;max-width:1800px;margin:0 auto}
-.hamburger{display:flex;flex-direction:column;gap:5px;padding:8px;border-radius:8px;transition:background var(--transition)}
-.hamburger:hover{background:var(--bg-glass)}
-.hamburger span{width:22px;height:2px;background:var(--text-primary);border-radius:2px;transition:transform var(--transition),opacity var(--transition)}
-.logo{flex:0 0 auto;display:flex;align-items:center;gap:10px;margin:0 auto;position:absolute;left:50%;transform:translateX(-50%)}
-.logo-mark{width:34px;height:34px;background:linear-gradient(135deg,var(--accent),var(--accent-bright));border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:18px;box-shadow:0 0 20px var(--accent-glow)}
-.logo-text{font-size:22px;font-weight:800;letter-spacing:-0.5px;background:linear-gradient(135deg,#fff 40%,var(--accent-bright));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.header-right{display:flex;align-items:center;gap:4px;margin-left:auto}
-.icon-btn{width:40px;height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;transition:background var(--transition),color var(--transition);color:var(--text-secondary);font-size:18px;position:relative}
-.icon-btn:hover{background:var(--bg-glass);color:var(--text-primary)}
+        html {
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+            max-width: 100%;
+        }
 
-/* Language switcher */
-.lang-switcher{position:relative}
-.lang-btn{display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:8px;font-size:13px;font-weight:600;color:var(--text-secondary);transition:all var(--transition);border:1px solid transparent}
-.lang-btn:hover{background:var(--bg-glass);border-color:var(--border);color:var(--text-primary)}
-.lang-dropdown{position:absolute;top:calc(100% + 8px);right:0;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:6px;min-width:130px;opacity:0;pointer-events:none;transform:translateY(-8px);transition:all var(--transition);box-shadow:0 20px 40px rgba(0,0,0,0.5);z-index:100}
-.lang-switcher:hover .lang-dropdown,.lang-dropdown.open{opacity:1;pointer-events:all;transform:translateY(0)}
-.lang-opt{padding:8px 12px;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;transition:background var(--transition);display:flex;align-items:center;gap:8px}
-.lang-opt:hover,.lang-opt.active{background:var(--accent-soft);color:var(--accent-bright)}
+        body {
+            font-family: var(--font-body);
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+            max-width: 100%;
+            position: relative;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-overflow-scrolling: touch;
+        }
 
-/* ── NAV ── */
-#nav{position:fixed;top:var(--header-h);left:0;right:0;z-index:990;background:rgba(8,8,16,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);transform:translateY(-100%);opacity:0;transition:transform var(--transition),opacity var(--transition)}
-#nav.visible{transform:translateY(0);opacity:1}
-.nav-inner{display:flex;align-items:center;gap:0;padding:0 20px;max-width:1800px;margin:0 auto;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
-.nav-inner::-webkit-scrollbar{display:none}
-.nav-item{position:relative;flex-shrink:0}
-.nav-link{display:flex;align-items:center;gap:5px;padding:14px 16px;font-size:13.5px;font-weight:600;color:var(--text-secondary);transition:color var(--transition);white-space:nowrap;letter-spacing:0.2px}
-.nav-link:hover,.nav-link.active{color:var(--text-primary)}
-.nav-link svg{width:12px;height:12px;transition:transform var(--transition)}
-.nav-item:hover .nav-link svg{transform:rotate(180deg)}
-.nav-active-bar{position:absolute;bottom:0;left:50%;transform:translateX(-50%);height:2px;background:var(--accent-bright);border-radius:2px 2px 0 0;width:0;transition:width var(--transition)}
-.nav-item:hover .nav-active-bar,.nav-item.active .nav-active-bar{width:80%}
+        body.no-scroll {
+            overflow: hidden;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+        }
 
-/* MEGA MENU */
-.mega-menu{position:absolute;top:100%;left:50%;transform:translateX(-50%) translateY(-10px);background:rgba(13,13,26,0.97);backdrop-filter:blur(30px);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;min-width:240px;opacity:0;pointer-events:none;transition:all var(--transition);box-shadow:0 25px 60px rgba(0,0,0,0.6);z-index:200}
-.nav-item:hover .mega-menu{opacity:1;pointer-events:all;transform:translateX(-50%) translateY(0)}
-.mega-menu-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
-.mega-item{padding:8px 12px;border-radius:7px;font-size:13px;font-weight:500;color:var(--text-secondary);cursor:pointer;transition:all var(--transition);white-space:nowrap}
-.mega-item:hover{background:var(--accent-soft);color:var(--accent-bright)}
+        ::selection {
+            background: var(--purple-600);
+            color: #fff;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-medium);
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--purple-500);
+        }
 
-/* ── SIDEBAR ── */
-#sidebar{position:fixed;top:0;left:0;bottom:0;width:280px;background:rgba(8,8,16,0.98);backdrop-filter:blur(30px);border-right:1px solid var(--border);z-index:2000;transform:translateX(-100%);transition:transform 0.35s cubic-bezier(0.4,0,0.2,1);overflow-y:auto;padding:20px}
-#sidebar.open{transform:translateX(0)}
-#sidebar-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:1999;opacity:0;pointer-events:none;transition:opacity var(--transition)}
-#sidebar-overlay.visible{opacity:1;pointer-events:all}
-.sidebar-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
-.sidebar-close{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--text-secondary);transition:all var(--transition)}
-.sidebar-close:hover{background:var(--bg-glass);color:var(--text-primary)}
-.sidebar-nav{display:flex;flex-direction:column;gap:2px}
-.sidebar-link{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:9px;font-size:14px;font-weight:500;color:var(--text-secondary);transition:all var(--transition)}
-.sidebar-link:hover{background:var(--accent-soft);color:var(--accent-bright)}
-.sidebar-divider{height:1px;background:var(--border);margin:12px 0}
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+        ul {
+            list-style: none;
+        }
+        img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+        }
+        button {
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-family: inherit;
+            color: inherit;
+        }
+        input,
+        textarea {
+            font-family: inherit;
+            color: inherit;
+        }
 
-/* ══════════════════════════════════════════
-   HERO SLIDER
-══════════════════════════════════════════ */
-#hero{position:relative;height:calc(100svh - var(--header-h));min-height:500px;max-height:900px;margin-top:var(--header-h);overflow:hidden;background:#000}
-.hero-track{display:flex;height:100%;transition:transform 0.8s cubic-bezier(0.77,0,0.175,1)}
-.hero-slide{flex:0 0 100%;position:relative;overflow:hidden}
-.hero-bg{position:absolute;inset:0;background-size:cover;background-position:center top;filter:brightness(0.55);transform:scale(1.05);transition:transform 8s ease}
-.hero-slide.active .hero-bg{transform:scale(1)}
-.hero-overlay{position:absolute;inset:0;background:linear-gradient(to right,rgba(8,8,16,0.95) 0%,rgba(8,8,16,0.6) 50%,transparent 100%),linear-gradient(to top,rgba(8,8,16,0.8) 0%,transparent 60%)}
-.hero-content{position:absolute;bottom:10%;left:6%;max-width:min(580px,90vw);z-index:2}
-.hero-badge{display:inline-flex;align-items:center;gap:8px;padding:5px 12px;background:var(--accent);border-radius:99px;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:16px;opacity:0;transform:translateY(20px);transition:all 0.6s 0.1s}
-.hero-slide.active .hero-badge{opacity:1;transform:translateY(0)}
-.hero-title{font-size:clamp(26px,5vw,58px);font-weight:900;line-height:1.1;letter-spacing:-1px;margin-bottom:12px;opacity:0;transform:translateY(24px);transition:all 0.6s 0.2s}
-.hero-slide.active .hero-title{opacity:1;transform:translateY(0)}
-.hero-meta{display:flex;align-items:center;gap:14px;margin-bottom:12px;opacity:0;transform:translateY(20px);transition:all 0.6s 0.3s;flex-wrap:wrap}
-.hero-slide.active .hero-meta{opacity:1;transform:translateY(0)}
-.hero-score{display:flex;align-items:center;gap:5px;font-size:14px;font-weight:700;color:#fbbf24}
-.hero-genres{display:flex;gap:6px;flex-wrap:wrap}
-.hero-genre-tag{padding:3px 10px;background:rgba(255,255,255,0.1);border-radius:99px;font-size:12px;font-weight:500;color:var(--text-secondary)}
-.hero-synopsis{font-size:14px;color:var(--text-secondary);line-height:1.7;margin-bottom:22px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;opacity:0;transform:translateY(20px);transition:all 0.6s 0.4s}
-.hero-slide.active .hero-synopsis{opacity:1;transform:translateY(0)}
-.hero-actions{display:flex;gap:12px;flex-wrap:wrap;opacity:0;transform:translateY(20px);transition:all 0.6s 0.5s}
-.hero-slide.active .hero-actions{opacity:1;transform:translateY(0)}
-.btn-primary{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;background:var(--accent);color:#fff;border-radius:10px;font-weight:700;font-size:14px;transition:all var(--transition);box-shadow:0 0 24px var(--accent-glow)}
-.btn-primary:hover{background:var(--accent-bright);transform:translateY(-2px);box-shadow:0 8px 32px var(--accent-glow)}
-.btn-secondary{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;background:rgba(255,255,255,0.1);backdrop-filter:blur(10px);color:#fff;border-radius:10px;font-weight:600;font-size:14px;border:1px solid rgba(255,255,255,0.15);transition:all var(--transition)}
-.btn-secondary:hover{background:rgba(255,255,255,0.18);transform:translateY(-2px)}
-/* slider controls */
-.hero-arrows{position:absolute;bottom:10%;right:6%;display:flex;gap:10px;z-index:3}
-.hero-arrow{width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,0.1);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;transition:all var(--transition)}
-.hero-arrow:hover{background:var(--accent);border-color:var(--accent)}
-.hero-dots{position:absolute;bottom:5%;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:3}
-.hero-dot{width:6px;height:6px;border-radius:99px;background:rgba(255,255,255,0.3);cursor:pointer;transition:all var(--transition)}
-.hero-dot.active{width:24px;background:var(--accent-bright)}
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
 
-/* drag */
-.hero-track.dragging{transition:none;cursor:grabbing}
+        /* ========== HEADER ========== */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            height: var(--header-height);
+            background: rgba(10, 10, 15, 0.85);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border-bottom: 1px solid var(--border-subtle);
+            display: flex;
+            align-items: center;
+            padding: 0 clamp(12px, 3vw, 32px);
+            gap: clamp(8px, 2vw, 16px);
+            transition: background var(--transition-smooth);
+            padding-top: var(--safe-top);
+        }
+        .header.scrolled {
+            background: rgba(10, 10, 15, 0.95);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
+        }
 
-/* ══════════════════════════════════════════
-   SECTION / SLIDERS
-══════════════════════════════════════════ */
-.section{padding:48px 0 0}
-.section:last-child{padding-bottom:80px}
-.section-header{display:flex;align-items:center;justify-content:space-between;padding:0 24px;margin-bottom:20px}
-.section-title{font-size:clamp(18px,2.5vw,24px);font-weight:800;letter-spacing:-0.5px}
-.section-title span{color:var(--accent-bright)}
-.see-all{font-size:13px;font-weight:600;color:var(--accent-bright);display:flex;align-items:center;gap:4px;opacity:0.8;transition:opacity var(--transition)}
-.see-all:hover{opacity:1}
+        .header__left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
 
-/* slider wrapper */
-.slider-wrap{position:relative;padding:0 24px}
-.slider-viewport{overflow:hidden;border-radius:var(--radius)}
-.slider-track{display:flex;gap:14px;transition:transform 0.45s cubic-bezier(0.4,0,0.2,1);will-change:transform;cursor:grab}
-.slider-track.dragging{transition:none;cursor:grabbing}
-.slider-track:active{cursor:grabbing}
-.slider-arrow{position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;background:var(--bg-card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--text-primary);font-size:16px;z-index:10;transition:all var(--transition);box-shadow:0 4px 20px rgba(0,0,0,0.5);opacity:0}
-.slider-wrap:hover .slider-arrow{opacity:1}
-.slider-arrow:hover{background:var(--accent);border-color:var(--accent);box-shadow:0 0 20px var(--accent-glow)}
-.slider-arrow.prev{left:4px}
-.slider-arrow.next{right:4px}
-.slider-arrow.disabled{opacity:0!important}
+        .header__hamburger {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            transition: background var(--transition-fast);
+            flex-shrink: 0;
+            color: var(--text-primary);
+        }
+        .header__hamburger:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .header__hamburger svg {
+            width: 22px;
+            height: 22px;
+        }
 
-/* ── ANIME CARD ── */
-.anime-card{flex:0 0 calc((100% - 14px * 5) / 6);min-width:0;position:relative;border-radius:var(--radius);overflow:hidden;background:var(--bg-card);cursor:pointer;transition:transform var(--transition),box-shadow var(--transition)}
-@media(max-width:1200px){.anime-card{flex-basis:calc((100% - 14px * 4) / 5)}}
-@media(max-width:960px){.anime-card{flex-basis:calc((100% - 14px * 3) / 4)}}
-@media(max-width:640px){.anime-card{flex-basis:calc((100% - 14px * 2) / 3)}}
-@media(max-width:440px){.anime-card{flex-basis:calc((100% - 14px * 1) / 2)}}
-.anime-card:hover{transform:translateY(-6px) scale(1.02);box-shadow:0 20px 50px rgba(0,0,0,0.6),0 0 30px var(--accent-glow)}
-.card-poster{aspect-ratio:2/3;overflow:hidden;position:relative;background:#0d0d1a}
-.card-poster img{width:100%;height:100%;object-fit:cover;transition:transform 0.5s ease}
-.anime-card:hover .card-poster img{transform:scale(1.08)}
-.card-poster-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#111125,#0d0d1a);color:var(--text-muted);font-size:32px}
-.card-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(8,8,16,0.95) 0%,rgba(8,8,16,0.3) 50%,transparent 100%);opacity:0;transition:opacity var(--transition)}
-.anime-card:hover .card-overlay{opacity:1}
-.card-badges{position:absolute;top:8px;left:8px;display:flex;gap:4px;flex-direction:column;align-items:flex-start}
-.badge{padding:2px 7px;border-radius:5px;font-size:10px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase}
-.badge-hd{background:#10b981;color:#fff}
-.badge-score{background:rgba(251,191,36,0.9);color:#000}
-.badge-ep{background:rgba(0,0,0,0.7);color:#fff;backdrop-filter:blur(4px)}
-.badge-type{background:var(--accent);color:#fff}
-.card-info{padding:10px}
-.card-title{font-size:12.5px;font-weight:600;color:var(--text-primary);line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:5px}
-.card-meta{display:flex;align-items:center;justify-content:space-between;font-size:11px;color:var(--text-muted)}
-.card-play{position:absolute;bottom:50px;left:50%;transform:translateX(-50%);width:44px;height:44px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:16px;opacity:0;transition:all var(--transition);box-shadow:0 0 20px var(--accent-glow)}
-.anime-card:hover .card-play{opacity:1}
+        .header__logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #c4b5fd, #8b5cf6, #6d28d9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .header__logo-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: var(--radius-sm);
+            background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            -webkit-text-fill-color: #fff;
+            flex-shrink: 0;
+        }
 
-/* ── SKELETON ── */
-.skeleton{background:linear-gradient(90deg,var(--bg-card) 0%,rgba(255,255,255,0.06) 50%,var(--bg-card) 100%);background-size:200% 100%;animation:shimmer 1.5s infinite}
-@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
-.skeleton-card{flex:0 0 calc((100% - 14px * 5) / 6);min-width:0;border-radius:var(--radius);overflow:hidden}
-.skeleton-poster{aspect-ratio:2/3}
-.skeleton-line{height:12px;border-radius:6px;margin:10px}
+        .header__icon-btn {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition-fast);
+            color: var(--text-secondary);
+            position: relative;
+            flex-shrink: 0;
+        }
+        .header__icon-btn:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .header__icon-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+        .header__profile-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: #fff;
+            transition: all var(--transition-fast);
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+        .header__profile-btn:hover {
+            box-shadow: var(--shadow-glow);
+            transform: scale(1.05);
+        }
 
-/* ══════════════════════════════════════════
-   SEARCH OVERLAY
-══════════════════════════════════════════ */
-#search-overlay{position:fixed;inset:0;background:rgba(5,5,15,0.95);backdrop-filter:blur(30px);z-index:3000;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity 0.3s}
-#search-overlay.open{opacity:1;pointer-events:all}
-.search-header{padding:max(20px,env(safe-area-inset-top)) 24px 0;display:flex;align-items:center;gap:12px}
-.search-input-wrap{flex:1;position:relative;max-width:760px;margin:0 auto}
-#search-input{width:100%;padding:16px 50px 16px 20px;background:rgba(255,255,255,0.07);border:1.5px solid var(--border);border-radius:14px;font-size:18px;font-family:'Outfit',sans-serif;color:var(--text-primary);outline:none;transition:border-color var(--transition)}
-#search-input:focus{border-color:var(--accent)}
-#search-input::placeholder{color:var(--text-muted)}
-.search-clear{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:var(--text-muted);font-size:18px;cursor:pointer;display:none}
-.search-close{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--text-secondary);font-size:22px;transition:all var(--transition)}
-.search-close:hover{background:var(--bg-glass);color:var(--text-primary)}
-.search-filters{display:flex;gap:8px;padding:16px 24px;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid var(--border);flex-shrink:0}
-.search-filters::-webkit-scrollbar{display:none}
-.filter-chip{padding:7px 16px;border-radius:99px;border:1px solid var(--border);font-size:12.5px;font-weight:600;color:var(--text-secondary);cursor:pointer;white-space:nowrap;transition:all var(--transition);flex-shrink:0}
-.filter-chip:hover,.filter-chip.active{background:var(--accent-soft);border-color:var(--accent);color:var(--accent-bright)}
-.search-body{flex:1;overflow-y:auto;padding:20px 24px;min-height:0}
-.search-results-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:16px}
-.search-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:200px;color:var(--text-muted);gap:12px;font-size:15px}
-.search-empty svg{font-size:48px;opacity:0.3}
+        .header__lang {
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0 12px;
+            border-radius: 20px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: all var(--transition-fast);
+            flex-shrink: 0;
+        }
+        .header__lang:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+        }
 
-/* ══════════════════════════════════════════
-   AUTH MODAL
-══════════════════════════════════════════ */
-#auth-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(10px);z-index:4000;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity 0.3s}
-#auth-overlay.open{opacity:1;pointer-events:all}
-.auth-modal{background:rgba(13,13,26,0.98);border:1px solid var(--border-accent);border-radius:20px;padding:32px;width:100%;max-width:440px;max-height:calc(100svh - 40px);overflow-y:auto;position:relative;transform:scale(0.95) translateY(20px);transition:transform 0.35s cubic-bezier(0.34,1.56,0.64,1)}
-#auth-overlay.open .auth-modal{transform:scale(1) translateY(0)}
-.auth-close{position:absolute;top:16px;right:16px;width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--text-muted);font-size:18px;transition:all var(--transition)}
-.auth-close:hover{background:var(--bg-glass);color:var(--text-primary)}
-.auth-logo{display:flex;align-items:center;gap:10px;margin-bottom:24px;justify-content:center}
-.auth-tabs{display:flex;background:rgba(255,255,255,0.04);border-radius:10px;padding:4px;margin-bottom:24px;border:1px solid var(--border)}
-.auth-tab{flex:1;padding:9px;border-radius:8px;font-size:14px;font-weight:600;color:var(--text-muted);transition:all var(--transition);text-align:center;cursor:pointer}
-.auth-tab.active{background:var(--accent);color:#fff;box-shadow:0 4px 16px var(--accent-glow)}
-.auth-form{display:flex;flex-direction:column;gap:14px}
-.auth-form-section{display:none}
-.auth-form-section.active{display:flex;flex-direction:column;gap:14px}
-.form-group{display:flex;flex-direction:column;gap:7px}
-.form-label{font-size:12px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.5px}
-.form-input{padding:12px 16px;background:rgba(255,255,255,0.05);border:1.5px solid var(--border);border-radius:10px;font-size:14px;font-family:'Outfit',sans-serif;color:var(--text-primary);outline:none;transition:border-color var(--transition)}
-.form-input:focus{border-color:var(--accent)}
-.form-input::placeholder{color:var(--text-muted)}
-.form-row{display:flex;align-items:center;justify-content:space-between;font-size:13px}
-.form-check{display:flex;align-items:center;gap:8px;cursor:pointer;color:var(--text-secondary)}
-.form-check input{accent-color:var(--accent)}
-.form-link{color:var(--accent-bright);font-weight:600;cursor:pointer;background:none;border:none;font-family:inherit;font-size:13px}
-.form-link:hover{text-decoration:underline}
-.btn-auth{padding:14px;background:linear-gradient(135deg,var(--accent),var(--accent-bright));color:#fff;border-radius:10px;font-size:15px;font-weight:700;font-family:'Outfit',sans-serif;transition:all var(--transition);box-shadow:0 4px 20px var(--accent-glow)}
-.btn-auth:hover{transform:translateY(-2px);box-shadow:0 8px 30px var(--accent-glow)}
-.auth-divider{display:flex;align-items:center;gap:12px;color:var(--text-muted);font-size:12px}
-.auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:var(--border)}
-.social-btns{display:flex;gap:10px}
-.btn-social{flex:1;padding:11px;border:1.5px solid var(--border);border-radius:10px;font-size:13px;font-weight:600;color:var(--text-secondary);display:flex;align-items:center;justify-content:center;gap:8px;transition:all var(--transition)}
-.btn-social:hover{border-color:var(--accent);color:var(--accent-bright);background:var(--accent-soft)}
-.auth-switch{text-align:center;font-size:13px;color:var(--text-muted)}
+        .header__nav {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            flex: 1;
+            overflow-x: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            mask-image: linear-gradient(to right, transparent 0%, #000 2%, #000 98%, transparent 100%);
+            -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 2%, #000 98%, transparent 100%);
+            justify-content: flex-end;
+        }
+        .header__nav::-webkit-scrollbar {
+            display: none;
+        }
+        .header__nav-item {
+            position: relative;
+            white-space: nowrap;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            transition: all var(--transition-fast);
+            cursor: pointer;
+            letter-spacing: 0.2px;
+            user-select: none;
+        }
+        .header__nav-item:hover,
+        .header__nav-item.active {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.04);
+        }
+        .header__nav-item.active {
+            color: var(--purple-400);
+            background: rgba(139, 92, 246, 0.1);
+        }
 
-/* ══════════════════════════════════════════
-   FOOTER
-══════════════════════════════════════════ */
-footer{background:var(--bg-secondary);border-top:1px solid var(--border);padding:32px 24px;text-align:center}
-.footer-logo{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:16px}
-.footer-disclaimer{font-size:12px;color:var(--text-muted);max-width:600px;margin:0 auto 16px;line-height:1.6}
-.footer-social{display:flex;justify-content:center;gap:12px;margin-bottom:16px}
-.social-icon{width:36px;height:36px;border-radius:8px;background:var(--bg-glass);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--text-muted);font-size:15px;transition:all var(--transition)}
-.social-icon:hover{border-color:var(--accent);color:var(--accent-bright);background:var(--accent-soft)}
-.footer-copy{font-size:12px;color:var(--text-muted)}
+        /* ========== SIDEBAR ========== */
+        .sidebar-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 1100;
+            background: rgba(0, 0, 0, 0.6);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity var(--transition-smooth);
+        }
+        .sidebar-overlay.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: clamp(280px, 80vw, 340px);
+            z-index: 1101;
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border-subtle);
+            transform: translateX(-100%);
+            transition: transform var(--transition-smooth);
+            display: flex;
+            flex-direction: column;
+            padding-top: var(--header-height);
+            overflow-y: auto;
+            padding-top: calc(var(--header-height) + var(--safe-top));
+        }
+        .sidebar.open {
+            transform: translateX(0);
+        }
+        .sidebar__section {
+            padding: 12px 20px;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        .sidebar__title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        .sidebar__link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: var(--radius-sm);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            transition: all var(--transition-fast);
+            cursor: pointer;
+        }
+        .sidebar__link:hover,
+        .sidebar__link.active {
+            color: #fff;
+            background: rgba(139, 92, 246, 0.1);
+        }
+        .sidebar__link svg {
+            width: 18px;
+            height: 18px;
+            opacity: 0.7;
+            flex-shrink: 0;
+        }
 
-/* ══════════════════════════════════════════
-   NOTIFICATION TOAST
-══════════════════════════════════════════ */
-#toast-container{position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:8px;pointer-events:none}
-.toast{padding:14px 18px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;font-size:13.5px;font-weight:500;color:var(--text-primary);box-shadow:0 8px 30px rgba(0,0,0,0.4);animation:toastIn 0.3s ease forwards;pointer-events:all;max-width:320px;display:flex;align-items:center;gap:10px}
-.toast.success{border-color:rgba(16,185,129,0.4)}
-.toast.error{border-color:rgba(239,68,68,0.4)}
-@keyframes toastIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
-@keyframes toastOut{from{opacity:1}to{opacity:0;transform:translateX(20px)}}
+        /* ========== MEGA MENU ========== */
+        .mega-menu {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%) translateY(8px);
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-xl);
+            padding: 20px 24px;
+            min-width: 500px;
+            max-width: 90vw;
+            opacity: 0;
+            pointer-events: none;
+            transition: all var(--transition-smooth);
+            z-index: 1001;
+            box-shadow: var(--shadow-card), var(--shadow-glow);
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 8px;
+        }
+        .header__nav-item:hover .mega-menu,
+        .mega-menu:hover {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateX(-50%) translateY(0);
+        }
+        .mega-menu__item {
+            padding: 8px 12px;
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            transition: all var(--transition-fast);
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .mega-menu__item:hover {
+            color: #fff;
+            background: rgba(139, 92, 246, 0.15);
+        }
 
-/* ══════════════════════════════════════════
-   RESPONSIVE
-══════════════════════════════════════════ */
-@media(max-width:768px){
-  .hero-arrows{bottom:5%;right:4%}
-  .nav-link{padding:12px 10px;font-size:13px}
-  .logo-text{font-size:18px}
-  .header-inner{padding:0 12px}
-  .slider-wrap{padding:0 12px}
-  .section-header{padding:0 12px}
-  .search-results-grid{grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px}
-  .hero-content{left:4%;bottom:8%}
-}
-@media(max-width:480px){
-  .search-filters{padding:10px 12px;gap:6px}
-  .filter-chip{padding:5px 12px;font-size:12px}
-  .auth-modal{padding:24px}
-  .hero-synopsis{display:none}
-}
-</style>
+        /* ========== SEARCH OVERLAY ========== */
+        .search-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 2000;
+            background: rgba(10, 10, 15, 0.92);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity var(--transition-smooth);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: clamp(20px, 5vh, 60px) clamp(16px, 4vw, 40px);
+            padding-top: calc(var(--header-height) + clamp(20px, 5vh, 60px) + var(--safe-top));
+        }
+        .search-overlay.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .search-overlay__input-wrap {
+            width: 100%;
+            max-width: 680px;
+            position: relative;
+            margin-bottom: 24px;
+        }
+        .search-overlay__input {
+            width: 100%;
+            padding: 16px 50px 16px 24px;
+            border-radius: 50px;
+            border: 2px solid var(--border-medium);
+            background: var(--bg-tertiary);
+            font-size: 1.1rem;
+            color: #fff;
+            outline: none;
+            transition: all var(--transition-fast);
+        }
+        .search-overlay__input:focus {
+            border-color: var(--purple-500);
+            box-shadow: 0 0 30px var(--purple-glow);
+        }
+        .search-overlay__clear {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all var(--transition-fast);
+        }
+        .search-overlay__clear:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .search-overlay__suggestions {
+            width: 100%;
+            max-width: 680px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 12px;
+            overflow-y: auto;
+            max-height: 60vh;
+            padding-right: 8px;
+        }
+        .search-suggestion-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            border: 1px solid transparent;
+        }
+        .search-suggestion-card:hover {
+            border-color: var(--purple-500);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-glow);
+        }
+        .search-suggestion-card img {
+            width: 100%;
+            aspect-ratio: 3/4;
+            object-fit: cover;
+            background: var(--bg-tertiary);
+        }
+        .search-suggestion-card__info {
+            padding: 8px 10px;
+        }
+        .search-suggestion-card__title {
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            line-height: 1.3;
+        }
+        .search-overlay__filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+            max-width: 680px;
+            width: 100%;
+        }
+        .search-filter-chip {
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1px solid var(--border-medium);
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            transition: all var(--transition-fast);
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .search-filter-chip:hover,
+        .search-filter-chip.active {
+            border-color: var(--purple-500);
+            color: #fff;
+            background: rgba(139, 92, 246, 0.15);
+        }
+
+        /* ========== AUTH MODAL ========== */
+        .auth-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 3000;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity var(--transition-smooth);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .auth-overlay.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .auth-modal {
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-2xl);
+            padding: clamp(24px, 4vw, 40px);
+            width: 100%;
+            max-width: 440px;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-card), var(--shadow-glow-strong);
+            transform: scale(0.9);
+            transition: transform var(--transition-smooth);
+            position: relative;
+        }
+        .auth-overlay.open .auth-modal {
+            transform: scale(1);
+        }
+        .auth-modal__tabs {
+            display: flex;
+            gap: 0;
+            margin-bottom: 24px;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        .auth-modal__tab {
+            flex: 1;
+            text-align: center;
+            padding: 12px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all var(--transition-fast);
+        }
+        .auth-modal__tab.active {
+            color: var(--purple-400);
+            border-bottom-color: var(--purple-500);
+        }
+        .auth-modal__close {
+            position: absolute;
+            top: 12px;
+            right: 16px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            color: var(--text-muted);
+            transition: all var(--transition-fast);
+            z-index: 1;
+        }
+        .auth-modal__close:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+        .auth-form__group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .auth-form__label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+        .auth-form__input {
+            padding: 12px 16px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-medium);
+            background: var(--bg-tertiary);
+            font-size: 0.9rem;
+            color: #fff;
+            outline: none;
+            transition: all var(--transition-fast);
+        }
+        .auth-form__input:focus {
+            border-color: var(--purple-500);
+            box-shadow: 0 0 16px var(--purple-glow);
+        }
+        .auth-form__checkbox-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+        .auth-form__submit {
+            padding: 14px;
+            border-radius: 50px;
+            background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.95rem;
+            transition: all var(--transition-fast);
+            margin-top: 8px;
+            letter-spacing: 0.3px;
+        }
+        .auth-form__submit:hover {
+            box-shadow: var(--shadow-glow-strong);
+            transform: translateY(-1px);
+        }
+        .auth-form__switch {
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+        .auth-form__switch span {
+            color: var(--purple-400);
+            cursor: pointer;
+            font-weight: 500;
+        }
+        .auth-form__switch span:hover {
+            text-decoration: underline;
+        }
+
+        /* ========== HERO SLIDER ========== */
+        .hero {
+            position: relative;
+            width: 100%;
+            height: clamp(400px, 60vh, 700px);
+            margin-top: var(--header-height);
+            overflow: hidden;
+            background: var(--bg-primary);
+        }
+        .hero__slide {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+        }
+        .hero__slide.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .hero__slide-bg {
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center 20%;
+            background-repeat: no-repeat;
+            filter: brightness(0.4);
+            transform: scale(1.05);
+            transition: transform 8s ease;
+        }
+        .hero__slide.active .hero__slide-bg {
+            transform: scale(1);
+        }
+        .hero__slide-gradient {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, var(--bg-primary) 0%, transparent 40%, rgba(10, 10, 15, 0.4) 100%),
+                linear-gradient(to right, rgba(10, 10, 15, 0.9) 0%, transparent 50%, rgba(10, 10, 15, 0.3) 100%);
+        }
+        .hero__content {
+            position: absolute;
+            bottom: clamp(40px, 8vh, 80px);
+            left: clamp(20px, 5vw, 60px);
+            max-width: 600px;
+            z-index: 2;
+        }
+        .hero__title {
+            font-size: clamp(1.8rem, 4.5vw, 3.2rem);
+            font-weight: 900;
+            letter-spacing: -1px;
+            line-height: 1.1;
+            margin-bottom: 12px;
+            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.6);
+        }
+        .hero__meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 12px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        .hero__score {
+            color: #fbbf24;
+            font-weight: 700;
+        }
+        .hero__synopsis {
+            font-size: 0.9rem;
+            color: #ccc;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        .hero__buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all var(--transition-fast);
+            letter-spacing: 0.3px;
+            white-space: nowrap;
+        }
+        .btn--primary {
+            background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+            color: #fff;
+        }
+        .btn--primary:hover {
+            box-shadow: var(--shadow-glow-strong);
+            transform: translateY(-2px);
+        }
+        .btn--outline {
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            color: #fff;
+        }
+        .btn--outline:hover {
+            border-color: #fff;
+            background: rgba(255, 255, 255, 0.08);
+        }
+        .hero__dots {
+            position: absolute;
+            bottom: 20px;
+            right: clamp(20px, 5vw, 60px);
+            display: flex;
+            gap: 8px;
+            z-index: 2;
+        }
+        .hero__dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+        .hero__dot.active {
+            background: var(--purple-500);
+            box-shadow: 0 0 12px var(--purple-glow-strong);
+            width: 28px;
+            border-radius: 10px;
+        }
+        .hero__arrows {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 2;
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            padding: 0 16px;
+            pointer-events: none;
+        }
+        .hero__arrow {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 1.4rem;
+            pointer-events: auto;
+            transition: all var(--transition-fast);
+            cursor: pointer;
+        }
+        .hero__arrow:hover {
+            background: rgba(139, 92, 246, 0.5);
+        }
+
+        /* ========== WIDGET SECTION ========== */
+        .section {
+            padding: clamp(20px, 4vw, 40px) clamp(12px, 3vw, 32px);
+        }
+        .section__header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+        .section__title {
+            font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+            font-weight: 700;
+            letter-spacing: -0.3px;
+            position: relative;
+            padding-left: 16px;
+        }
+        .section__title::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 24px;
+            border-radius: 2px;
+            background: var(--purple-500);
+        }
+        .section__see-all {
+            font-size: 0.85rem;
+            color: var(--purple-400);
+            cursor: pointer;
+            font-weight: 500;
+            transition: color var(--transition-fast);
+        }
+        .section__see-all:hover {
+            color: #fff;
+        }
+
+        /* ========== CARD SLIDER ========== */
+        .slider-container {
+            position: relative;
+            overflow: hidden;
+        }
+        .slider-track {
+            display: flex;
+            gap: 14px;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            padding: 8px 4px 20px;
+            cursor: grab;
+            scroll-snap-type: x proximity;
+        }
+        .slider-track::-webkit-scrollbar {
+            display: none;
+        }
+        .slider-track:active {
+            cursor: grabbing;
+        }
+        .slider-track.dragging {
+            scroll-behavior: auto;
+        }
+        .anime-card {
+            flex: 0 0 clamp(140px, 22vw, 180px);
+            scroll-snap-align: start;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            background: var(--bg-card);
+            cursor: pointer;
+            transition: all var(--transition-smooth);
+            position: relative;
+            border: 1px solid transparent;
+            user-select: none;
+            display: flex;
+            flex-direction: column;
+        }
+        .anime-card:hover {
+            transform: translateY(-6px);
+            border-color: var(--purple-500);
+            box-shadow: var(--shadow-glow);
+            z-index: 5;
+        }
+        .anime-card__poster-wrap {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 3/4;
+            overflow: hidden;
+        }
+        .anime-card__poster {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            background: var(--bg-tertiary);
+            transition: transform var(--transition-slow);
+        }
+        .anime-card:hover .anime-card__poster {
+            transform: scale(1.05);
+        }
+        .anime-card__badges {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            pointer-events: none;
+        }
+        .badge {
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+        }
+        .badge--score {
+            background: rgba(251, 191, 36, 0.9);
+            color: #000;
+        }
+        .badge--episode {
+            background: rgba(139, 92, 246, 0.85);
+            color: #fff;
+        }
+        .badge--hd {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+        }
+        .badge--type {
+            background: rgba(0, 0, 0, 0.6);
+            color: #fff;
+        }
+        .anime-card__title {
+            padding: 10px 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            line-height: 1.3;
+            color: #fff;
+            background: var(--bg-card);
+            flex-grow: 1;
+        }
+        .slider-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--border-medium);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 1.2rem;
+            z-index: 10;
+            transition: all var(--transition-fast);
+            cursor: pointer;
+            opacity: 0;
+            pointer-events: none;
+        }
+        .slider-container:hover .slider-arrow {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .slider-arrow:hover {
+            background: rgba(139, 92, 246, 0.6);
+            border-color: var(--purple-500);
+        }
+        .slider-arrow--left {
+            left: 4px;
+        }
+        .slider-arrow--right {
+            right: 4px;
+        }
+
+        /* ========== SKELETON ========== */
+        .skeleton {
+            background: linear-gradient(90deg, var(--bg-tertiary) 25%, #252535 50%, var(--bg-tertiary) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s ease-in-out infinite;
+            border-radius: var(--radius-md);
+        }
+        @keyframes shimmer {
+            0% {
+                background-position: 200% 0;
+            }
+            100% {
+                background-position: -200% 0;
+            }
+        }
+        .skeleton-card {
+            flex: 0 0 clamp(140px, 22vw, 180px);
+            aspect-ratio: 3/4;
+            border-radius: var(--radius-md);
+        }
+
+        /* ========== FOOTER ========== */
+        .footer {
+            padding: 30px clamp(16px, 4vw, 40px);
+            text-align: center;
+            border-top: 1px solid var(--border-subtle);
+            background: var(--bg-secondary);
+        }
+        .footer__text {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 8px;
+            line-height: 1.5;
+        }
+        .footer__social {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            margin-bottom: 12px;
+        }
+        .footer__social a {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--bg-tertiary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition-fast);
+            color: var(--text-secondary);
+        }
+        .footer__social a:hover {
+            background: var(--purple-600);
+            color: #fff;
+        }
+        .footer__copyright {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* ========== TOAST ========== */
+        .toast-container {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .toast {
+            padding: 12px 20px;
+            border-radius: 50px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-medium);
+            color: #fff;
+            font-size: 0.85rem;
+            font-weight: 500;
+            box-shadow: var(--shadow-card);
+            animation: toastIn 0.4s ease, toastOut 0.3s ease 2.5s forwards;
+            backdrop-filter: blur(12px);
+        }
+        @keyframes toastIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        @keyframes toastOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 768px) {
+            .header__nav {
+                display: none;
+            }
+            .header__left {
+                flex: 1;
+            }
+            .hero {
+                height: clamp(350px, 55vh, 500px);
+            }
+            .hero__content {
+                bottom: 50px;
+                left: 16px;
+                max-width: 90%;
+            }
+            .hero__arrows {
+                display: none;
+            }
+            .hero__dots {
+                bottom: 12px;
+                right: 16px;
+            }
+            .mega-menu {
+                display: none !important;
+            }
+            .slider-arrow {
+                display: none !important;
+            }
+            .anime-card {
+                flex: 0 0 clamp(120px, 30vw, 150px);
+            }
+            .search-overlay__suggestions {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+                gap: 8px;
+            }
+            .auth-modal {
+                margin: 0 8px;
+                border-radius: var(--radius-xl);
+            }
+        }
+        @media (max-width: 480px) {
+            .hero {
+                height: clamp(300px, 50vh, 420px);
+            }
+            .hero__title {
+                font-size: 1.3rem;
+            }
+            .anime-card {
+                flex: 0 0 clamp(100px, 40vw, 130px);
+            }
+            .btn {
+                padding: 10px 18px;
+                font-size: 0.8rem;
+            }
+            .section__title {
+                font-size: 1rem;
+            }
+            .header__logo {
+                font-size: 1rem;
+            }
+        }
+        @media (min-width: 1400px) {
+            .anime-card {
+                flex: 0 0 170px;
+            }
+            .hero__content {
+                max-width: 700px;
+                left: 80px;
+            }
+        }
+    </style>
 </head>
 <body>
 
-<!-- ══ HEADER ══ -->
-<header id="header">
-  <div class="header-inner">
-    <button class="hamburger" id="hamburger-btn" aria-label="Menu">
-      <span></span><span></span><span></span>
-    </button>
-
-    <a href="index.html" class="logo">
-      <div class="logo-mark">V</div>
-      <span class="logo-text">AnimeVault</span>
-    </a>
-
-    <div class="header-right">
-      <button class="icon-btn" id="search-btn" aria-label="Search">
-        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      </button>
-
-      <div class="lang-switcher">
-        <button class="icon-btn lang-btn" id="lang-btn">
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-          <span id="lang-label">EN</span>
-        </button>
-        <div class="lang-dropdown" id="lang-dropdown">
-          <div class="lang-opt active" data-lang="en">🇺🇸 English</div>
-          <div class="lang-opt" data-lang="jp">🇯🇵 日本語</div>
-          <div class="lang-opt" data-lang="bn">🇧🇩 বাংলা</div>
+    <!-- ==================== HEADER ==================== -->
+    <header class="header" id="header">
+        <div class="header__left">
+            <button class="header__hamburger" id="hamburgerBtn" aria-label="Open menu">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+            </button>
+            <a href="index.html" class="header__logo">
+                <span class="header__logo-icon">A</span> AnimeStream
+            </a>
+            <button class="header__icon-btn" id="searchBtn" aria-label="Search">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            </button>
+            <div class="header__lang" id="langBtn" aria-label="Language">🌐 EN</div>
+            <button class="header__profile-btn" id="profileBtn" aria-label="Profile">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="8" r="4"/>
+                    <path d="M6 21v-2a4 4 0 014-4h4a4 4 0 014 4v2"/>
+                </svg>
+            </button>
         </div>
-      </div>
+        <nav class="header__nav" id="headerNav">
+            <a href="index.html" class="header__nav-item active">Home</a>
+            <div class="header__nav-item" id="genresMenuTrigger">
+                Genres
+                <div class="mega-menu" id="genresMegaMenu"></div>
+            </div>
+            <div class="header__nav-item">
+                Types
+                <div class="mega-menu">
+                    <span class="mega-menu__item" data-type="tv">TV</span>
+                    <span class="mega-menu__item" data-type="movie">Movie</span>
+                    <span class="mega-menu__item" data-type="ova">OVA</span>
+                    <span class="mega-menu__item" data-type="ona">ONA</span>
+                    <span class="mega-menu__item" data-type="special">Special</span>
+                    <span class="mega-menu__item" data-type="music">Music</span>
+                </div>
+            </div>
+            <div class="header__nav-item">
+                Status
+                <div class="mega-menu">
+                    <span class="mega-menu__item" data-status="airing">Airing</span>
+                    <span class="mega-menu__item" data-status="complete">Completed</span>
+                    <span class="mega-menu__item" data-status="upcoming">Upcoming</span>
+                </div>
+            </div>
+            <a href="schedule.html" class="header__nav-item">Schedule</a>
+            <a href="az-list.html" class="header__nav-item">A-Z List</a>
+            <a href="search.html" class="header__nav-item">New Releases</a>
+        </nav>
+    </header>
 
-      <button class="icon-btn" id="profile-btn" aria-label="Profile">
-        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-      </button>
-    </div>
-  </div>
-</header>
-
-<!-- ══ NAV ══ -->
-<nav id="nav">
-  <div class="nav-inner">
-    <div class="nav-item active">
-      <a href="index.html" class="nav-link active">Home</a>
-      <div class="nav-active-bar"></div>
-    </div>
-    <div class="nav-item">
-      <a href="?filter=trending" class="nav-link">Trending</a>
-      <div class="nav-active-bar"></div>
-    </div>
-    <div class="nav-item">
-      <a href="schedule.html" class="nav-link">Schedule</a>
-      <div class="nav-active-bar"></div>
-    </div>
-    <div class="nav-item">
-      <a href="az-list.html" class="nav-link">A-Z List</a>
-      <div class="nav-active-bar"></div>
-    </div>
-    <!-- Genres dropdown -->
-    <div class="nav-item">
-      <span class="nav-link" style="cursor:pointer">Genres
-        <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
-      </span>
-      <div class="nav-active-bar"></div>
-      <div class="mega-menu" id="genres-menu">
-        <div class="mega-menu-grid" id="genres-grid">
-          <div class="mega-item">Loading...</div>
+    <!-- ==================== SIDEBAR ==================== -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar__section">
+            <div class="sidebar__title">Navigation</div>
+            <a href="index.html" class="sidebar__link active">🏠 Home</a>
+            <a href="search.html" class="sidebar__link">🔥 Trending</a>
+            <a href="schedule.html" class="sidebar__link">📅 Schedule</a>
+            <a href="az-list.html" class="sidebar__link">🔤 A-Z List</a>
+            <a href="profile.html" class="sidebar__link">👤 Profile</a>
         </div>
-      </div>
-    </div>
-    <!-- Types dropdown -->
-    <div class="nav-item">
-      <span class="nav-link" style="cursor:pointer">Types
-        <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
-      </span>
-      <div class="nav-active-bar"></div>
-      <div class="mega-menu">
-        <div class="mega-menu-grid">
-          <div class="mega-item" onclick="filterByType('tv')">TV</div>
-          <div class="mega-item" onclick="filterByType('movie')">Movie</div>
-          <div class="mega-item" onclick="filterByType('ova')">OVA</div>
-          <div class="mega-item" onclick="filterByType('ona')">ONA</div>
-          <div class="mega-item" onclick="filterByType('special')">Special</div>
-          <div class="mega-item" onclick="filterByType('music')">Music</div>
+        <div class="sidebar__section" id="sidebarGenres">
+            <div class="sidebar__title">Genres</div>
         </div>
-      </div>
-    </div>
-    <!-- Status dropdown -->
-    <div class="nav-item">
-      <span class="nav-link" style="cursor:pointer">Status
-        <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
-      </span>
-      <div class="nav-active-bar"></div>
-      <div class="mega-menu">
-        <div class="mega-menu-grid">
-          <div class="mega-item" onclick="filterByStatus('airing')">Airing</div>
-          <div class="mega-item" onclick="filterByStatus('complete')">Completed</div>
-          <div class="mega-item" onclick="filterByStatus('upcoming')">Upcoming</div>
+    </aside>
+
+    <!-- ==================== SEARCH OVERLAY ==================== -->
+    <div class="search-overlay" id="searchOverlay">
+        <div class="search-overlay__input-wrap">
+            <input type="text" class="search-overlay__input" id="searchInput" placeholder="Search anime...">
+            <button class="search-overlay__clear" id="searchClear" aria-label="Clear">✕</button>
         </div>
-      </div>
-    </div>
-    <div class="nav-item">
-      <a href="search.html" class="nav-link">New Releases</a>
-      <div class="nav-active-bar"></div>
-    </div>
-  </div>
-</nav>
-
-<!-- ══ SIDEBAR ══ -->
-<div id="sidebar-overlay"></div>
-<aside id="sidebar">
-  <div class="sidebar-header">
-    <a href="index.html" class="logo">
-      <div class="logo-mark">V</div>
-      <span class="logo-text">AnimeVault</span>
-    </a>
-    <button class="sidebar-close" id="sidebar-close">✕</button>
-  </div>
-  <nav class="sidebar-nav">
-    <a href="index.html" class="sidebar-link">🏠 Home</a>
-    <a href="?filter=trending" class="sidebar-link">🔥 Trending</a>
-    <a href="schedule.html" class="sidebar-link">📅 Schedule</a>
-    <a href="az-list.html" class="sidebar-link">🔡 A-Z List</a>
-    <a href="search.html" class="sidebar-link">🔍 Search</a>
-    <div class="sidebar-divider"></div>
-    <a href="profile.html" class="sidebar-link" id="sb-profile">👤 My Profile</a>
-    <a href="#" class="sidebar-link" id="sb-favorites">❤️ Favorites</a>
-    <a href="#" class="sidebar-link" id="sb-history">🕒 History</a>
-  </nav>
-</aside>
-
-<!-- ══ HERO SLIDER ══ -->
-<section id="hero">
-  <div class="hero-track" id="hero-track"></div>
-  <button class="hero-arrow" id="hero-prev">
-    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
-  </button>
-  <button class="hero-arrow" id="hero-next">
-    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
-  </button>
-  <div class="hero-dots" id="hero-dots"></div>
-</section>
-
-<!-- ══ MAIN CONTENT ══ -->
-<main id="main">
-  <!-- Sections injected by JS -->
-</main>
-
-<!-- ══ FOOTER ══ -->
-<footer>
-  <div class="footer-logo">
-    <div class="logo-mark">V</div>
-    <span class="logo-text">AnimeVault</span>
-  </div>
-  <p class="footer-disclaimer">This site does not store any files on its server. All contents are provided by non-affiliated third parties.</p>
-  <div class="footer-social">
-    <a href="#" class="social-icon">𝕏</a>
-    <a href="#" class="social-icon">📘</a>
-    <a href="#" class="social-icon">📷</a>
-    <a href="#" class="social-icon">💬</a>
-  </div>
-  <p class="footer-copy">© 2025 AnimeVault. For entertainment purposes only.</p>
-</footer>
-
-<!-- ══ SEARCH OVERLAY ══ -->
-<div id="search-overlay" role="dialog" aria-label="Search">
-  <div class="search-header">
-    <div class="search-input-wrap">
-      <input type="text" id="search-input" placeholder="Search anime, genres, studios..." autocomplete="off" spellcheck="false">
-      <button class="search-clear" id="search-clear">✕</button>
-    </div>
-    <button class="search-close" id="search-close">✕</button>
-  </div>
-  <div class="search-filters">
-    <div class="filter-chip active" data-filter="">All</div>
-    <div class="filter-chip" data-filter="tv">TV</div>
-    <div class="filter-chip" data-filter="movie">Movie</div>
-    <div class="filter-chip" data-filter="ova">OVA</div>
-    <div class="filter-chip" data-filter="ona">ONA</div>
-    <div class="filter-chip" data-filter="airing">Airing</div>
-    <div class="filter-chip" data-filter="complete">Completed</div>
-  </div>
-  <div class="search-body">
-    <div id="search-results" class="search-results-grid"></div>
-    <div id="search-empty" class="search-empty" style="display:none">
-      <svg width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="opacity:0.3"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      <span id="search-empty-text">Search for your favorite anime</span>
-    </div>
-  </div>
-</div>
-
-<!-- ══ AUTH MODAL ══ -->
-<div id="auth-overlay" role="dialog" aria-label="Authentication">
-  <div class="auth-modal">
-    <button class="auth-close" id="auth-close">✕</button>
-    <div class="auth-logo">
-      <div class="logo-mark">V</div>
-      <span class="logo-text">AnimeVault</span>
-    </div>
-    <div class="auth-tabs">
-      <div class="auth-tab active" data-tab="login">Sign In</div>
-      <div class="auth-tab" data-tab="signup">Sign Up</div>
-    </div>
-    <!-- Login -->
-    <div class="auth-form-section active" id="form-login">
-      <div class="form-group">
-        <label class="form-label">Email or Username</label>
-        <input type="text" class="form-input" id="login-email" placeholder="Enter email or username">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Password</label>
-        <input type="password" class="form-input" id="login-pass" placeholder="Enter password">
-      </div>
-      <div class="form-row">
-        <label class="form-check"><input type="checkbox"> Remember me</label>
-        <button class="form-link">Forgot password?</button>
-      </div>
-      <button class="btn-auth" onclick="handleLogin()">Sign In</button>
-      <div class="auth-divider">or continue with</div>
-      <div class="social-btns">
-        <button class="btn-social">G Google</button>
-        <button class="btn-social">D Discord</button>
-      </div>
-      <p class="auth-switch">Don't have an account? <button class="form-link" onclick="switchAuthTab('signup')">Sign up</button></p>
-    </div>
-    <!-- Signup -->
-    <div class="auth-form-section" id="form-signup">
-      <div class="form-group">
-        <label class="form-label">Full Name</label>
-        <input type="text" class="form-input" id="signup-name" placeholder="Your full name">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Username</label>
-        <input type="text" class="form-input" id="signup-username" placeholder="Choose a username">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Email</label>
-        <input type="email" class="form-input" id="signup-email" placeholder="Enter email">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Password</label>
-        <input type="password" class="form-input" id="signup-pass" placeholder="Create password">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Confirm Password</label>
-        <input type="password" class="form-input" id="signup-confirm" placeholder="Confirm password">
-      </div>
-      <label class="form-check"><input type="checkbox" id="terms-check"> I agree to the <button class="form-link">Terms of Service</button></label>
-      <button class="btn-auth" onclick="handleSignup()">Create Account</button>
-      <p class="auth-switch">Already have an account? <button class="form-link" onclick="switchAuthTab('login')">Sign in</button></p>
-    </div>
-  </div>
-</div>
-
-<!-- ══ TOAST ══ -->
-<div id="toast-container"></div>
-
-<script>
-'use strict';
-
-/* ═══════════════════════════════════════
-   CONFIG & STATE
-═══════════════════════════════════════ */
-const API = 'https://api.jikan.moe/v4';
-const CACHE_TTL = 5 * 60 * 1000; // 5 min
-const cache = new Map();
-let currentLang = localStorage.getItem('av_lang') || 'en';
-let currentUser = JSON.parse(localStorage.getItem('av_user') || 'null');
-let heroSlides = [];
-let heroIndex = 0;
-let heroTimer = null;
-let heroDragging = false;
-let heroStartX = 0;
-let heroDelta = 0;
-let heroTransitioning = false;
-let searchFilter = '';
-let searchDebounce = null;
-
-/* ═══════════════════════════════════════
-   UTILS
-═══════════════════════════════════════ */
-async function fetchWithRetry(url, retries = 3, delay = 600) {
-  const cached = cache.get(url);
-  if (cached && Date.now() - cached.ts < CACHE_TTL) return cached.data;
-  for (let i = 0; i < retries; i++) {
-    try {
-      const ctrl = new AbortController();
-      const timeout = setTimeout(() => ctrl.abort(), 8000);
-      const res = await fetch(url, { signal: ctrl.signal });
-      clearTimeout(timeout);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = await res.json();
-      cache.set(url, { data, ts: Date.now() });
-      return data;
-    } catch (e) {
-      if (i < retries - 1) await new Promise(r => setTimeout(r, delay * (i + 1)));
-      else throw e;
-    }
-  }
-}
-
-function toast(msg, type = 'info') {
-  const t = document.createElement('div');
-  t.className = `toast ${type}`;
-  t.innerHTML = `<span>${type === 'success' ? '✓' : type === 'error' ? '✗' : 'ℹ'}</span> ${msg}`;
-  document.getElementById('toast-container').appendChild(t);
-  setTimeout(() => { t.style.animation = 'toastOut 0.3s ease forwards'; setTimeout(() => t.remove(), 300); }, 3000);
-}
-
-function safeImg(url, fallback = '') {
-  return url || fallback || 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="300"><rect fill="%23111122" width="200" height="300"/><text fill="%23333355" font-size="40" x="50%" y="50%" text-anchor="middle" dominant-baseline="middle">✦</text></svg>';
-}
-
-function slugify(id, title) { return `anime.html?id=${id}`; }
-function watchUrl(id, ep = 1) { return `watch.html?id=${id}&ep=${ep}`; }
-
-function scoreStars(score) { return score ? `⭐ ${score}` : ''; }
-
-/* ═══════════════════════════════════════
-   HEADER SCROLL BEHAVIOR
-═══════════════════════════════════════ */
-const header = document.getElementById('header');
-const nav = document.getElementById('nav');
-let lastScroll = 0;
-
-window.addEventListener('scroll', () => {
-  const s = window.scrollY;
-  header.classList.toggle('scrolled', s > 20);
-  if (s > 80) {
-    nav.classList.add('visible');
-  } else {
-    nav.classList.remove('visible');
-  }
-  lastScroll = s;
-}, { passive: true });
-
-/* ═══════════════════════════════════════
-   SIDEBAR
-═══════════════════════════════════════ */
-const sidebar = document.getElementById('sidebar');
-const sidebarOverlay = document.getElementById('sidebar-overlay');
-document.getElementById('hamburger-btn').onclick = () => { sidebar.classList.add('open'); sidebarOverlay.classList.add('visible'); };
-document.getElementById('sidebar-close').onclick = closeSidebar;
-sidebarOverlay.onclick = closeSidebar;
-function closeSidebar() { sidebar.classList.remove('open'); sidebarOverlay.classList.remove('visible'); }
-
-/* ═══════════════════════════════════════
-   LANGUAGE
-═══════════════════════════════════════ */
-document.querySelectorAll('.lang-opt').forEach(opt => {
-  opt.onclick = () => {
-    currentLang = opt.dataset.lang;
-    localStorage.setItem('av_lang', currentLang);
-    document.getElementById('lang-label').textContent = currentLang.toUpperCase();
-    document.querySelectorAll('.lang-opt').forEach(o => o.classList.remove('active'));
-    opt.classList.add('active');
-    document.documentElement.lang = currentLang;
-  };
-});
-document.getElementById('lang-label').textContent = currentLang.toUpperCase();
-
-/* ═══════════════════════════════════════
-   AUTH MODAL
-═══════════════════════════════════════ */
-const authOverlay = document.getElementById('auth-overlay');
-document.getElementById('profile-btn').onclick = () => {
-  if (currentUser) { window.location.href = 'profile.html'; }
-  else { authOverlay.classList.add('open'); }
-};
-document.getElementById('auth-close').onclick = () => authOverlay.classList.remove('open');
-authOverlay.addEventListener('click', e => { if (e.target === authOverlay) authOverlay.classList.remove('open'); });
-
-document.querySelectorAll('.auth-tab').forEach(tab => {
-  tab.onclick = () => switchAuthTab(tab.dataset.tab);
-});
-
-function switchAuthTab(tab) {
-  document.querySelectorAll('.auth-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
-  document.querySelectorAll('.auth-form-section').forEach(s => s.classList.remove('active'));
-  document.getElementById(`form-${tab}`).classList.add('active');
-}
-
-function handleLogin() {
-  const email = document.getElementById('login-email').value.trim();
-  const pass = document.getElementById('login-pass').value;
-  if (!email || !pass) return toast('Please fill all fields', 'error');
-  // Simulate auth - replace with real API call
-  const stored = JSON.parse(localStorage.getItem('av_users') || '[]');
-  const user = stored.find(u => (u.email === email || u.username === email));
-  if (user && user.password === btoa(pass)) {
-    currentUser = { name: user.name, username: user.username, email: user.email, avatar: user.avatar };
-    localStorage.setItem('av_user', JSON.stringify(currentUser));
-    authOverlay.classList.remove('open');
-    toast(`Welcome back, ${user.name}! ✨`, 'success');
-    updateUserUI();
-  } else {
-    toast('Invalid credentials', 'error');
-  }
-}
-
-function handleSignup() {
-  const name = document.getElementById('signup-name').value.trim();
-  const username = document.getElementById('signup-username').value.trim();
-  const email = document.getElementById('signup-email').value.trim();
-  const pass = document.getElementById('signup-pass').value;
-  const confirm = document.getElementById('signup-confirm').value;
-  const terms = document.getElementById('terms-check').checked;
-  if (!name || !username || !email || !pass) return toast('Please fill all fields', 'error');
-  if (pass !== confirm) return toast('Passwords do not match', 'error');
-  if (!terms) return toast('Please accept the terms', 'error');
-  const stored = JSON.parse(localStorage.getItem('av_users') || '[]');
-  if (stored.find(u => u.email === email)) return toast('Email already registered', 'error');
-  const newUser = { name, username, email, password: btoa(pass), avatar: '' };
-  stored.push(newUser);
-  localStorage.setItem('av_users', JSON.stringify(stored));
-  currentUser = { name, username, email, avatar: '' };
-  localStorage.setItem('av_user', JSON.stringify(currentUser));
-  authOverlay.classList.remove('open');
-  toast(`Account created! Welcome, ${name} ✨`, 'success');
-  updateUserUI();
-}
-
-function updateUserUI() {
-  if (currentUser) {
-    document.getElementById('profile-btn').innerHTML = currentUser.avatar
-      ? `<img src="${currentUser.avatar}" style="width:28px;height:28px;border-radius:50%;object-fit:cover">`
-      : `<div style="width:28px;height:28px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700">${currentUser.name[0]}</div>`;
-  }
-}
-
-updateUserUI();
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') { authOverlay.classList.remove('open'); closeSearch(); }
-});
-
-/* ═══════════════════════════════════════
-   SEARCH
-═══════════════════════════════════════ */
-const searchOverlay = document.getElementById('search-overlay');
-const searchInput = document.getElementById('search-input');
-
-document.getElementById('search-btn').onclick = openSearch;
-document.getElementById('search-close').onclick = closeSearch;
-document.getElementById('search-clear').onclick = () => { searchInput.value = ''; renderSearchEmpty('Search for your favorite anime'); searchInput.focus(); };
-
-document.querySelectorAll('.filter-chip').forEach(chip => {
-  chip.onclick = () => {
-    document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
-    chip.classList.add('active');
-    searchFilter = chip.dataset.filter;
-    if (searchInput.value.trim()) doSearch(searchInput.value.trim());
-  };
-});
-
-searchInput.addEventListener('input', () => {
-  const q = searchInput.value.trim();
-  document.getElementById('search-clear').style.display = q ? 'block' : 'none';
-  clearTimeout(searchDebounce);
-  if (!q) { renderSearchEmpty('Search for your favorite anime'); return; }
-  searchDebounce = setTimeout(() => doSearch(q), 400);
-});
-
-function openSearch() { searchOverlay.classList.add('open'); setTimeout(() => searchInput.focus(), 100); renderSearchEmpty('Search for your favorite anime'); }
-function closeSearch() { searchOverlay.classList.remove('open'); searchInput.value = ''; document.getElementById('search-clear').style.display = 'none'; }
-
-function renderSearchEmpty(msg) {
-  document.getElementById('search-results').innerHTML = '';
-  const el = document.getElementById('search-empty');
-  document.getElementById('search-empty-text').textContent = msg;
-  el.style.display = 'flex';
-}
-
-async function doSearch(q) {
-  const resultsEl = document.getElementById('search-results');
-  const emptyEl = document.getElementById('search-empty');
-  emptyEl.style.display = 'none';
-  resultsEl.innerHTML = Array(8).fill(0).map(() => `<div class="skeleton skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-line"></div></div>`).join('');
-  try {
-    let url = `${API}/anime?q=${encodeURIComponent(q)}&limit=24`;
-    if (searchFilter) url += `&type=${searchFilter}&status=${searchFilter}`;
-    const data = await fetchWithRetry(url);
-    if (!data.data || !data.data.length) { renderSearchEmpty(`No results for "${q}"`); return; }
-    resultsEl.innerHTML = data.data.map(a => makeAnimeCard(a, true)).join('');
-    attachCardClicks(resultsEl);
-  } catch (e) { renderSearchEmpty('Search failed, try again'); }
-}
-
-/* ═══════════════════════════════════════
-   CARD BUILDER
-═══════════════════════════════════════ */
-function makeAnimeCard(anime, small = false) {
-  const img = safeImg(anime.images?.webp?.large_image_url || anime.images?.jpg?.large_image_url);
-  const score = anime.score ? `<span class="badge badge-score">⭐ ${anime.score}</span>` : '';
-  const ep = anime.episodes ? `<span class="badge badge-ep">${anime.episodes} eps</span>` : '';
-  const type = anime.type ? `<span class="badge badge-type">${anime.type}</span>` : '';
-  return `<div class="anime-card" data-id="${anime.mal_id}" data-title="${(anime.title || '').replace(/"/g,'')}">
-    <div class="card-poster">
-      <img src="${img}" alt="${anime.title || ''}" loading="lazy" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22300%22><rect fill=%22%23111122%22 width=%22200%22 height=%22300%22/></svg>'">
-      <div class="card-overlay"></div>
-      <div class="card-badges">${score}${ep}${type}</div>
-      <div class="card-play">▶</div>
-    </div>
-    <div class="card-info">
-      <div class="card-title">${anime.title_english || anime.title || 'Unknown'}</div>
-      <div class="card-meta"><span>${anime.type || ''}</span><span style="color:var(--accent-bright)">${anime.status === 'Currently Airing' ? '● Airing' : ''}</span></div>
-    </div>
-  </div>`;
-}
-
-function attachCardClicks(container) {
-  container.querySelectorAll('.anime-card').forEach(card => {
-    card.onclick = () => { window.location.href = `anime.html?id=${card.dataset.id}`; };
-  });
-}
-
-/* ═══════════════════════════════════════
-   HERO SLIDER
-═══════════════════════════════════════ */
-async function initHero() {
-  try {
-    const data = await fetchWithRetry(`${API}/top/anime?filter=airing&limit=12`);
-    if (!data.data?.length) return;
-    heroSlides = data.data.slice(0, 10);
-    const track = document.getElementById('hero-track');
-    const dotsEl = document.getElementById('hero-dots');
-    track.innerHTML = heroSlides.map((a, i) => {
-      const bg = a.images?.webp?.large_image_url || a.images?.jpg?.large_image_url || '';
-      const genres = (a.genres || []).slice(0, 3).map(g => `<span class="hero-genre-tag">${g.name}</span>`).join('');
-      return `<div class="hero-slide${i === 0 ? ' active' : ''}" data-index="${i}">
-        <div class="hero-bg" style="background-image:url('${bg}')"></div>
-        <div class="hero-overlay"></div>
-        <div class="hero-content">
-          <div class="hero-badge">🔥 #${i + 1} Trending</div>
-          <h1 class="hero-title">${a.title_english || a.title || ''}</h1>
-          <div class="hero-meta">
-            ${a.score ? `<span class="hero-score">⭐ ${a.score}</span>` : ''}
-            <div class="hero-genres">${genres}</div>
-            ${a.type ? `<span style="color:var(--text-muted);font-size:13px">${a.type}</span>` : ''}
-          </div>
-          <p class="hero-synopsis">${(a.synopsis || '').replace(/\[Written by MAL Rewrite\]/g, '').trim().slice(0, 220)}${(a.synopsis || '').length > 220 ? '...' : ''}</p>
-          <div class="hero-actions">
-            <a href="${watchUrl(a.mal_id)}" class="btn-primary">▶ Watch Now</a>
-            <a href="${slugify(a.mal_id, a.title)}" class="btn-secondary">ℹ Details</a>
-          </div>
+        <div class="search-overlay__filters" id="searchFilters">
+            <span class="search-filter-chip active" data-filter="all">All</span>
+            <span class="search-filter-chip" data-filter="tv">TV</span>
+            <span class="search-filter-chip" data-filter="movie">Movie</span>
+            <span class="search-filter-chip" data-filter="ova">OVA</span>
+            <span class="search-filter-chip" data-filter="ona">ONA</span>
+            <span class="search-filter-chip" data-filter="special">Special</span>
         </div>
-      </div>`;
-    }).join('');
-    dotsEl.innerHTML = heroSlides.map((_, i) => `<div class="hero-dot${i === 0 ? ' active' : ''}" data-i="${i}"></div>`).join('');
-    dotsEl.querySelectorAll('.hero-dot').forEach(dot => { dot.onclick = () => goHero(+dot.dataset.i); });
-    document.getElementById('hero-prev').onclick = () => goHero((heroIndex - 1 + heroSlides.length) % heroSlides.length);
-    document.getElementById('hero-next').onclick = () => goHero((heroIndex + 1) % heroSlides.length);
-    startHeroAuto();
-    initHeroDrag();
-  } catch (e) { console.warn('Hero init failed:', e); }
-}
-
-function goHero(i) {
-  if (heroTransitioning || i === heroIndex) return;
-  heroTransitioning = true;
-  const slides = document.querySelectorAll('.hero-slide');
-  const dots = document.querySelectorAll('.hero-dot');
-  slides[heroIndex]?.classList.remove('active');
-  dots[heroIndex]?.classList.remove('active');
-  heroIndex = i;
-  const track = document.getElementById('hero-track');
-  track.style.transform = `translateX(-${heroIndex * 100}%)`;
-  slides[heroIndex]?.classList.add('active');
-  dots[heroIndex]?.classList.add('active');
-  setTimeout(() => { heroTransitioning = false; }, 850);
-}
-
-function startHeroAuto() {
-  clearInterval(heroTimer);
-  heroTimer = setInterval(() => goHero((heroIndex + 1) % heroSlides.length), 6000);
-}
-
-function initHeroDrag() {
-  const track = document.getElementById('hero-track');
-  track.addEventListener('mousedown', e => { heroDragging = true; heroStartX = e.clientX; track.classList.add('dragging'); clearInterval(heroTimer); });
-  document.addEventListener('mousemove', e => { if (!heroDragging) return; heroDelta = e.clientX - heroStartX; });
-  document.addEventListener('mouseup', () => {
-    if (!heroDragging) return;
-    heroDragging = false;
-    track.classList.remove('dragging');
-    if (Math.abs(heroDelta) > 60) { goHero(heroDelta < 0 ? (heroIndex + 1) % heroSlides.length : (heroIndex - 1 + heroSlides.length) % heroSlides.length); }
-    heroDelta = 0;
-    startHeroAuto();
-  });
-  track.addEventListener('touchstart', e => { heroStartX = e.touches[0].clientX; clearInterval(heroTimer); }, { passive: true });
-  track.addEventListener('touchend', e => {
-    heroDelta = e.changedTouches[0].clientX - heroStartX;
-    if (Math.abs(heroDelta) > 50) goHero(heroDelta < 0 ? (heroIndex + 1) % heroSlides.length : (heroIndex - 1 + heroSlides.length) % heroSlides.length);
-    heroDelta = 0;
-    startHeroAuto();
-  });
-}
-
-/* ═══════════════════════════════════════
-   UNIVERSAL SLIDER ENGINE
-═══════════════════════════════════════ */
-class Slider {
-  constructor(id) {
-    this.track = document.querySelector(`#${id} .slider-track`);
-    this.viewport = document.querySelector(`#${id} .slider-viewport`);
-    this.prev = document.querySelector(`#${id} .slider-arrow.prev`);
-    this.next = document.querySelector(`#${id} .slider-arrow.next`);
-    this.pos = 0;
-    this.dragging = false;
-    this.startX = 0;
-    this.startPos = 0;
-    this.animating = false;
-    if (!this.track) return;
-    this.prev.onclick = () => this.slide(-1);
-    this.next.onclick = () => this.slide(1);
-    this.initDrag();
-    new ResizeObserver(() => this.clamp()).observe(this.viewport);
-  }
-  get cardW() {
-    const c = this.track.firstElementChild;
-    if (!c) return 180;
-    return c.getBoundingClientRect().width + 14;
-  }
-  get max() { return Math.max(0, this.track.scrollWidth - this.viewport.clientWidth); }
-  slide(dir) {
-    if (this.animating) return;
-    this.pos = Math.max(0, Math.min(this.max, this.pos + dir * this.cardW * 3));
-    this.render();
-  }
-  clamp() { this.pos = Math.min(this.pos, this.max); this.render(false); }
-  render(anim = true) {
-    if (!anim) this.track.style.transition = 'none';
-    this.track.style.transform = `translateX(-${this.pos}px)`;
-    if (!anim) requestAnimationFrame(() => { this.track.style.transition = ''; });
-    this.prev.classList.toggle('disabled', this.pos <= 0);
-    this.next.classList.toggle('disabled', this.pos >= this.max);
-  }
-  initDrag() {
-    const t = this.track;
-    const onStart = e => { this.dragging = true; this.startX = e.touches ? e.touches[0].clientX : e.clientX; this.startPos = this.pos; t.classList.add('dragging'); t.style.transition = 'none'; };
-    const onMove = e => { if (!this.dragging) return; const x = e.touches ? e.touches[0].clientX : e.clientX; this.pos = Math.max(0, Math.min(this.max, this.startPos - (x - this.startX))); t.style.transform = `translateX(-${this.pos}px)`; };
-    const onEnd = () => { if (!this.dragging) return; this.dragging = false; t.classList.remove('dragging'); t.style.transition = ''; this.render(); };
-    t.addEventListener('mousedown', onStart);
-    t.addEventListener('touchstart', onStart, { passive: true });
-    document.addEventListener('mousemove', onMove);
-    document.addEventListener('touchmove', onMove, { passive: true });
-    document.addEventListener('mouseup', onEnd);
-    document.addEventListener('touchend', onEnd);
-  }
-}
-
-/* ═══════════════════════════════════════
-   SECTION BUILDER
-═══════════════════════════════════════ */
-function createSection(id, title, accentWord) {
-  const main = document.getElementById('main');
-  const sec = document.createElement('section');
-  sec.className = 'section';
-  sec.id = `sec-${id}`;
-  sec.innerHTML = `
-    <div class="section-header">
-      <h2 class="section-title">${accentWord ? title.replace(accentWord, `<span>${accentWord}</span>`) : title}</h2>
-      <a href="search.html?filter=${id}" class="see-all">See all →</a>
+        <div class="search-overlay__suggestions" id="searchSuggestions"></div>
     </div>
-    <div class="slider-wrap" id="sw-${id}">
-      <button class="slider-arrow prev" aria-label="Previous">‹</button>
-      <div class="slider-viewport">
-        <div class="slider-track" id="st-${id}">
-          ${Array(6).fill(0).map(() => `<div class="skeleton-card skeleton" style="flex:0 0 calc((100% - 14px * 5) / 6);min-width:140px"><div class="skeleton skeleton-poster" style="aspect-ratio:2/3"></div><div class="skeleton skeleton-line"></div></div>`).join('')}
+
+    <!-- ==================== AUTH MODAL ==================== -->
+    <div class="auth-overlay" id="authOverlay">
+        <div class="auth-modal" id="authModal">
+            <button class="auth-modal__close" id="authClose">✕</button>
+            <div class="auth-modal__tabs">
+                <div class="auth-modal__tab active" data-tab="login">Login</div>
+                <div class="auth-modal__tab" data-tab="signup">Sign Up</div>
+            </div>
+            <form class="auth-form" id="loginForm">
+                <div class="auth-form__group">
+                    <label class="auth-form__label">Email or Username</label>
+                    <input type="text" class="auth-form__input" id="loginEmail" placeholder="Enter email or username" required>
+                </div>
+                <div class="auth-form__group">
+                    <label class="auth-form__label">Password</label>
+                    <input type="password" class="auth-form__input" id="loginPassword" placeholder="Enter password" required>
+                </div>
+                <div class="auth-form__checkbox-row">
+                    <input type="checkbox" id="rememberMe"><label for="rememberMe">Remember me</label>
+                </div>
+                <button type="submit" class="auth-form__submit">Sign In</button>
+                <div class="auth-form__switch">Forgot password? <span id="forgotPassword">Reset</span></div>
+                <div class="auth-form__switch">Don't have an account? <span id="switchToSignup">Sign Up</span></div>
+            </form>
+            <form class="auth-form" id="signupForm" style="display:none;">
+                <div class="auth-form__group">
+                    <label class="auth-form__label">Name</label>
+                    <input type="text" class="auth-form__input" id="signupName" placeholder="Your name" required>
+                </div>
+                <div class="auth-form__group">
+                    <label class="auth-form__label">Username</label>
+                    <input type="text" class="auth-form__input" id="signupUsername" placeholder="Choose username" required>
+                </div>
+                <div class="auth-form__group">
+                    <label class="auth-form__label">Email</label>
+                    <input type="email" class="auth-form__input" id="signupEmail" placeholder="Your email" required>
+                </div>
+                <div class="auth-form__group">
+                    <label class="auth-form__label">Password</label>
+                    <input type="password" class="auth-form__input" id="signupPassword" placeholder="Create password" required minlength="6">
+                </div>
+                <div class="auth-form__group">
+                    <label class="auth-form__label">Confirm Password</label>
+                    <input type="password" class="auth-form__input" id="signupConfirmPassword" placeholder="Confirm password" required>
+                </div>
+                <div class="auth-form__checkbox-row">
+                    <input type="checkbox" id="termsCheck"><label for="termsCheck">I agree to the Terms & Conditions</label>
+                </div>
+                <button type="submit" class="auth-form__submit">Create Account</button>
+                <div class="auth-form__switch">Already have an account? <span id="switchToLogin">Sign In</span></div>
+            </form>
         </div>
-      </div>
-      <button class="slider-arrow next" aria-label="Next">›</button>
-    </div>`;
-  main.appendChild(sec);
-  return sec;
-}
+    </div>
 
-async function loadSection(id, apiUrl, title, accent) {
-  createSection(id, title, accent);
-  try {
-    const data = await fetchWithRetry(apiUrl);
-    const items = data.data || [];
-    const track = document.getElementById(`st-${id}`);
-    if (!track) return;
-    if (!items.length) { track.innerHTML = `<div style="color:var(--text-muted);padding:20px">No content available</div>`; return; }
-    track.innerHTML = items.map(a => makeAnimeCard(a)).join('');
-    attachCardClicks(track);
-    new Slider(`sw-${id}`);
-  } catch (e) {
-    const track = document.getElementById(`st-${id}`);
-    if (track) track.innerHTML = `<div style="color:var(--text-muted);padding:20px;font-size:14px">Failed to load</div>`;
-  }
-}
+    <!-- ==================== MAIN CONTENT ==================== -->
+    <main>
+        <!-- HERO SLIDER -->
+        <section class="hero" id="heroSlider">
+            <div class="hero__dots" id="heroDots"></div>
+            <div class="hero__arrows">
+                <button class="hero__arrow" id="heroPrev">◀</button>
+                <button class="hero__arrow" id="heroNext">▶</button>
+            </div>
+        </section>
 
-/* ═══════════════════════════════════════
-   GENRES MENU
-═══════════════════════════════════════ */
-async function loadGenres() {
-  try {
-    const data = await fetchWithRetry(`${API}/genres/anime`);
-    const grid = document.getElementById('genres-grid');
-    if (!grid || !data.data) return;
-    grid.innerHTML = data.data.slice(0, 18).map(g => `<div class="mega-item" onclick="window.location.href='search.html?genre=${g.mal_id}'">${g.name}</div>`).join('');
-  } catch (e) {}
-}
+        <!-- TRENDING -->
+        <section class="section" id="sectionTrending">
+            <div class="section__header">
+                <h2 class="section__title">🔥 Trending Now</h2>
+                <span class="section__see-all" data-section="trending">See All →</span>
+            </div>
+            <div class="slider-container" id="sliderTrending">
+                <div class="slider-track" id="trackTrending"></div>
+                <button class="slider-arrow slider-arrow--left">◀</button>
+                <button class="slider-arrow slider-arrow--right">▶</button>
+            </div>
+        </section>
 
-function filterByType(type) { window.location.href = `search.html?type=${type}`; }
-function filterByStatus(status) { window.location.href = `search.html?status=${status}`; }
+        <!-- TOP RATED -->
+        <section class="section" id="sectionTopRated">
+            <div class="section__header">
+                <h2 class="section__title">⭐ Top Rated</h2>
+                <span class="section__see-all" data-section="top-rated">See All →</span>
+            </div>
+            <div class="slider-container" id="sliderTopRated">
+                <div class="slider-track" id="trackTopRated"></div>
+                <button class="slider-arrow slider-arrow--left">◀</button>
+                <button class="slider-arrow slider-arrow--right">▶</button>
+            </div>
+        </section>
 
-/* ═══════════════════════════════════════
-   INIT ALL
-═══════════════════════════════════════ */
-async function init() {
-  initHero();
-  loadGenres();
-  // Load all sections in parallel with Promise.allSettled
-  Promise.allSettled([
-    loadSection('trending', `${API}/top/anime?filter=bypopularity&limit=18`, 'Trending Now', 'Trending'),
-    loadSection('airing', `${API}/top/anime?filter=airing&limit=18`, 'Top Airing', 'Airing'),
-    loadSection('toprated', `${API}/top/anime?limit=18`, 'Top Rated', 'Rated'),
-    loadSection('upcoming', `${API}/top/anime?filter=upcoming&limit=18`, 'Upcoming', 'Upcoming'),
-    loadSection('movies', `${API}/top/anime?type=movie&limit=18`, 'Top Movies', 'Movies'),
-    loadSection('recent', `${API}/watch/episodes`, 'Recent Episodes', 'Recent'),
-    loadSection('recommendations', `${API}/recommendations/anime`, 'Recommended', 'Recommended'),
-  ]);
-}
+        <!-- TOP AIRING -->
+        <section class="section" id="sectionTopAiring">
+            <div class="section__header">
+                <h2 class="section__title">📡 Top Airing</h2>
+                <span class="section__see-all" data-section="airing">See All →</span>
+            </div>
+            <div class="slider-container" id="sliderTopAiring">
+                <div class="slider-track" id="trackTopAiring"></div>
+                <button class="slider-arrow slider-arrow--left">◀</button>
+                <button class="slider-arrow slider-arrow--right">▶</button>
+            </div>
+        </section>
 
-// Observe nav visibility
-const navObserver = new IntersectionObserver(([e]) => {
-  if (!e.isIntersecting) nav.classList.add('visible');
-  else nav.classList.remove('visible');
-}, { rootMargin: '-70px 0px 0px 0px' });
-navObserver.observe(document.getElementById('hero'));
+        <!-- UPCOMING -->
+        <section class="section" id="sectionUpcoming">
+            <div class="section__header">
+                <h2 class="section__title">🔮 Upcoming</h2>
+                <span class="section__see-all" data-section="upcoming">See All →</span>
+            </div>
+            <div class="slider-container" id="sliderUpcoming">
+                <div class="slider-track" id="trackUpcoming"></div>
+                <button class="slider-arrow slider-arrow--left">◀</button>
+                <button class="slider-arrow slider-arrow--right">▶</button>
+            </div>
+        </section>
+    </main>
 
-init();
-</script>
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="footer">
+        <div class="footer__social">
+            <a href="#" aria-label="Twitter">𝕏</a>
+            <a href="#" aria-label="Discord">🎮</a>
+            <a href="#" aria-label="Reddit">💬</a>
+        </div>
+        <p class="footer__text">This site does not store any files on its server. All contents are provided by non-affiliated third parties.</p>
+        <p class="footer__copyright">© 2026 AnimeStream. All rights reserved.</p>
+    </footer>
+
+    <!-- ==================== TOAST CONTAINER ==================== -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+        (function() {
+            // ==================== GLOBAL STATE ====================
+            const API_BASE = 'https://api.jikan.moe/v4';
+            const CACHE_PREFIX = 'anime_stream_';
+            const CACHE_TTL = 30 * 60 * 1000;
+            let currentUser = null;
+            let heroSlides = [];
+            let heroIndex = 0;
+            let heroInterval = null;
+            let heroIsDragging = false;
+            let heroStartX = 0;
+            let searchDebounceTimer = null;
+
+            function $(sel, ctx = document) { return ctx.querySelector(sel); }
+
+            function $$(sel, ctx = document) { return [...ctx.querySelectorAll(sel)]; }
+
+            function showToast(msg) {
+                const container = $('#toastContainer');
+                const toast = document.createElement('div');
+                toast.className = 'toast';
+                toast.textContent = msg;
+                container.appendChild(toast);
+                setTimeout(() => toast.remove(), 3000);
+            }
+
+            function getCache(key) {
+                try {
+                    const item = localStorage.getItem(CACHE_PREFIX + key);
+                    if (!item) return null;
+                    const { data, ts } = JSON.parse(item);
+                    if (Date.now() - ts > CACHE_TTL) { localStorage.removeItem(CACHE_PREFIX + key); return null; }
+                    return data;
+                } catch { return null; }
+            }
+
+            function setCache(key, data) {
+                try {
+                    localStorage.setItem(CACHE_PREFIX + key, JSON.stringify({ data, ts: Date.now() }));
+                } catch {}
+            }
+
+            async function fetchWithRetry(url, retries = 2, timeout = 8000) {
+                for (let i = 0; i <= retries; i++) {
+                    try {
+                        const controller = new AbortController();
+                        const timer = setTimeout(() => controller.abort(), timeout);
+                        const res = await fetch(url, { signal: controller.signal });
+                        clearTimeout(timer);
+                        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                        return await res.json();
+                    } catch (err) {
+                        if (i === retries) throw err;
+                        await new Promise(r => setTimeout(r, 1000 * (i + 1)));
+                    }
+                }
+            }
+
+            // ==================== USER AUTH ====================
+            function loadUser() {
+                try {
+                    const u = localStorage.getItem('anime_stream_user');
+                    if (u) currentUser = JSON.parse(u);
+                } catch { currentUser = null; }
+                updateProfileBtn();
+            }
+
+            function saveUser(user) {
+                currentUser = user;
+                localStorage.setItem('anime_stream_user', JSON.stringify(user));
+                updateProfileBtn();
+            }
+
+            function logoutUser() {
+                currentUser = null;
+                localStorage.removeItem('anime_stream_user');
+                updateProfileBtn();
+                showToast('Logged out successfully');
+            }
+
+            function updateProfileBtn() {
+                const btn = $('#profileBtn');
+                if (!btn) return;
+                // The button now shows an SVG icon; we can update the tooltip
+                btn.title = currentUser ? (currentUser.name || currentUser.username || 'Profile') : 'Sign In';
+            }
+
+            // ==================== AUTH MODAL ====================
+            const authOverlay = $('#authOverlay');
+            const authModal = $('#authModal');
+            const authClose = $('#authClose');
+            const loginForm = $('#loginForm');
+            const signupForm = $('#signupForm');
+            const authTabs = $$('.auth-modal__tab');
+
+            function openAuth(tab = 'login') {
+                authOverlay.classList.add('open');
+                document.body.classList.add('no-scroll');
+                switchAuthTab(tab);
+            }
+
+            function closeAuth() {
+                authOverlay.classList.remove('open');
+                document.body.classList.remove('no-scroll');
+            }
+            authClose.addEventListener('click', closeAuth);
+            authOverlay.addEventListener('click', (e) => { if (e.target === authOverlay) closeAuth(); });
+            document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && authOverlay.classList.contains(
+                    'open')) closeAuth(); });
+
+            function switchAuthTab(tab) {
+                authTabs.forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+                loginForm.style.display = tab === 'login' ? '' : 'none';
+                signupForm.style.display = tab === 'signup' ? '' : 'none';
+            }
+            authTabs.forEach(t => t.addEventListener('click', () => switchAuthTab(t.dataset.tab)));
+            $('#switchToSignup')?.addEventListener('click', () => switchAuthTab('signup'));
+            $('#switchToLogin')?.addEventListener('click', () => switchAuthTab('login'));
+
+            $('#profileBtn').addEventListener('click', () => {
+                if (currentUser) {
+                    window.location.href = 'profile.html';
+                } else {
+                    openAuth('login');
+                }
+            });
+
+            loginForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const email = $('#loginEmail').value.trim();
+                const password = $('#loginPassword').value;
+                if (!email || !password) { showToast('Please fill all fields'); return; }
+                const user = { name: email.split('@')[0] || 'User', username: email.split('@')[0] || 'user',
+                    email, avatar: null };
+                saveUser(user);
+                showToast('Welcome back, ' + user.name + '!');
+                closeAuth();
+            });
+
+            signupForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const name = $('#signupName').value.trim();
+                const username = $('#signupUsername').value.trim();
+                const email = $('#signupEmail').value.trim();
+                const password = $('#signupPassword').value;
+                const confirm = $('#signupConfirmPassword').value;
+                const terms = $('#termsCheck').checked;
+                if (!name || !username || !email || !password) { showToast('Please fill all fields'); return; }
+                if (password !== confirm) { showToast('Passwords do not match'); return; }
+                if (!terms) { showToast('Please accept the terms'); return; }
+                const user = { name, username, email, avatar: null };
+                saveUser(user);
+                showToast('Account created! Welcome, ' + name + '!');
+                closeAuth();
+            });
+
+            // ==================== SIDEBAR ====================
+            const sidebar = $('#sidebar');
+            const sidebarOverlay = $('#sidebarOverlay');
+            const hamburgerBtn = $('#hamburgerBtn');
+
+            function openSidebar() {
+                sidebar.classList.add('open');
+                sidebarOverlay.classList.add('open');
+                document.body.classList.add('no-scroll');
+            }
+
+            function closeSidebar() {
+                sidebar.classList.remove('open');
+                sidebarOverlay.classList.remove('open');
+                document.body.classList.remove('no-scroll');
+            }
+            hamburgerBtn.addEventListener('click', openSidebar);
+            sidebarOverlay.addEventListener('click', closeSidebar);
+            document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && sidebar.classList.contains(
+                    'open')) closeSidebar(); });
+
+            // ==================== SEARCH OVERLAY ====================
+            const searchOverlay = $('#searchOverlay');
+            const searchInput = $('#searchInput');
+            const searchClear = $('#searchClear');
+            const searchSuggestions = $('#searchSuggestions');
+            const searchFilters = $('#searchFilters');
+            const searchBtn = $('#searchBtn');
+            let activeSearchFilter = 'all';
+
+            function openSearch() {
+                searchOverlay.classList.add('open');
+                document.body.classList.add('no-scroll');
+                setTimeout(() => searchInput.focus(), 200);
+            }
+
+            function closeSearch() {
+                searchOverlay.classList.remove('open');
+                document.body.classList.remove('no-scroll');
+                searchInput.value = '';
+                searchSuggestions.innerHTML = '';
+            }
+            searchBtn.addEventListener('click', openSearch);
+            searchClear.addEventListener('click', () => { searchInput.value = '';
+                searchSuggestions.innerHTML = '';
+                searchInput.focus(); });
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && searchOverlay.classList.contains('open')) closeSearch();
+                if ((e.ctrlKey || e.metaKey) && e.key === 'k') { e.preventDefault();
+                    openSearch(); }
+            });
+            searchOverlay.addEventListener('click', (e) => { if (e.target === searchOverlay) closeSearch(); });
+
+            searchFilters.addEventListener('click', (e) => {
+                if (e.target.classList.contains('search-filter-chip')) {
+                    $$('.search-filter-chip', searchFilters).forEach(c => c.classList.remove(
+                    'active'));
+                    e.target.classList.add('active');
+                    activeSearchFilter = e.target.dataset.filter;
+                    if (searchInput.value.trim()) doSearch();
+                }
+            });
+
+            searchInput.addEventListener('input', () => {
+                clearTimeout(searchDebounceTimer);
+                const val = searchInput.value.trim();
+                if (!val) { searchSuggestions.innerHTML = ''; return; }
+                searchDebounceTimer = setTimeout(doSearch, 350);
+            });
+
+            async function doSearch() {
+                const query = searchInput.value.trim();
+                if (!query) return;
+                searchSuggestions.innerHTML =
+                    '<div style="grid-column:1/-1;text-align:center;color:var(--text-muted);padding:40px;">Searching...</div>';
+                try {
+                    let url = `${API_BASE}/anime?q=${encodeURIComponent(query)}&limit=18&sfw=true`;
+                    if (activeSearchFilter !== 'all') url += `&type=${activeSearchFilter}`;
+                    const data = await fetchWithRetry(url);
+                    renderSearchResults(data.data || []);
+                } catch {
+                    searchSuggestions.innerHTML =
+                        '<div style="grid-column:1/-1;text-align:center;color:var(--text-muted);padding:40px;">Search failed. Try again.</div>';
+                }
+            }
+
+            function renderSearchResults(animes) {
+                if (!animes.length) {
+                    searchSuggestions.innerHTML =
+                        '<div style="grid-column:1/-1;text-align:center;color:var(--text-muted);padding:40px;">No results found</div>';
+                    return;
+                }
+                searchSuggestions.innerHTML = animes.map(a => `
+                <div class="search-suggestion-card" onclick="window.location.href='anime.html?id=${a.mal_id}'">
+                  <img src="${a.images?.jpg?.image_url || ''}" alt="${a.title}" loading="lazy" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 200 280%22><rect fill=%22%231a1a24%22 width=%22200%22 height=%22280%22/><text fill=%22%23777%22 x=%22100%22 y=%22140%22 text-anchor=%22middle%22 font-size=%2214%22>No Image</text></svg>'">
+                  <div class="search-suggestion-card__info">
+                    <div class="search-suggestion-card__title">${a.title}</div>
+                  </div>
+                </div>
+              `).join('');
+            }
+
+            // ==================== HERO SLIDER ====================
+            async function loadHero() {
+                const cacheKey = 'hero_slides';
+                let animes = getCache(cacheKey);
+                if (!animes) {
+                    try {
+                        const data = await fetchWithRetry(`${API_BASE}/top/anime?limit=12&filter=bypopularity`);
+                        animes = (data.data || []).filter(a => a.trailer?.images?.large_image_url || a.images?.jpg
+                            ?.large_image_url);
+                        if (animes.length < 5) {
+                            const d2 = await fetchWithRetry(`${API_BASE}/top/anime?limit=15`);
+                            animes = (d2.data || []).filter(a => a.trailer?.images?.large_image_url || a.images?.jpg
+                                ?.large_image_url);
+                        }
+                        if (animes.length) setCache(cacheKey, animes.slice(0, 12));
+                    } catch { animes = []; }
+                }
+                heroSlides = animes.slice(0, 10);
+                if (!heroSlides.length) {
+                    $('#heroSlider').innerHTML =
+                        '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--text-muted);">Loading featured anime...</div>';
+                    try {
+                        const d = await fetchWithRetry(`${API_BASE}/top/anime?limit=10`);
+                        heroSlides = (d.data || []).slice(0, 10);
+                    } catch {}
+                }
+                renderHero();
+            }
+
+            function renderHero() {
+                const hero = $('#heroSlider');
+                const dotsContainer = $('#heroDots');
+                if (!heroSlides.length) {
+                    hero.innerHTML =
+                        '<div style="display:flex;align-items:center;justify-content:center;height:100%;background:var(--bg-secondary);"><p style="color:var(--text-muted);">Featured anime coming soon</p></div>';
+                    return;
+                }
+                hero.innerHTML = heroSlides.map((a, i) => {
+                    const banner = a.trailer?.images?.large_image_url || a.images?.jpg?.large_image_url || '';
+                    return `
+                <div class="hero__slide${i===0?' active':''}" data-index="${i}">
+                  <div class="hero__slide-bg" style="background-image:url('${banner}')"></div>
+                  <div class="hero__slide-gradient"></div>
+                  <div class="hero__content">
+                    <h1 class="hero__title">${a.title}</h1>
+                    <div class="hero__meta">
+                      <span class="hero__score">★ ${a.score||'N/A'}</span>
+                      <span>${a.type||'TV'}</span>
+                      <span>${a.episodes||'?'} eps</span>
+                      <span>${a.status||''}</span>
+                    </div>
+                    <p class="hero__synopsis">${a.synopsis||''}</p>
+                    <div class="hero__buttons">
+                      <a href="watch.html?id=${a.mal_id}&ep=1" class="btn btn--primary">▶ Watch Now</a>
+                      <a href="anime.html?id=${a.mal_id}" class="btn btn--outline">ℹ Details</a>
+                    </div>
+                  </div>
+                </div>`;
+                }).join('');
+                dotsContainer.innerHTML = heroSlides.map((_, i) =>
+                    `<span class="hero__dot${i===0?' active':''}" data-index="${i}"></span>`).join('');
+                heroIndex = 0;
+                setupHeroListeners();
+                startHeroAutoplay();
+            }
+
+            function setupHeroListeners() {
+                const dots = $$('.hero__dot');
+                dots.forEach(d => d.addEventListener('click', () => {
+                    const idx = parseInt(d.dataset.index);
+                    goToHeroSlide(idx);
+                    resetHeroAutoplay();
+                }));
+                $('#heroPrev')?.addEventListener('click', () => { goToHeroSlide((heroIndex - 1 + heroSlides.length) %
+                        heroSlides.length);
+                    resetHeroAutoplay(); });
+                $('#heroNext')?.addEventListener('click', () => { goToHeroSlide((heroIndex + 1) % heroSlides.length);
+                    resetHeroAutoplay(); });
+                const heroEl = $('#heroSlider');
+                heroEl.addEventListener('mousedown', (e) => { heroIsDragging = true;
+                    heroStartX = e.clientX; });
+                heroEl.addEventListener('mouseup', (e) => {
+                    if (!heroIsDragging) return;
+                    heroIsDragging = false;
+                    const diff = e.clientX - heroStartX;
+                    if (Math.abs(diff) > 60) {
+                        if (diff > 0) goToHeroSlide((heroIndex - 1 + heroSlides.length) % heroSlides.length);
+                        else goToHeroSlide((heroIndex + 1) % heroSlides.length);
+                        resetHeroAutoplay();
+                    }
+                });
+                heroEl.addEventListener('mouseleave', () => { heroIsDragging = false; });
+                heroEl.addEventListener('touchstart', (e) => { heroStartX = e.touches[0].clientX; });
+                heroEl.addEventListener('touchend', (e) => {
+                    const diff = e.changedTouches[0].clientX - heroStartX;
+                    if (Math.abs(diff) > 50) {
+                        if (diff > 0) goToHeroSlide((heroIndex - 1 + heroSlides.length) % heroSlides
+                        .length);
+                        else goToHeroSlide((heroIndex + 1) % heroSlides.length);
+                        resetHeroAutoplay();
+                    }
+                });
+            }
+
+            function goToHeroSlide(idx) {
+                const slides = $$('.hero__slide');
+                const dots = $$('.hero__dot');
+                slides.forEach(s => s.classList.remove('active'));
+                dots.forEach(d => d.classList.remove('active'));
+                if (slides[idx]) slides[idx].classList.add('active');
+                if (dots[idx]) dots[idx].classList.add('active');
+                heroIndex = idx;
+            }
+
+            function startHeroAutoplay() {
+                stopHeroAutoplay();
+                heroInterval = setInterval(() => {
+                    goToHeroSlide((heroIndex + 1) % heroSlides.length);
+                }, 5000);
+            }
+
+            function stopHeroAutoplay() {
+                if (heroInterval) clearInterval(heroInterval);
+            }
+
+            function resetHeroAutoplay() {
+                stopHeroAutoplay();
+                startHeroAutoplay();
+            }
+
+            // ==================== UNIVERSAL SLIDER ENGINE ====================
+            function initSlider(containerId) {
+                const container = $('#' + containerId);
+                if (!container || container.dataset.initialized === 'true') return;
+                container.dataset.initialized = 'true';
+                const track = container.querySelector('.slider-track');
+                const leftArrow = container.querySelector('.slider-arrow--left');
+                const rightArrow = container.querySelector('.slider-arrow--right');
+                if (!track) return;
+                let isDown = false,
+                    startX, scrollLeft;
+                track.addEventListener('mousedown', (e) => { isDown = true;
+                    track.classList.add('dragging');
+                    startX = e.pageX - track.offsetLeft;
+                    scrollLeft = track.scrollLeft; });
+                track.addEventListener('mouseleave', () => { isDown = false;
+                    track.classList.remove('dragging'); });
+                track.addEventListener('mouseup', () => { isDown = false;
+                    track.classList.remove('dragging'); });
+                track.addEventListener('mousemove', (e) => {
+                    if (!isDown) return;
+                    e.preventDefault();
+                    const x = e.pageX - track.offsetLeft;
+                    track.scrollLeft = scrollLeft - (x - startX) * 1.5;
+                });
+                const scrollAmount = () => track.querySelector('.anime-card')?.offsetWidth * 3 || 400;
+                leftArrow?.addEventListener('click', () => { track.scrollBy({ left: -scrollAmount(),
+                        behavior: 'smooth' }); });
+                rightArrow?.addEventListener('click', () => { track.scrollBy({ left: scrollAmount(),
+                        behavior: 'smooth' }); });
+            }
+
+            async function populateSlider(trackId, animes) {
+                const track = $('#' + trackId);
+                if (!track) return;
+                if (!animes || !animes.length) {
+                    track.innerHTML =
+                        '<div style="padding:40px;color:var(--text-muted);text-align:center;width:100%;">No anime found</div>';
+                    return;
+                }
+                track.innerHTML = animes.map(a => `
+                <div class="anime-card" onclick="window.location.href='anime.html?id=${a.mal_id}'" title="${a.title}">
+                  <div class="anime-card__poster-wrap">
+                    <img class="anime-card__poster" src="${a.images?.jpg?.image_url||''}" alt="${a.title}" loading="lazy" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 200 280%22><rect fill=%22%231a1a24%22 width=%22200%22 height=%22280%22/></svg>'">
+                    <div class="anime-card__badges">
+                      ${a.score?`<span class="badge badge--score">★ ${a.score}</span>`:''}
+                      ${a.episodes?`<span class="badge badge--episode">${a.episodes} eps</span>`:''}
+                      <span class="badge badge--type">${a.type||'TV'}</span>
+                    </div>
+                  </div>
+                  <div class="anime-card__title">${a.title}</div>
+                </div>
+              `).join('');
+            }
+
+            async function loadWidget(sectionId, trackId, sliderId, apiPath, cacheKey) {
+                const track = $('#' + trackId);
+                if (!track) return;
+                track.innerHTML = Array(8).fill('<div class="skeleton skeleton-card"></div>').join('');
+                let animes = getCache(cacheKey);
+                if (!animes) {
+                    try {
+                        const data = await fetchWithRetry(`${API_BASE}${apiPath}`);
+                        animes = data.data || [];
+                        if (animes.length) setCache(cacheKey, animes);
+                    } catch { animes = []; }
+                }
+                await populateSlider(trackId, animes);
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => initSlider(sliderId));
+                });
+            }
+
+            // ==================== GENRES MEGA MENU ====================
+            async function loadGenres() {
+                const menu = $('#genresMegaMenu');
+                const sidebarGenres = $('#sidebarGenres');
+                if (!menu && !sidebarGenres) return;
+                let genres = getCache('genres');
+                if (!genres) {
+                    try {
+                        const data = await fetchWithRetry(`${API_BASE}/genres/anime`);
+                        genres = data.data || [];
+                        if (genres.length) setCache('genres', genres);
+                    } catch { genres = []; }
+                }
+                const genreHTML = genres.map(g =>
+                    `<span class="mega-menu__item" data-genre-id="${g.mal_id}" data-genre-name="${g.name}">${g.name}</span>`
+                    ).join('');
+                if (menu) menu.innerHTML = genreHTML;
+                if (sidebarGenres) {
+                    sidebarGenres.innerHTML =
+                        '<div class="sidebar__title">Genres</div>' + genres.map(g =>
+                            `<a href="search.html?genre=${g.mal_id}&genreName=${encodeURIComponent(g.name)}" class="sidebar__link">• ${g.name}</a>`
+                            ).join('');
+                }
+                document.addEventListener('click', (e) => {
+                    const item = e.target.closest('.mega-menu__item');
+                    if (item && item.dataset.genreId) {
+                        window.location.href =
+                            `search.html?genre=${item.dataset.genreId}&genreName=${encodeURIComponent(item.dataset.genreName)}`;
+                    }
+                    if (e.target.dataset.type) {
+                        window.location.href = `search.html?type=${e.target.dataset.type}`;
+                    }
+                    if (e.target.dataset.status) {
+                        window.location.href = `search.html?status=${e.target.dataset.status}`;
+                    }
+                });
+            }
+
+            // ==================== LANGUAGE SWITCHER ====================
+            const langBtn = $('#langBtn');
+            const langOptions = { EN: 'English', JP: '日本語', BN: 'বাংলা' };
+            let currentLang = localStorage.getItem('anime_stream_lang') || 'EN';
+            langBtn.textContent = '🌐 ' + currentLang;
+            langBtn.addEventListener('click', () => {
+                const keys = Object.keys(langOptions);
+                const idx = keys.indexOf(currentLang);
+                currentLang = keys[(idx + 1) % keys.length];
+                localStorage.setItem('anime_stream_lang', currentLang);
+                langBtn.textContent = '🌐 ' + currentLang;
+                showToast('Language: ' + langOptions[currentLang]);
+            });
+
+            // ==================== HEADER SCROLL ====================
+            window.addEventListener('scroll', () => {
+                const header = $('#header');
+                if (window.scrollY > 50) header.classList.add('scrolled');
+                else header.classList.remove('scrolled');
+            });
+
+            // ==================== INIT ====================
+            async function init() {
+                loadUser();
+                await Promise.allSettled([
+                    loadHero(),
+                    loadGenres(),
+                    loadWidget('sectionTrending', 'trackTrending', 'sliderTrending', '/top/anime?limit=15&filter=bypopularity',
+                        'widget_trending'),
+                    loadWidget('sectionTopRated', 'trackTopRated', 'sliderTopRated', '/top/anime?limit=15&filter=bypopularity',
+                        'widget_toprated'),
+                    loadWidget('sectionTopAiring', 'trackTopAiring', 'sliderTopAiring', '/top/anime?limit=15&filter=airing',
+                        'widget_airing'),
+                    loadWidget('sectionUpcoming', 'trackUpcoming', 'sliderUpcoming', '/top/anime?limit=15&filter=upcoming',
+                        'widget_upcoming'),
+                ]);
+                ['sliderTrending', 'sliderTopRated', 'sliderTopAiring', 'sliderUpcoming'].forEach(id => {
+                    const container = $('#' + id);
+                    if (container && container.querySelector('.anime-card')) {
+                        initSlider(id);
+                    }
+                });
+                console.log('✅ AnimeStream initialized successfully');
+            }
+
+            // ==================== RESIZE HANDLER ====================
+            let resizeDebounce;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeDebounce);
+                resizeDebounce = setTimeout(() => {
+                    ['sliderTrending', 'sliderTopRated', 'sliderTopAiring', 'sliderUpcoming'].forEach(
+                        id => {
+                            const c = $('#' + id);
+                            if (c) c.dataset.initialized = 'false';
+                            initSlider(id);
+                        });
+                }, 300);
+            });
+            window.addEventListener('orientationchange', () => {
+                setTimeout(() => {
+                    ['sliderTrending', 'sliderTopRated', 'sliderTopAiring', 'sliderUpcoming'].forEach(
+                        id => {
+                            const c = $('#' + id);
+                            if (c) c.dataset.initialized = 'false';
+                            initSlider(id);
+                        });
+                }, 500);
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    if (searchOverlay.classList.contains('open')) closeSearch();
+                    if (authOverlay.classList.contains('open')) closeAuth();
+                    if (sidebar.classList.contains('open')) closeSidebar();
+                }
+            });
+
+            init().catch(err => console.error('Init error:', err));
+
+            window.closeSearch = closeSearch;
+            window.openSearch = openSearch;
+        })();
+    </script>
 </body>
 </html>
